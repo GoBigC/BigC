@@ -8,4 +8,3 @@ import (
 	"BigCooker/syntax/parser"
 )
 
-func 
