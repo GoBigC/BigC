@@ -263,12 +263,6 @@ func (s *BaseBigCListener) EnterFunctionCallArgs(ctx *FunctionCallArgsContext) {
 // ExitFunctionCallArgs is called when production functionCallArgs is exited.
 func (s *BaseBigCListener) ExitFunctionCallArgs(ctx *FunctionCallArgsContext) {}
 
-// EnterIncreaseDecrease is called when production increaseDecrease is entered.
-func (s *BaseBigCListener) EnterIncreaseDecrease(ctx *IncreaseDecreaseContext) {}
-
-// ExitIncreaseDecrease is called when production increaseDecrease is exited.
-func (s *BaseBigCListener) ExitIncreaseDecrease(ctx *IncreaseDecreaseContext) {}
-
 // EnterArgList is called when production argList is entered.
 func (s *BaseBigCListener) EnterArgList(ctx *ArgListContext) {}
 

@@ -8,4 +8,4 @@ fi
 
 # antlr4 -atn -Xforce-atn -Xlog -Dlanguage=Go -visitor -listener $GRAMMAR_FILE -o out/
 
-antlr4 -Dlanguage=Go -visitor $GRAMMAR_FILE -o parser/
+antlr4 -Dlanguage=Go -Xlog -visitor $GRAMMAR_FILE -o parser/

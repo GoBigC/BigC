@@ -1,17 +1,38 @@
 package ast
 
+// [Explain] interface is used for objects that 
+// would be extend over time (a Node satisfy this, 
+// because it could be branch node or leaf node)
+// The Node especially need to be an interface, 
+// because it is very polymorphic -- all AST nodes 
+// will be a specific kind of Node 
 type Node interface {
 	isNode()
 }
 
+// [Explain] struct is used if the object needs to
+// hold data (BaseNode satisfy this because it should
+// contain line & col information for bug reports)
 type BaseNode struct {
 	Line int 
 	Column int 
 }
 
-func (b *BaseNode) isNode(){} // required interface implementation 
+// [Design Pattern] Sealed interface
+// https://www.baeldung.com/java-sealed-classes-interfaces
+// the existence of this method prevents accidental 
+// implementations (have to explicitly implement this method
+// to qualify as a Declaration AST node)
+// Having this extra method helps with that, while not adding 
+// any additional cost -- the method is empty, it does not use 
+// any computation resource, cost nothing :)
+func (b *BaseNode) isNode(){} 
 
 // ----- Program structure -----
+// [Explain] struct is also used when the object is 
+// rather simple/concrete and would not need to be  
+// extended over time (Program satisfy this because a 
+// program is a list of declarations, no polymorphs here)
 type Program struct {
 	BaseNode
 	Declarations []Declaration
@@ -58,6 +79,12 @@ type Type interface {
 
 type BaseType struct {
 	BaseNode 
+}
+
+type ArrayType struct{
+	BaseType
+	ElementType	Type
+	Size		Expression
 }
 
 func (b *BaseType) isType() {}
@@ -127,6 +154,12 @@ type BaseExpression struct {
 
 func (b *BaseExpression) isExpression() {}
 
+type FunctionCallExpression struct {
+	BaseExpression 
+	Function 	Expression 
+	Arguments	[]Expression
+}
+
 type BinaryExpression struct {
 	// contains + - * / 
 	BaseExpression 
@@ -136,17 +169,16 @@ type BinaryExpression struct {
 }
 
 type UnaryExpression struct { 
-	// contains ! ++ -- 
+	// contains ! (logical not)
 	BaseExpression 
 	Operator 	string 
 	Operand		Expression 
-	IsPrefix 	bool 	// true if prefix, false if postfix 
 }
 
-type FunctionCallExpression struct {
+type ArrayAccessExpression struct {
 	BaseExpression 
-	Function 	Expression 
-	Arguments	[]Expression
+	Array 	Expression // to support matrix defn, where mat[i][j] then mat[i] is an expression, not just a var
+	Index	Expression
 }
 
 // ----- Identifiers & Literals ----- 

@@ -1,0 +1,7 @@
+int answer = 42;
+float pi = 3.14159;
+bool flag = true;
+
+int factorial(int n) {
+    return 1; 
+}

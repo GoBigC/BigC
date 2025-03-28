@@ -10,7 +10,7 @@ declaration
     ;
 
 arrayNotation   
-    : '[' IntegerConstant ']'
+    : '[' expression ']'
     ;
 
 type
@@ -166,7 +166,6 @@ multiplicationExpressionRest
 multDivModOperator
     : '*'
     | '/'
-    | '%'
     ;
 
 unaryExpression 
@@ -175,13 +174,11 @@ unaryExpression
     ;
 
 unaryOperator
-    : '++' // prefix
-    | '--' // prefix
-    | '!'
+    : '!'
     ;
 
 postfixExpression 
-    : primaryExpression (arrayAccess | functionCallArgs | increaseDecrease)?
+    : primaryExpression (arrayAccess | functionCallArgs)?
     ;
 
 arrayAccess 
@@ -190,11 +187,6 @@ arrayAccess
 
 functionCallArgs
     : '(' argList? ')'
-    ;
-
-increaseDecrease
-    : '++'  // postfix
-    | '--'  // postfix 
     ;
 
 argList 
