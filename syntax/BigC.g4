@@ -23,7 +23,7 @@ type
 
 declarationRemainder 
     : '(' parameterList? ')' block 
-    | Identifier variableInitializer? ';'
+    | variableInitializer? ';'
     ;
 
 parameterList
@@ -95,7 +95,7 @@ assignmentRest
     ;
 
 variableInitializer
-    : '=' expression ';'
+    : '=' expression
     ;
 
 logicalOrExpression
