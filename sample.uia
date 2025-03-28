@@ -1,0 +1,74 @@
+/* Corrected BigC program that follows the grammar */
+
+// Global variable declarations
+int globalVar = 42;
+float pi= 3.14159;
+bool flag  = true;
+char message;
+
+// Function to calculate factorial
+int factorial(int n) {
+    if (n <= 1) {
+        return 1;
+    } 
+    else {
+        return n * factorial(n - 1);
+    }
+}
+
+// Function to fill an array with values
+void fillArray(int size) {
+    int i = 0;
+    
+    while (i < size) {
+        i = i + 1;
+    }
+}
+
+// Main function with various expressions and statements
+int main() {
+    // Variable declarations with initializers
+    int x = 10;
+    int y = 5;
+    bool result = false;
+    float sum  = 0.0;
+    
+    // Function calls
+    fillArray(5);
+    
+    // Arithmetic expressions
+    sum = (x + y) * 2;
+    
+    // Prefix and postfix operators
+    ++x;
+    y--;
+    
+    // Comparison and logical operators
+    if (x > y && !result) {
+        result = true;
+    } 
+    else {
+        if (x == y || sum > 10.0) {
+            result = false;
+        }
+    }
+    
+    // While loop with nested if
+    while (x > 0) {
+        if (x % 2 == 0) {
+            sum = sum + x;
+        }
+        x = x - 1;
+    }
+    
+    // Assignment
+    int  a = 0;
+    int  b = 0;
+    int c = 0;
+    
+    // Logical expressions
+    bool complex;
+    complex = x < y || sum >= 10.0 && !flag;
+    
+    return factorial(5);
+}
