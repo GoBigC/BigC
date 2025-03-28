@@ -16,6 +16,10 @@ func (v *BaseBigCVisitor) VisitDeclaration(ctx *DeclarationContext) interface{} 
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseBigCVisitor) VisitArrayNotation(ctx *ArrayNotationContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseBigCVisitor) VisitType(ctx *TypeContext) interface{} {
 	return v.VisitChildren(ctx)
 }

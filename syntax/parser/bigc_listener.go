@@ -14,6 +14,9 @@ type BigCListener interface {
 	// EnterDeclaration is called when entering the declaration production.
 	EnterDeclaration(c *DeclarationContext)
 
+	// EnterArrayNotation is called when entering the arrayNotation production.
+	EnterArrayNotation(c *ArrayNotationContext)
+
 	// EnterType is called when entering the type production.
 	EnterType(c *TypeContext)
 
@@ -142,6 +145,9 @@ type BigCListener interface {
 
 	// ExitDeclaration is called when exiting the declaration production.
 	ExitDeclaration(c *DeclarationContext)
+
+	// ExitArrayNotation is called when exiting the arrayNotation production.
+	ExitArrayNotation(c *ArrayNotationContext)
 
 	// ExitType is called when exiting the type production.
 	ExitType(c *TypeContext)

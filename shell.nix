@@ -4,6 +4,8 @@ pkgs.mkShell {
     go 
     gotools 
     gopls 
+    go-outline
+    golint
     delve # Go debugger 
 
     antlr4

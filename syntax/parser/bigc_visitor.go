@@ -14,6 +14,9 @@ type BigCVisitor interface {
 	// Visit a parse tree produced by BigCParser#declaration.
 	VisitDeclaration(ctx *DeclarationContext) interface{}
 
+	// Visit a parse tree produced by BigCParser#arrayNotation.
+	VisitArrayNotation(ctx *ArrayNotationContext) interface{}
+
 	// Visit a parse tree produced by BigCParser#type.
 	VisitType(ctx *TypeContext) interface{}
 

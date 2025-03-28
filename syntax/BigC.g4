@@ -6,7 +6,11 @@ program
     ;
 
 declaration
-    : type Identifier declarationRemainder
+    : type arrayNotation? Identifier declarationRemainder
+    ;
+
+arrayNotation   
+    : '[' IntegerConstant ']'
     ;
 
 type
@@ -173,6 +177,7 @@ unaryExpression
 unaryOperator
     : '++' // prefix
     | '--' // prefix
+    | '!'
     ;
 
 postfixExpression 
