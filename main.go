@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	
-	"BigCooker/syntax"
+	// "BigCooker/syntax"
 	"BigCooker/syntax/parser"
 	// "BigCooker/syntax/ast"
 

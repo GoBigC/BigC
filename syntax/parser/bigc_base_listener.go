@@ -33,6 +33,12 @@ func (s *BaseBigCListener) EnterDeclaration(ctx *DeclarationContext) {}
 // ExitDeclaration is called when production declaration is exited.
 func (s *BaseBigCListener) ExitDeclaration(ctx *DeclarationContext) {}
 
+// EnterArrayNotation is called when production arrayNotation is entered.
+func (s *BaseBigCListener) EnterArrayNotation(ctx *ArrayNotationContext) {}
+
+// ExitArrayNotation is called when production arrayNotation is exited.
+func (s *BaseBigCListener) ExitArrayNotation(ctx *ArrayNotationContext) {}
+
 // EnterType is called when production type is entered.
 func (s *BaseBigCListener) EnterType(ctx *TypeContext) {}
 
