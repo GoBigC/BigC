@@ -168,10 +168,6 @@ func (v *BaseBigCVisitor) VisitFunctionCallArgs(ctx *FunctionCallArgsContext) in
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseBigCVisitor) VisitIncreaseDecrease(ctx *IncreaseDecreaseContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseBigCVisitor) VisitArgList(ctx *ArgListContext) interface{} {
 	return v.VisitChildren(ctx)
 }

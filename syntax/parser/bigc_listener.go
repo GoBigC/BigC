@@ -128,9 +128,6 @@ type BigCListener interface {
 	// EnterFunctionCallArgs is called when entering the functionCallArgs production.
 	EnterFunctionCallArgs(c *FunctionCallArgsContext)
 
-	// EnterIncreaseDecrease is called when entering the increaseDecrease production.
-	EnterIncreaseDecrease(c *IncreaseDecreaseContext)
-
 	// EnterArgList is called when entering the argList production.
 	EnterArgList(c *ArgListContext)
 
@@ -259,9 +256,6 @@ type BigCListener interface {
 
 	// ExitFunctionCallArgs is called when exiting the functionCallArgs production.
 	ExitFunctionCallArgs(c *FunctionCallArgsContext)
-
-	// ExitIncreaseDecrease is called when exiting the increaseDecrease production.
-	ExitIncreaseDecrease(c *IncreaseDecreaseContext)
 
 	// ExitArgList is called when exiting the argList production.
 	ExitArgList(c *ArgListContext)

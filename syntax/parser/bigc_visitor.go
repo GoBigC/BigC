@@ -128,9 +128,6 @@ type BigCVisitor interface {
 	// Visit a parse tree produced by BigCParser#functionCallArgs.
 	VisitFunctionCallArgs(ctx *FunctionCallArgsContext) interface{}
 
-	// Visit a parse tree produced by BigCParser#increaseDecrease.
-	VisitIncreaseDecrease(ctx *IncreaseDecreaseContext) interface{}
-
 	// Visit a parse tree produced by BigCParser#argList.
 	VisitArgList(ctx *ArgListContext) interface{}
 
