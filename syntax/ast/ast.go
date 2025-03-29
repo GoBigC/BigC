@@ -160,7 +160,7 @@ type FunctionCallExpression struct {
 	Arguments	[]Expression
 }
 
-type BinaryExpression struct {
+type BinaryExpression struct { // likely unused :)
 	// contains + - * / 
 	BaseExpression 
 	Left 		Expression 

@@ -43,3 +43,6 @@ When standing at a decision point (ie. after processing `type` and have to decid
 This is when grammar unambiguity proves to be very useful: if the grammar is ambiguous, you would need to implement lookahead logic to lookahead several tokens to have enough information to keep going. 
 
 Once again, this is very formulaic and requires detailed handling. 
+
+## Helpful resources 
+- [This guy](https://youtu.be/VKM1eLoN-gI?si=WzVZjmnYIZWEjvEG) explains and demonstrates CST, AST, and happen to also explain interpreting vs. compiling pretty well in the process. He uses lex/yacc though, so if you're only familiar with Antlr it takes some extra effort to learn lex/yacc.

@@ -6,7 +6,7 @@ program
     ;
 
 declaration
-    : type arrayNotation? Identifier declarationRemainder
+    : type Identifier arrayNotation? declarationRemainder
     ;
 
 arrayNotation   
@@ -31,7 +31,7 @@ parameterList
     ;
 
 parameter
-    : type Identifier
+    : type Identifier arrayNotation?
     ;
 
 block 
@@ -72,9 +72,9 @@ returnStatement
 
 // Expression precedence (from highest to lowest):
 // 1. Primary expressions (constants, variables, parenthesized)
-// 2. Postfix operations (arr[i], fn(), x++, x--)
-// 3. Unary operations (++x, --x)
-// 4. Multiplicative (*, /, %)
+// 2. Postfix operations (arr[i], fn(), x++, x--) -- only support the first 2
+// 3. Unary operations (!x, ++x, --x) -- only support the first
+// 4. Multiplicative (*, /) 
 // 5. Additive (+, -)
 // 6. Comparison (<, <=, >=, >)
 // 7. Equality (==, !=)
