@@ -18,3 +18,5 @@ go mod tidy
 ```
 bash run.sh
 ```
+
+After this, find the concrete syntax tree at `artifact/cst.txt`, and abstract syntax tree `at artifact/ast.txt`
