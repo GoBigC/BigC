@@ -1,19 +1,20 @@
 # BigC
 A simple C and Java inspired language for CS212 Programming Languages Paradigm
 
-1. Init the go module 
+## Build instruction 
+1. Clone & Go into the project dir 
+```
+git clone https://github.com/GoBigC/BigC.git
+cd BigC
+```
 
-`go mod init BigCooker`
+2. Update Go module dependency
+```
+go mod tidy
+```
+(dont have to do this all the time, once in a while is okay)
 
-2. Grab dependency 
-
-`go mod tidy`
-
-3. Compile (build)
-
-Stand in the project root directory
-`go build `
-
-4. Run 
-Stand in the project root directory
-`go run . bigcooker <sourcefile>`
+3. Run sript `run.sh` in the project root
+```
+bash run.sh
+```
