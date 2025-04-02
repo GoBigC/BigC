@@ -175,6 +175,7 @@ unaryExpression
 
 unaryOperator
     : '!'
+    | '-'
     ;
 
 postfixExpression 

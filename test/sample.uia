@@ -5,6 +5,8 @@ int globalInt = 42;
 float globalFloat = 3.14159;
 bool globalBool = true;
 char globalChar = 'A';
+int globalInt2 = -16; 
+float globalFloat2 = -1.2321;
 
 // Array declaration with size (syntax depends on your grammar rules)
 int globalArray[10];
