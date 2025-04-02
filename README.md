@@ -14,9 +14,17 @@ go mod tidy
 ```
 (dont have to do this all the time, once in a while is okay)
 
-3. Run sript `run.sh` in the project root
+3. Run sript `run.sh` in the project root to generate parser files through ANTLR
 ```
 bash run.sh
+```
+
+4. Build and run Go module 
+Stand at project root and run: 
+
+```
+go build . 
+go run . test/sample.uia
 ```
 
 After this, find the concrete syntax tree at `artifact/cst.txt`, and abstract syntax tree `at artifact/ast.txt`
