@@ -1,7 +1,6 @@
 // Code generated from grammar/BigC.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
 package parser // BigC
-
 import "github.com/antlr4-go/antlr/v4"
 
 // A complete Visitor for a parse tree produced by BigCParser.
