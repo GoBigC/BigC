@@ -1,4 +1,4 @@
-// Code generated from BigC.g4 by ANTLR 4.13.0. DO NOT EDIT.
+// Code generated from grammar/BigC.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
 package parser // BigC
 
