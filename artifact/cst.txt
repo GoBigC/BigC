@@ -90,6 +90,58 @@
 		declaration (
 			type int
 		)
+		globalInt2
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														unaryOperator -
+													)
+													(
+														unaryExpression (
+															postfixExpression (
+																primaryExpression (
+																	constant 16
+																))))))))))))))
+			;))
+	(
+		declaration (
+			type float
+		)
+		globalFloat2
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														unaryOperator -
+													)
+													(
+														unaryExpression (
+															postfixExpression (
+																primaryExpression (
+																	constant 1.2321
+																))))))))))))))
+			;))
+	(
+		declaration (
+			type int
+		)
 		globalArray
 		(
 			arrayNotation [ (
