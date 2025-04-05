@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"BigCooker/pkg/semantic"
 	"BigCooker/pkg/syntax"
 )
 
@@ -15,11 +16,22 @@ func main() {
     
     filename := os.Args[1]
     
-    err := syntax.ProcessFile(filename)
+    program, err := syntax.ProcessFile(filename)
     if err != nil {
         fmt.Printf("Error processing file: %v\n", err)
         os.Exit(1)
     }
+
     
     fmt.Println("Successfully processed file and generated artifacts.")
+
+    // Initialize the semantic analyzer
+    semanticAnalyzer := semantic.NewSemanticAnalyzer()
+    // Perform semantic analysis
+    if err := semanticAnalyzer.Analyze(program); err != nil {
+        fmt.Printf("Semantic analysis error: %v\n", err)
+        os.Exit(1)
+    }
+    fmt.Println("Semantic analysis completed successfully.")
+
 }
