@@ -90,8 +90,10 @@ func (symTable *SymbolTable) PrintTable() {
         }
         fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", name, typ, scope, arraySize, value, params, retType)
     }
+    fmt.Fprintln(w, "-----------------------------------------------------------------")
 
     w.Flush()
+    fmt.Println()
 }
 
 // collectSymbols gathers all symbols from the current scope and its parents.

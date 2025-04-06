@@ -4,6 +4,7 @@ import (
 	"BigCooker/pkg/semantic/table"
 	"BigCooker/pkg/syntax/ast"
 	"fmt"
+	"math"
 )
 
 type SemanticAnalyzer struct {
@@ -90,6 +91,11 @@ func (analyzer *SemanticAnalyzer) checkExpression(expr ast.Expression) ast.Type 
 
 // --- SemanticAnalyzerntic Checks ---
 func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclaration) {
+    lastLine := math.MaxInt // Global default
+    if analyzer.SymTable.ScopeType != "global" {
+        lastLine = varDeclr.Line // Will be updated in checkBlock
+    }
+
     var size int64 = getArraySize(varDeclr.Type)
     if size < 0 && isArray(varDeclr.Type) {
         analyzer.Error(varDeclr.Line, "array size must be a positive constant")
@@ -97,7 +103,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
     var sym table.Symbol = table.Symbol{
         Name:      varDeclr.Name,
         Type:      varDeclr.Type,
-        Scope:     table.ScopeInfo{ValidFirstLine: varDeclr.Line, ValidLastLine: varDeclr.Line}, // Updated later
+        Scope:     table.ScopeInfo{ValidFirstLine: varDeclr.Line, ValidLastLine: lastLine}, // Updated later
         ArraySize: size,
     }
     if varDeclr.Initializer != nil {
@@ -129,13 +135,15 @@ func (analyzer *SemanticAnalyzer) checkFunctionDeclaration(funcDeclr *ast.Functi
             Scope: table.ScopeInfo{ValidFirstLine: funcDeclr.Line, ValidLastLine: funcDeclr.Body.Line},
         })
     }
-    analyzer.checkBlock(funcDeclr.Body, funcDeclr.Body.Line) // Use block’s line as end
+    analyzer.checkBlock(funcDeclr.Body, funcDeclr.Body.Line) // TODO: This is block start line
+    fmt.Println("Table in function scope:")
+    analyzer.SymTable.PrintTable()
     analyzer.SymTable = analyzer.SymTable.Parent
 }
 
-func (analyzer *SemanticAnalyzer) checkBlock(b *ast.Block, blockEndLine int) {
+func (analyzer *SemanticAnalyzer) checkBlock(block *ast.Block, blockEndLine int) {
     analyzer.SymTable = table.NewSymbolTable(analyzer.SymTable, "block")
-    for _, item := range b.Items {
+    for _, item := range block.Items {
         switch it := item.(type) {
         case ast.Declaration:
             analyzer.visitDeclaration(it)
@@ -147,6 +155,8 @@ func (analyzer *SemanticAnalyzer) checkBlock(b *ast.Block, blockEndLine int) {
             analyzer.visitStatement(it, blockEndLine)
         }
     }
+    fmt.Println("Table in block scope:")
+    analyzer.SymTable.PrintTable()
     analyzer.SymTable = analyzer.SymTable.Parent
 }
 
