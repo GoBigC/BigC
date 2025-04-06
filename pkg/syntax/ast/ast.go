@@ -14,8 +14,10 @@ type Node interface {
 // hold data (BaseNode satisfy this because it should
 // contain line & col information for bug reports)
 type BaseNode struct {
-	Line int 
-	Column int 
+	Line 		int 
+	Column 		int 
+	EndLine 	int
+	EndColumn	int
 }
 
 // [Design Pattern] Sealed interface
