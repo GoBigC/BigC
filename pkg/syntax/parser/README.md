@@ -4,6 +4,7 @@
 Stand at project root and run:
 
 ```
+go build . 
 go run . test/sample.uia 
 ```
 
