@@ -29,9 +29,11 @@ func main() {
     // Initialize the semantic analyzer
     semanticAnalyzer := semantic.NewSemanticAnalyzer()
     // Perform semantic analysis
-    if err := semanticAnalyzer.Analyze(program); len(err) > 0 {
+    if errs := semanticAnalyzer.Analyze(program); len(errs) > 0 {
+        for _, err := range errs {
         fmt.Printf("Semantic analysis error: %v\n", err)
-        os.Exit(1)
+        }
+    os.Exit(1)
     }
     fmt.Println("Semantic analysis completed successfully.")
 

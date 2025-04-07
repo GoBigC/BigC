@@ -23,13 +23,79 @@ func (analyzer *SemanticAnalyzer) Error(line int, msg string) {
     analyzer.errors = append(analyzer.errors, fmt.Sprintf("Line %d: %s", line, msg))
 }
 
+// 2 pass analyzer:
+// First pass collect all symbols
+// Second pass check for usage and type checking
+// Allows for declarations after function call
 func (analyzer *SemanticAnalyzer) Analyze(program *ast.Program) []string {
     for _, decl := range program.Declarations {
-        analyzer.visitDeclaration(decl)
+        analyzer.collectDeclaration(decl)
     }
-	fmt.Println("Symbol Table Dump:")
+
+    for _, decl := range program.Declarations {
+        analyzer.analyzeDeclaration(decl)
+    }
+
+    fmt.Println("Symbol Table Dump:")
     analyzer.SymTable.PrintTable()
     return analyzer.errors
+}
+
+// First pass to add all symbols to table first
+func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
+    lastLine := math.MaxInt // Global default
+    switch d := declr.(type) {
+    case *ast.VarDeclaration:
+        if analyzer.SymTable.ScopeType != "global" {
+            lastLine = d.EndLine 
+        }
+        analyzer.SymTable.Define(d.Name, table.Symbol{
+            Name:      d.Name,
+            Type:      d.Type,
+            Scope:     table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine}, // Global
+            ArraySize: getArraySize(d.Type),
+        })
+    case *ast.FunctionDeclaration:
+        if analyzer.SymTable.ScopeType != "global" {
+            lastLine = d.EndLine 
+        }
+        analyzer.SymTable.Define(d.Name, table.Symbol{
+            Name:       d.Name,
+            Type:       &ast.PrimitiveType{Name: "function"},
+            Scope:      table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine}, // Requires EndLine
+            Parameters: d.Parameters,
+            ReturnType: d.ReturnType,
+        })
+    }
+}
+
+// Now we analyze -> can declare and use anywhere within scope
+func (analyzer *SemanticAnalyzer) analyzeDeclaration(declr ast.Declaration) {
+    switch d := declr.(type) {
+    case *ast.VarDeclaration:
+        if d.Initializer != nil {
+            initType := analyzer.checkExpression(d.Initializer)
+            if !typesMatch(d.Type, initType) {
+                analyzer.Error(d.Line, fmt.Sprintf("type mismatch in initializer: expected %s, got %s", typeString(d.Type), typeString(initType)))
+            }
+            if val, ok := getConstantValue(d.Initializer); ok {
+                sym := analyzer.SymTable.Symbols[d.Name]
+                sym.Value = val
+                analyzer.SymTable.Symbols[d.Name] = sym
+            }
+        }
+    case *ast.FunctionDeclaration:
+        analyzer.SymTable = table.NewSymbolTable(analyzer.SymTable, "function")
+        for _, param := range d.Parameters {
+            analyzer.SymTable.Define(param.Name, table.Symbol{
+                Name:  param.Name,
+                Type:  param.Type,
+                Scope: table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: d.Body.EndLine},
+            })
+        }
+        analyzer.checkBlock(d.Body, d.Body.EndLine)
+        analyzer.SymTable = analyzer.SymTable.Parent
+    }
 }
 
 // --- Visitors ---
@@ -93,7 +159,7 @@ func (analyzer *SemanticAnalyzer) checkExpression(expr ast.Expression) ast.Type 
 func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclaration) {
     lastLine := math.MaxInt // Global default
     if analyzer.SymTable.ScopeType != "global" {
-        lastLine = varDeclr.Line // Will be updated in checkBlock
+        lastLine = varDeclr.EndLine 
     }
 
     var size int64 = getArraySize(varDeclr.Type)
@@ -103,7 +169,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
     var sym table.Symbol = table.Symbol{
         Name:      varDeclr.Name,
         Type:      varDeclr.Type,
-        Scope:     table.ScopeInfo{ValidFirstLine: varDeclr.Line, ValidLastLine: lastLine}, // Updated later
+        Scope:     table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, // Updated later
         ArraySize: size,
     }
     if varDeclr.Initializer != nil {
@@ -122,7 +188,7 @@ func (analyzer *SemanticAnalyzer) checkFunctionDeclaration(funcDeclr *ast.Functi
     sym := table.Symbol{
         Name:       funcDeclr.Name,
         Type:       &ast.PrimitiveType{Name: "function"},
-        Scope:      table.ScopeInfo{ValidFirstLine: funcDeclr.Line, ValidLastLine: funcDeclr.Body.Line}, // Approx block end
+        Scope:      table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: math.MaxInt}, // No nested functions allowed, so all functions are global
         Parameters: funcDeclr.Parameters,
         ReturnType: funcDeclr.ReturnType,
     }
@@ -132,11 +198,11 @@ func (analyzer *SemanticAnalyzer) checkFunctionDeclaration(funcDeclr *ast.Functi
         analyzer.SymTable.Define(param.Name, table.Symbol{
             Name:  param.Name,
             Type:  param.Type,
-            Scope: table.ScopeInfo{ValidFirstLine: funcDeclr.Line, ValidLastLine: funcDeclr.Body.Line},
+            Scope: table.ScopeInfo{ValidFirstLine: funcDeclr.Line, ValidLastLine: funcDeclr.Body.EndLine},
         })
     }
-    analyzer.checkBlock(funcDeclr.Body, funcDeclr.Body.Line) // TODO: This is block start line
-    fmt.Println("Table in function scope:")
+    analyzer.checkBlock(funcDeclr.Body, funcDeclr.Body.EndLine) // TODO: This is block start line
+    fmt.Printf("Table in function scope at line %d \n", funcDeclr.Line)
     analyzer.SymTable.PrintTable()
     analyzer.SymTable = analyzer.SymTable.Parent
 }
@@ -146,16 +212,22 @@ func (analyzer *SemanticAnalyzer) checkBlock(block *ast.Block, blockEndLine int)
     for _, item := range block.Items {
         switch it := item.(type) {
         case ast.Declaration:
-            analyzer.visitDeclaration(it)
-            if sym, ok := analyzer.SymTable.Symbols[it.(*ast.VarDeclaration).Name]; ok {
-                sym.Scope.ValidLastLine = blockEndLine // Update scope
-                analyzer.SymTable.Symbols[it.(*ast.VarDeclaration).Name] = sym
+            switch d := it.(type) {
+            case *ast.VarDeclaration:
+                analyzer.visitDeclaration(d)
+                if sym, ok := analyzer.SymTable.Symbols[d.Name]; ok {
+                    sym.Scope.ValidLastLine = blockEndLine
+                    analyzer.SymTable.Symbols[d.Name] = sym
+                }
+            case *ast.FunctionDeclaration:
+                // Nested function declarations aren't valid in BigC, so error
+                analyzer.Error(d.Line, "nested function declarations are not allowed")
             }
         case ast.Statement:
             analyzer.visitStatement(it, blockEndLine)
         }
     }
-    fmt.Println("Table in block scope:")
+    fmt.Printf("Table in block scope at line %d \n", block.Line)
     analyzer.SymTable.PrintTable()
     analyzer.SymTable = analyzer.SymTable.Parent
 }
@@ -175,20 +247,20 @@ func (analyzer *SemanticAnalyzer) checkIfStatement(ifStmt *ast.IfStatement, bloc
     }
 }
 
-func (s *SemanticAnalyzer) checkWhileStatement(w *ast.WhileStatement, blockEndLine int) {
-    condType := s.checkExpression(w.Condition)
+func (analyzer *SemanticAnalyzer) checkWhileStatement(w *ast.WhileStatement, blockEndLine int) {
+    condType := analyzer.checkExpression(w.Condition)
     if !isBoolType(condType) {
-        s.Error(w.Line, "while condition must be boolean")
+        analyzer.Error(w.Line, "while condition must be boolean")
     }
-    s.checkBlock(w.Body, blockEndLine)
+    analyzer.checkBlock(w.Body, blockEndLine)
 }
 
-func (s *SemanticAnalyzer) checkReturnStatement(r *ast.ReturnStatement) {
-    retType := s.checkExpression(r.Value)
-    fnScope := s.findFunctionScope()
+func (analyzer *SemanticAnalyzer) checkReturnStatement(r *ast.ReturnStatement) {
+    retType := analyzer.checkExpression(r.Value)
+    fnScope := analyzer.findFunctionScope()
     if fnScope != nil {
         if !typesMatch(fnScope.ReturnType, retType) {
-            s.Error(r.Line, fmt.Sprintf("return type mismatch: expected %s, got %s", typeString(fnScope.ReturnType), typeString(retType)))
+            analyzer.Error(r.Line, fmt.Sprintf("return type mismatch: expected %s, got %s", typeString(fnScope.ReturnType), typeString(retType)))
         }
     }
 }
@@ -262,7 +334,7 @@ func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAcxessExpr *ast.
 }
 
 func (analyzer *SemanticAnalyzer) checkFunctionCallExpression(funcCallExpr *ast.FunctionCallExpression) ast.Type {
-    // fnExpr := analyzer.checkExpression(funcCallExpr.Function)
+
     if id, ok := funcCallExpr.Function.(*ast.Identifier); ok {
         sym, ok := analyzer.SymTable.Lookup(id.Name)
         if !ok || sym.Type.(*ast.PrimitiveType).Name != "function" {
@@ -270,7 +342,7 @@ func (analyzer *SemanticAnalyzer) checkFunctionCallExpression(funcCallExpr *ast.
             return nil
         }
         if len(funcCallExpr.Arguments) != len(sym.Parameters) {
-            analyzer.Error(funcCallExpr.Line, "argument count mismatch")
+            analyzer.Error(funcCallExpr.Line, fmt.Sprintf("argument count mismatch, expected %d, got %d", len(sym.Parameters), len(funcCallExpr.Arguments)))
             return sym.ReturnType
         }
         for i, arg := range funcCallExpr.Arguments {

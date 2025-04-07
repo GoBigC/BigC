@@ -1,5 +1,16 @@
 int x[3];
 int main(int arg) {
-    int y = 5;
-    return y;
+    int y = addInt(1, 2, 6);
+    // if (y == 3) {
+    //     int z = 69;
+    // }
+    // return z;
+
+}
+    void foo() {
+        return 'c';
+    }
+
+int addInt(int x, int y) {
+    return x + yourMom;
 }
