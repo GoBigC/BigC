@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-    // if len(os.Args) < 2 {
-    //     fmt.Println("Please supply source file")
-    //     os.Exit(1)
-    // }
+    if len(os.Args) < 2 {
+        fmt.Println("Please supply source file")
+        os.Exit(1)
+    }
     
-    // filename := os.Args[1]
-    filename := "test/smol_sample.uia"
+    filename := os.Args[1]
+    // filename := "test/smol_sample.uia"
     
     program, err := syntax.ProcessFile(filename)
     if err != nil {
