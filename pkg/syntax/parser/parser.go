@@ -27,16 +27,16 @@ func ParseFile(filename string) (*ast.Program, error) {
 	tokenStream := antlr.NewCommonTokenStream(lexer, 0)
 	p := NewBigCParser(tokenStream)
 
-	errorListener := NewSyntaxErrorListener(lines)
+	errorHandler := NewSyntaxErrorHandler(lines)
 	p.RemoveErrorListeners()
-	p.AddErrorListener(errorListener)
+	p.AddErrorListener(errorHandler)
 
 	tree := p.Program()
 
 	// Check if there were any syntax errors
-	if len(errorListener.Errors) > 0 {
+	if len(errorHandler.Errors) > 0 {
 		// Return syntax error without attempting to build AST
-		return nil, fmt.Errorf("%s", strings.Join(errorListener.Errors, "\n"))
+		return nil, fmt.Errorf("%s", strings.Join(errorHandler.Errors, "\n"))
 	}
 
 	// Only build AST if there are no syntax errors
@@ -48,80 +48,6 @@ func ParseFile(filename string) (*ast.Program, error) {
 	}
 
 	return program, nil
-}
-
-// SyntaxErrorListener implements antlr.ErrorListener
-type SyntaxErrorListener struct {
-	Errors []string
-	Lines  []string // source lines from the file
-}
-
-func NewSyntaxErrorListener(lines []string) *SyntaxErrorListener {
-	return &SyntaxErrorListener{
-		Errors: make([]string, 0),
-		Lines:  lines,
-	}
-}
-
-func (l *SyntaxErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
-	actualLine := line
-	actualCol := column
-	text := "<unknown>"
-
-	if token, ok := offendingSymbol.(*antlr.CommonToken); ok && token != nil {
-		text = token.GetText()
-		if text == "<EOF>" {
-			if parser, ok := recognizer.(antlr.Parser); ok {
-				stream := parser.GetTokenStream()
-				index := stream.Index()
-				if index > 0 {
-					prev := stream.Get(index - 1)
-					text = prev.GetText()
-					actualLine = prev.GetLine()
-					actualCol = prev.GetColumn() + len(prev.GetText())
-				}
-			}
-		}
-	}
-
-	codeLine := ""
-	caretLine := ""
-	if actualLine > 0 && actualLine <= len(l.Lines) {
-		codeLine = l.Lines[actualLine-1]
-		caretLine = strings.Repeat(" ", actualCol) + "^"
-	}
-
-	// Enhanced error message handling
-	var fullMessage string
-	switch {
-	case strings.Contains(msg, "missing ';'"):
-		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: missing ';' at '%s'", actualLine, actualCol, codeLine, caretLine, text)
-
-	case strings.Contains(msg, "mismatched input"):
-		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: mismatched input '%s'. Check for unexpected tokens or typos.", actualLine, actualCol, codeLine, caretLine, text)
-
-	case strings.Contains(msg, "no viable alternative"):
-		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: unexpected structure near '%s'. Possibly an invalid expression or statement.", actualLine, actualCol, codeLine, caretLine, text)
-
-	case strings.Contains(msg, "extraneous input"):
-		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: extraneous input '%s'. Remove unnecessary characters or tokens.", actualLine, actualCol, codeLine, caretLine, text)
-
-	case strings.Contains(msg, "expecting"):
-		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: expected token missing near '%s'. %s", actualLine, actualCol, codeLine, caretLine, text, msg)
-
-	default:
-		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\n%s", actualLine, actualCol, codeLine, caretLine, msg)
-	}
-
-	l.Errors = append(l.Errors, fullMessage)
-}
-
-// Required interface methods for antlr.ErrorListener
-func (l *SyntaxErrorListener) ReportAmbiguity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, exact bool, ambigAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
-}
-func (l *SyntaxErrorListener) ReportAttemptingFullContext(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex int, conflictingAlts *antlr.BitSet, configs *antlr.ATNConfigSet) {
-}
-func (l *SyntaxErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex, prediction int, configs *antlr.ATNConfigSet) {
 }
 
 type ASTBuilder struct {
@@ -241,10 +167,8 @@ func (v *ASTBuilder) VisitProgram(ctx *ProgramContext) interface{} {
 	// set BaseNode properties
 	program := &ast.Program{
 		BaseNode: ast.BaseNode{
-			Line: 	    ctx.GetStart().GetLine(), 
-			Column:     ctx.GetStart().GetColumn(),
-            EndLine:    ctx.GetStop().GetLine(), 
-            EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
+			Line:   ctx.GetStart().GetLine(),
+			Column: ctx.GetStart().GetColumn(),
 		},
 	}
 
@@ -278,8 +202,6 @@ func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
 			BaseNode: ast.BaseNode{
 				Line:   ctx.GetStart().GetLine(),
 				Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
 			},
 		},
 		Name: typeName,
@@ -306,13 +228,10 @@ func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
 				BaseNode: ast.BaseNode{
 					Line:   arrayNotation.GetStart().GetLine(),
 					Column: arrayNotation.GetStart().GetColumn(),
-
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-				}, 
-			}, 
-			ElementType: typeNode, 
-			Size: 		 sizeExpr,
+				},
+			},
+			ElementType: typeNode,
+			Size:        sizeExpr,
 		}
 	}
 
@@ -338,8 +257,6 @@ func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
 				BaseNode: ast.BaseNode{
 					Line:   ctx.GetStart().GetLine(),
 					Column: ctx.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
 				},
 			},
 			Name:       identifier,
@@ -399,8 +316,6 @@ func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
 			BaseNode: ast.BaseNode{
 				Line:   ctx.GetStart().GetLine(),
 				Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
 			},
 		},
 		Name: identifier,
@@ -538,8 +453,6 @@ func (v *ASTBuilder) VisitParameter(ctx *ParameterContext) interface{} {
 			BaseNode: ast.BaseNode{
 				Line:   ctx.GetStart().GetLine(),
 				Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
 			},
 		},
 		Name: typeName,
@@ -554,26 +467,21 @@ func (v *ASTBuilder) VisitParameter(ctx *ParameterContext) interface{} {
 				BaseNode: ast.BaseNode{
 					Line:   arrayNotation.GetStart().GetLine(),
 					Column: arrayNotation.GetStart().GetColumn(),
-
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-				}, 
-			}, 
-			ElementType: typeNode, 
-			Size: 		 sizeExpr,
+				},
+			},
+			ElementType: typeNode,
+			Size:        sizeExpr,
 		}
 	}
-    
-    return ast.Parameter{
-        BaseNode: ast.BaseNode{
-            Line:   ctx.GetStart().GetLine(),
-            Column: ctx.GetStart().GetColumn(),
-            EndLine:    ctx.GetStop().GetLine(), 
-            EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-        },
-        Name: identifier,
-        Type: typeNode,
-    }
+
+	return ast.Parameter{
+		BaseNode: ast.BaseNode{
+			Line:   ctx.GetStart().GetLine(),
+			Column: ctx.GetStart().GetColumn(),
+		},
+		Name: identifier,
+		Type: typeNode,
+	}
 }
 
 func (v *ASTBuilder) VisitParameterList(ctx *ParameterListContext) interface{} {
@@ -597,104 +505,92 @@ func (v *ASTBuilder) VisitStatement(ctx *StatementContext) interface{} {
 
 // If statements
 func (v *ASTBuilder) VisitIfStatement(ctx *IfStatementContext) interface{} {
-    ifStmt := &ast.IfStatement{
-        BaseStatement: ast.BaseStatement{
-            BaseNode: ast.BaseNode{
-                Line:   ctx.GetStart().GetLine(),
-                Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-            },
-        },
-        Condition: v.Visit(ctx.Expression()).(ast.Expression),
-        ThenBlock: v.Visit(ctx.Block()).(*ast.Block),
-    }
-    
-    elseClause := ctx.ElseClause()
-    if elseClause != nil {
-        if elseBlock := elseClause.Block(); elseBlock != nil {
-            ifStmt.ElseBlock = v.Visit(elseBlock).(ast.Node)
-        } else if elseIf := elseClause.IfStatement(); elseIf != nil {
-            ifStmt.ElseBlock = v.Visit(elseIf).(ast.Node)
-        }
-    }
-    
-    return ifStmt
+	ifStmt := &ast.IfStatement{
+		BaseStatement: ast.BaseStatement{
+			BaseNode: ast.BaseNode{
+				Line:   ctx.GetStart().GetLine(),
+				Column: ctx.GetStart().GetColumn(),
+			},
+		},
+		Condition: v.Visit(ctx.Expression()).(ast.Expression),
+		ThenBlock: v.Visit(ctx.Block()).(*ast.Block),
+	}
+
+	elseClause := ctx.ElseClause()
+	if elseClause != nil {
+		if elseBlock := elseClause.Block(); elseBlock != nil {
+			ifStmt.ElseBlock = v.Visit(elseBlock).(ast.Node)
+		} else if elseIf := elseClause.IfStatement(); elseIf != nil {
+			ifStmt.ElseBlock = v.Visit(elseIf).(ast.Node)
+		}
+	}
+
+	return ifStmt
 }
 
 // NonIfStatement (while, return)
 func (v *ASTBuilder) VisitNonIfStatement(ctx *NonIfStatementContext) interface{} {
+	if expr := ctx.Expression(); expr != nil {
+		return &ast.ExpressionStatement{
+			BaseStatement: ast.BaseStatement{
+				BaseNode: ast.BaseNode{
+					Line:   expr.GetStart().GetLine(),
+					Column: expr.GetStart().GetColumn(),
+				},
+			},
+			Expr: v.Visit(expr).(ast.Expression),
+		}
+	} else if whileStmt := ctx.WhileStatement(); whileStmt != nil {
+		return v.Visit(whileStmt)
+	} else if returnStmt := ctx.ReturnStatement(); returnStmt != nil {
+		return v.Visit(returnStmt)
+	}
 
-    if expr := ctx.Expression(); expr != nil {
-        return &ast.ExpressionStatement{
-            BaseStatement: ast.BaseStatement{
-                BaseNode: ast.BaseNode{
-                    Line:   expr.GetStart().GetLine(),
-                    Column: expr.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Expr: v.Visit(expr).(ast.Expression),
-        }
-    } else if whileStmt := ctx.WhileStatement(); whileStmt != nil {
-        return v.Visit(whileStmt)
-    } else if returnStmt := ctx.ReturnStatement(); returnStmt != nil {
-        return v.Visit(returnStmt)
-    }
-    
-    panic("Unknown non-if statement type")
+	panic("Unknown non-if statement type")
 }
 
 func (v *ASTBuilder) VisitWhileStatement(ctx *WhileStatementContext) interface{} {
-    return &ast.WhileStatement{
-        BaseStatement: ast.BaseStatement{
-            BaseNode: ast.BaseNode{
-                Line:   ctx.GetStart().GetLine(),
-                Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-            },
-        },
-        Condition: v.Visit(ctx.Expression()).(ast.Expression),
-        Body:      v.Visit(ctx.Block()).(*ast.Block),
-    }
+	return &ast.WhileStatement{
+		BaseStatement: ast.BaseStatement{
+			BaseNode: ast.BaseNode{
+				Line:   ctx.GetStart().GetLine(),
+				Column: ctx.GetStart().GetColumn(),
+			},
+		},
+		Condition: v.Visit(ctx.Expression()).(ast.Expression),
+		Body:      v.Visit(ctx.Block()).(*ast.Block),
+	}
 }
 
 func (v *ASTBuilder) VisitReturnStatement(ctx *ReturnStatementContext) interface{} {
-    return &ast.ReturnStatement{
-        BaseStatement: ast.BaseStatement{
-            BaseNode: ast.BaseNode{
-                Line:   ctx.GetStart().GetLine(),
-                Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-            },
-        },
-        Value: v.Visit(ctx.Expression()).(ast.Expression),
-    }
+	return &ast.ReturnStatement{
+		BaseStatement: ast.BaseStatement{
+			BaseNode: ast.BaseNode{
+				Line:   ctx.GetStart().GetLine(),
+				Column: ctx.GetStart().GetColumn(),
+			},
+		},
+		Value: v.Visit(ctx.Expression()).(ast.Expression),
+	}
 }
 
-//
 func (v *ASTBuilder) VisitBlock(ctx *BlockContext) interface{} {
-    block := &ast.Block{
-        BaseStatement: ast.BaseStatement{
-            BaseNode: ast.BaseNode{
-                Line:   ctx.GetStart().GetLine(),
-                Column: ctx.GetStart().GetColumn(),
-                EndLine:    ctx.GetStop().GetLine(), 
-                EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-            },
-        },
-        Items: []ast.BlockItem{},
-    }
-    
-    for _, itemCtx := range ctx.AllBlockItem() {
-        item := v.Visit(itemCtx).(ast.BlockItem)
-        block.Items = append(block.Items, item)
-    }
-    
-    return block
+	block := &ast.Block{
+		BaseStatement: ast.BaseStatement{
+			BaseNode: ast.BaseNode{
+				Line:   ctx.GetStart().GetLine(),
+				Column: ctx.GetStart().GetColumn(),
+			},
+		},
+		Items: []ast.BlockItem{},
+	}
+
+	for _, itemCtx := range ctx.AllBlockItem() {
+		item := v.Visit(itemCtx).(ast.BlockItem)
+		block.Items = append(block.Items, item)
+	}
+
+	return block
 }
 
 func (v *ASTBuilder) VisitBlockItem(ctx *BlockItemContext) interface{} {
@@ -718,16 +614,14 @@ func (v *ASTBuilder) VisitAssignmentExpression(ctx *AssignmentExpressionContext)
 		rightExpr := v.Visit(rest.AssignmentExpression()).(ast.Expression)
 		expr = &ast.BinaryExpression{
 			BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-			Left:		expr, 
-			Operator: 	"=",
-			Right: 		rightExpr, 
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: "=",
+			Right:    rightExpr,
 		}
 	}
 
@@ -741,16 +635,14 @@ func (v *ASTBuilder) VisitLogicalOrExpression(ctx *LogicalOrExpressionContext) i
 		rightExpr := v.Visit(rest.LogicalAndExpression()).(ast.Expression)
 		expr = &ast.BinaryExpression{
 			BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-			Left:		expr, 
-			Operator: 	"||",
-			Right: 		rightExpr, 
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: "||",
+			Right:    rightExpr,
 		}
 	}
 
@@ -764,16 +656,14 @@ func (v *ASTBuilder) VisitLogicalAndExpression(ctx *LogicalAndExpressionContext)
 		rightExpr := v.Visit(rest.EqualityExpression()).(ast.Expression)
 		expr = &ast.BinaryExpression{
 			BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-			Left:		expr, 
-			Operator: 	"&&",
-			Right: 		rightExpr, 
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: "&&",
+			Right:    rightExpr,
 		}
 	}
 
@@ -788,16 +678,14 @@ func (v *ASTBuilder) VisitEqualityExpression(ctx *EqualityExpressionContext) int
 		operator := rest.EqualityOperator().GetText()
 		expr = &ast.BinaryExpression{
 			BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-			Left:		expr, 
-			Operator: 	operator,
-			Right: 		rightExpr, 
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: operator,
+			Right:    rightExpr,
 		}
 	}
 
@@ -805,152 +693,139 @@ func (v *ASTBuilder) VisitEqualityExpression(ctx *EqualityExpressionContext) int
 }
 
 func (v *ASTBuilder) VisitComparisonExpression(ctx *ComparisonExpressionContext) interface{} {
-    expr := v.Visit(ctx.AdditionExpression()).(ast.Expression)
-    
-    for _, rest := range ctx.AllComparisonRest() {
-        rightExpr := v.Visit(rest.AdditionExpression()).(ast.Expression)
-        operator := rest.ComparisonOperator().GetText()
-        expr = &ast.BinaryExpression{
-            BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Left:     expr,
-            Operator: operator,
-            Right:    rightExpr,
-        }
-    }
-    
-    return expr
+	expr := v.Visit(ctx.AdditionExpression()).(ast.Expression)
+
+	for _, rest := range ctx.AllComparisonRest() {
+		rightExpr := v.Visit(rest.AdditionExpression()).(ast.Expression)
+		operator := rest.ComparisonOperator().GetText()
+		expr = &ast.BinaryExpression{
+			BaseExpression: ast.BaseExpression{
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: operator,
+			Right:    rightExpr,
+		}
+	}
+
+	return expr
 }
 
 func (v *ASTBuilder) VisitAdditionExpression(ctx *AdditionExpressionContext) interface{} {
-    expr := v.Visit(ctx.MultiplicationExpression()).(ast.Expression)
-    
-    for _, rest := range ctx.AllAdditionExpressionRest() {
-        rightExpr := v.Visit(rest.MultiplicationExpression()).(ast.Expression)
-        operator := rest.AddSubtractOperator().GetText()
-        expr = &ast.BinaryExpression{
-            BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Left:     expr,
-            Operator: operator,
-            Right:    rightExpr,
-        }
-    }
-    
-    return expr
+	expr := v.Visit(ctx.MultiplicationExpression()).(ast.Expression)
+
+	for _, rest := range ctx.AllAdditionExpressionRest() {
+		rightExpr := v.Visit(rest.MultiplicationExpression()).(ast.Expression)
+		operator := rest.AddSubtractOperator().GetText()
+		expr = &ast.BinaryExpression{
+			BaseExpression: ast.BaseExpression{
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: operator,
+			Right:    rightExpr,
+		}
+	}
+
+	return expr
 }
 
 func (v *ASTBuilder) VisitMultiplicationExpression(ctx *MultiplicationExpressionContext) interface{} {
-    expr := v.Visit(ctx.UnaryExpression()).(ast.Expression)
-    
-    for _, rest := range ctx.AllMultiplicationExpressionRest() {
-        rightExpr := v.Visit(rest.UnaryExpression()).(ast.Expression)
-        operator := rest.MultDivModOperator().GetText()
-        expr = &ast.BinaryExpression{
-            BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   rest.GetStart().GetLine(),
-                    Column: rest.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Left:     expr,
-            Operator: operator,
-            Right:    rightExpr,
-        }
-    }
-    
-    return expr
+	expr := v.Visit(ctx.UnaryExpression()).(ast.Expression)
+
+	for _, rest := range ctx.AllMultiplicationExpressionRest() {
+		rightExpr := v.Visit(rest.UnaryExpression()).(ast.Expression)
+		operator := rest.MultDivModOperator().GetText()
+		expr = &ast.BinaryExpression{
+			BaseExpression: ast.BaseExpression{
+				BaseNode: ast.BaseNode{
+					Line:   rest.GetStart().GetLine(),
+					Column: rest.GetStart().GetColumn(),
+				},
+			},
+			Left:     expr,
+			Operator: operator,
+			Right:    rightExpr,
+		}
+	}
+
+	return expr
 }
 
 func (v *ASTBuilder) VisitUnaryExpression(ctx *UnaryExpressionContext) interface{} {
-    opCtx := ctx.UnaryOperator()
-    if (opCtx != nil) {
-        operand := v.Visit(ctx.UnaryExpression()).(ast.Expression)
-        operator := opCtx.GetText()
-        
-        return &ast.UnaryExpression{
-            BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   opCtx.GetStart().GetLine(),
-                    Column: opCtx.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Operator: operator,
-            Operand:  operand,
-        }
-    }
-    
-    return v.Visit(ctx.PostfixExpression())
+	opCtx := ctx.UnaryOperator()
+	if opCtx != nil {
+		operand := v.Visit(ctx.UnaryExpression()).(ast.Expression)
+		operator := opCtx.GetText()
+
+		return &ast.UnaryExpression{
+			BaseExpression: ast.BaseExpression{
+				BaseNode: ast.BaseNode{
+					Line:   opCtx.GetStart().GetLine(),
+					Column: opCtx.GetStart().GetColumn(),
+				},
+			},
+			Operator: operator,
+			Operand:  operand,
+		}
+	}
+
+	return v.Visit(ctx.PostfixExpression())
 }
 
 // (array access, function calls)
 func (v *ASTBuilder) VisitPostfixExpression(ctx *PostfixExpressionContext) interface{} {
-    primaryExpr := v.Visit(ctx.PrimaryExpression()).(ast.Expression)
+	primaryExpr := v.Visit(ctx.PrimaryExpression()).(ast.Expression)
 
-    arrAccess := ctx.ArrayAccess()
-    if (arrAccess != nil) {
-        indexExpr := v.Visit(arrAccess.Expression()).(ast.Expression)
-        return &ast.ArrayAccessExpression{
-            BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   arrAccess.GetStart().GetLine(),
-                    Column: arrAccess.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Array: primaryExpr,
-            Index: indexExpr,
-        }
-    }
-    
-    funcCall := ctx.FunctionCallArgs()
-    if funcCall != nil {
-        callExpr := &ast.FunctionCallExpression{
-            BaseExpression: ast.BaseExpression{
-                BaseNode: ast.BaseNode{
-                    Line:   funcCall.GetStart().GetLine(),
-                    Column: funcCall.GetStart().GetColumn(),
-                    EndLine:    ctx.GetStop().GetLine(), 
-                    EndColumn:  ctx.GetStop().GetColumn() + len(ctx.GetStop().GetText()) - 1,
-                },
-            },
-            Function:  primaryExpr,
-            Arguments: []ast.Expression{},
-        }
-        
-        // Process arguments if they exist
-        argList := funcCall.ArgList()
-        if argList != nil {
-            for _, argCtx := range argList.AllAssignmentExpression() {
-                argExpr := v.Visit(argCtx).(ast.Expression)
-                callExpr.Arguments = append(callExpr.Arguments, argExpr)
-            }
-        }
-        return callExpr
-    }
-    
-    return primaryExpr
+	arrAccess := ctx.ArrayAccess()
+	if arrAccess != nil {
+		indexExpr := v.Visit(arrAccess.Expression()).(ast.Expression)
+		return &ast.ArrayAccessExpression{
+			BaseExpression: ast.BaseExpression{
+				BaseNode: ast.BaseNode{
+					Line:   arrAccess.GetStart().GetLine(),
+					Column: arrAccess.GetStart().GetColumn(),
+				},
+			},
+			Array: primaryExpr,
+			Index: indexExpr,
+		}
+	}
+
+	funcCall := ctx.FunctionCallArgs()
+	if funcCall != nil {
+		callExpr := &ast.FunctionCallExpression{
+			BaseExpression: ast.BaseExpression{
+				BaseNode: ast.BaseNode{
+					Line:   funcCall.GetStart().GetLine(),
+					Column: funcCall.GetStart().GetColumn(),
+				},
+			},
+			Function:  primaryExpr,
+			Arguments: []ast.Expression{},
+		}
+
+		// Process arguments if they exist
+		argList := funcCall.ArgList()
+		if argList != nil {
+			for _, argCtx := range argList.AllAssignmentExpression() {
+				argExpr := v.Visit(argCtx).(ast.Expression)
+				callExpr.Arguments = append(callExpr.Arguments, argExpr)
+			}
+		}
+		return callExpr
+	}
+
+	return primaryExpr
 }
 
-//
-func (v* ASTBuilder) VisitPrimaryExpression(ctx *PrimaryExpressionContext) interface{} {
+func (v *ASTBuilder) VisitPrimaryExpression(ctx *PrimaryExpressionContext) interface{} {
 	id := ctx.Identifier()
 	if id != nil {
 		return v.plantIdentifier(id.GetSymbol())
@@ -1000,10 +875,8 @@ func (v *ASTBuilder) plantIdentifier(token antlr.Token) *ast.Identifier {
 	return &ast.Identifier{
 		BaseExpression: ast.BaseExpression{
 			BaseNode: ast.BaseNode{
-				Line: 	    token.GetLine(), 
-				Column:     token.GetColumn(),
-                EndLine:    token.GetLine(), 
-                EndColumn:  token.GetColumn() + len(token.GetText()) - 1,
+				Line:   token.GetLine(),
+				Column: token.GetColumn(),
 			},
 		},
 		Name: name,
@@ -1015,10 +888,8 @@ func (v *ASTBuilder) plantIntegerLiteral(token antlr.Token) *ast.IntegerLiteral 
 	return &ast.IntegerLiteral{
 		BaseExpression: ast.BaseExpression{
 			BaseNode: ast.BaseNode{
-				Line: 	    token.GetLine(), 
-				Column:     token.GetColumn(),
-                EndLine:    token.GetLine(), 
-                EndColumn:  token.GetColumn() + len(token.GetText()) - 1,
+				Line:   token.GetLine(),
+				Column: token.GetColumn(),
 			},
 		},
 		Value: value,
@@ -1031,10 +902,8 @@ func (v *ASTBuilder) plantFloatLiteral(token antlr.Token) *ast.FloatLiteral {
 	return &ast.FloatLiteral{
 		BaseExpression: ast.BaseExpression{
 			BaseNode: ast.BaseNode{
-				Line: 	    token.GetLine(), 
-				Column:     token.GetColumn(),
-                EndLine:    token.GetLine(), 
-                EndColumn:  token.GetColumn() + len(token.GetText()) - 1,
+				Line:   token.GetLine(),
+				Column: token.GetColumn(),
 			},
 		},
 		Value: value,
@@ -1047,10 +916,8 @@ func (v *ASTBuilder) plantBoolLiteral(token antlr.Token) *ast.BoolLiteral {
 	return &ast.BoolLiteral{
 		BaseExpression: ast.BaseExpression{
 			BaseNode: ast.BaseNode{
-				Line: 	    token.GetLine(), 
-				Column:     token.GetColumn(),
-                EndLine:    token.GetLine(), 
-                EndColumn:  token.GetColumn() + len(token.GetText()) - 1,
+				Line:   token.GetLine(),
+				Column: token.GetColumn(),
 			},
 		},
 		Value: value,
@@ -1087,10 +954,8 @@ func (v *ASTBuilder) plantCharLiteral(token antlr.Token) *ast.CharLiteral {
 	return &ast.CharLiteral{
 		BaseExpression: ast.BaseExpression{
 			BaseNode: ast.BaseNode{
-				Line: 	    token.GetLine(), 
-				Column:     token.GetColumn(),
-                EndLine:    token.GetLine(), 
-                EndColumn:  token.GetColumn() + len(token.GetText()) - 1,
+				Line:   token.GetLine(),
+				Column: token.GetColumn(),
 			},
 		},
 		Value: value,
