@@ -51,8 +51,56 @@ func (h *SyntaxErrorHandler) SyntaxError(recognizer antlr.Recognizer, offendingS
 	// Enhanced error message handling
 	var fullMessage string
 	switch {
+	case strings.Contains(msg, "missing '}'") || (strings.Contains(msg, "extraneous input '<EOF>' expecting") && strings.Contains(msg, "}")):
+		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: Unclosed function block. Missing closing brace '}' for function body",
+			actualLine, actualCol, codeLine, caretLine)
+
+	case strings.Contains(msg, "extraneous input") && !isValidIdentifier(text):
+		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: Invalid identifier '%s'",
+			actualLine, actualCol, codeLine, caretLine, text)
+
 	case strings.Contains(msg, "missing ';'"):
 		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: missing ';' at '%s'", actualLine, actualCol, codeLine, caretLine, text)
+
+	case strings.Contains(msg, "mismatched input") && isTypeKeyword(text):
+		if strings.Contains(msg, "expecting Identifier") {
+			fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: missing identifier after type '%s'",
+				actualLine, actualCol, codeLine, caretLine, text)
+		} else {
+			prevLine := ""
+			if actualLine > 1 && actualLine-1 <= len(h.Lines) {
+				prevLine = h.Lines[actualLine-2]
+			}
+			if !strings.Contains(prevLine, ";") && !strings.Contains(prevLine, "}") {
+				fullMessage = fmt.Sprintf("line %d:%d\n%s\nSyntax Error: missing ';' at end of declaration\n%s\n%s\nNote: this affects the next declaration on line %d",
+					actualLine-1, len(prevLine),
+					prevLine,
+					codeLine,
+					caretLine,
+					actualLine)
+			} else {
+				fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: unexpected type keyword '%s'. Check for missing identifier or invalid syntax",
+					actualLine, actualCol, codeLine, caretLine, text)
+			}
+		}
+
+	case strings.Contains(msg, "mismatched input") && !isTypeKeyword(text) && len(text) > 0:
+		if strings.Contains(msg, "expecting ')'") {
+			fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: missing closing parenthesis ')'",
+				actualLine, actualCol, codeLine, caretLine)
+		} else if strings.Contains(msg, "expecting '{'") {
+			fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: missing opening brace '{' for function body",
+				actualLine, actualCol, codeLine, caretLine)
+		} else if strings.Contains(msg, "expecting {<EOF>, 'int', 'float', 'bool', 'char', 'void'}") {
+			fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: unexpected type '%s'. ",
+				actualLine, actualCol, codeLine, caretLine, text)
+		} else {
+			fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: unexpected token '%s'.",
+				actualLine, actualCol, codeLine, caretLine, text)
+		}
+
+	case strings.Contains(msg, "missing ']'") || (strings.Contains(msg, "expecting") && strings.Contains(msg, "]")):
+		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: incomplete array declaration. Missing closing bracket ']' at '%s'", actualLine, actualCol, codeLine, caretLine, text)
 
 	case strings.Contains(msg, "mismatched input"):
 		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: mismatched input '%s'. Check for unexpected tokens or typos.", actualLine, actualCol, codeLine, caretLine, text)
@@ -71,6 +119,46 @@ func (h *SyntaxErrorHandler) SyntaxError(recognizer antlr.Recognizer, offendingS
 	}
 
 	h.Errors = append(h.Errors, fullMessage)
+}
+
+// Add this helper function
+func isTypeKeyword(text string) bool {
+	types := []string{"int", "float", "bool", "char", "void"}
+	for _, t := range types {
+		if text == t {
+			return true
+		}
+	}
+	return false
+}
+
+// Add this helper function
+func isValidIdentifier(text string) bool {
+	if len(text) == 0 {
+		return false
+	}
+
+	// First character must be [a-zA-Z_]
+	first := text[0]
+	if !((first >= 'a' && first <= 'z') ||
+		(first >= 'A' && first <= 'Z') ||
+		first == '_') {
+		return false
+	}
+
+	// Check for any characters that are not [a-zA-Z0-9_]
+	for _, c := range text[1:] {
+		// Check if character is NOT in allowed set
+		isLetter := (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+		isDigit := c >= '0' && c <= '9'
+		isUnderscore := c == '_'
+
+		if !isLetter && !isDigit && !isUnderscore {
+			// Character is a special symbol or other invalid character
+			return false
+		}
+	}
+	return true
 }
 
 // Required interface methods for antlr.ErrorListener
