@@ -1,20 +1,41 @@
 ========== AST ==========
-Program (Line 1, Col 0) with 2 declarations
+Program (Line 1, Col 0) with 4 declarations
  Declaration 1:
- FunctionDeclaration (Line 1, Col 0): side returns int with 0 parameters
-   Body:
-   Block (Line 1, Col 11) with 1 items
-     Item 1:
-     ReturnStatement (Line 2, Col 4):
-       IntegerLiteral (Line 2, Col 11): 0
+ VarDeclaration (Line 1, Col 0): x of type array of int with size IntegerLiteral (Line 1, Col 6): 3
+
  Declaration 2:
- FunctionDeclaration (Line 5, Col 0): main returns int with 1 parameters
+ FunctionDeclaration (Line 2, Col 0): main returns int with 1 parameters
    Parameter 1: arg of type int
    Body:
-   Block (Line 5, Col 18) with 2 items
+   Block (Line 2, Col 18) with 1 items
      Item 1:
-     VarDeclaration (Line 6, Col 4): c of type bool with initializer:
-       BoolLiteral (Line 6, Col 13): true
-     Item 2:
-     ReturnStatement (Line 7, Col 4):
-       IntegerLiteral (Line 7, Col 11): 0
+     VarDeclaration (Line 3, Col 4): y of type int with initializer:
+       FunctionCallExpression (Line 3, Col 18) with 3 arguments:
+         Function:
+         Identifier (Line 3, Col 12): addInt
+         Argument 1:
+           IntegerLiteral (Line 3, Col 19): 1
+         Argument 2:
+           IntegerLiteral (Line 3, Col 22): 2
+         Argument 3:
+           IntegerLiteral (Line 3, Col 25): 6
+ Declaration 3:
+ FunctionDeclaration (Line 10, Col 4): foo returns void with 0 parameters
+   Body:
+   Block (Line 10, Col 15) with 1 items
+     Item 1:
+     ReturnStatement (Line 11, Col 8):
+       CharLiteral (Line 11, Col 15): 'c'
+ Declaration 4:
+ FunctionDeclaration (Line 14, Col 0): addInt returns int with 2 parameters
+   Parameter 1: x of type int
+   Parameter 2: y of type int
+   Body:
+   Block (Line 14, Col 25) with 1 items
+     Item 1:
+     ReturnStatement (Line 15, Col 4):
+       BinaryExpression (Line 15, Col 13): Operator '+'
+         Left:
+         Identifier (Line 15, Col 11): x
+         Right:
+         Identifier (Line 15, Col 15): yourMom
