@@ -1,11 +1,11 @@
-package syntax 
+package syntax
 
 import (
-	"fmt"
-	"strings"
-	"io"
 	"bytes"
+	"fmt"
+	"io"
 	"os"
+	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
 

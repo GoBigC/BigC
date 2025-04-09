@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-    "strings"
+	"strings"
 
 	"BigCooker/pkg/syntax/ast"
 
