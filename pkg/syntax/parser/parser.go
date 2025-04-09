@@ -2,36 +2,78 @@ package parser
 
 import (
 	"fmt"
+	"os"
 	"strconv"
+    "strings"
 
 	"BigCooker/pkg/syntax/ast"
+
 	"github.com/antlr4-go/antlr/v4"
 )
 
 func ParseFile(filename string) (*ast.Program, error) {
-	// 1. Stream input
-	input, err := antlr.NewFileStream(filename)
+	// 1. Read file manually
+	raw, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read input file: %w", err)
+		return nil, fmt.Errorf("failed to read file: %w", err)
 	}
+	lines := strings.Split(string(raw), "\n")
 
-	// 2. Create lexer & parser instance 
+	// 2. Use NewInputStream instead of NewFileStream
+	input := antlr.NewInputStream(string(raw))
+
+	// 3. Continue as before
 	lexer := NewBigCLexer(input)
 	tokenStream := antlr.NewCommonTokenStream(lexer, 0)
 	p := NewBigCParser(tokenStream)
 
-	tree := p.Program() // "program" is the grammar entrypoint
-	
-	// 3. Build AST
+	errorHandler := NewSyntaxErrorHandler(lines)
+	p.RemoveErrorListeners()
+	p.AddErrorListener(errorHandler)
+
+	tree := p.Program()
+
+	// Check if there were any syntax errors
+	if len(errorHandler.Errors) > 0 {
+		// Return syntax error without attempting to build AST
+		return nil, fmt.Errorf("%s", strings.Join(errorHandler.Errors, "\n"))
+	}
+
+	// Only build AST if there are no syntax errors
 	builder := NewASTBuilder()
 	astRoot := builder.VisitProgram(tree.(*ProgramContext))
 	program, ok := astRoot.(*ast.Program)
 	if !ok {
 		return nil, fmt.Errorf("AST construction failed: expected *ast.Program but got %T", astRoot)
 	}
-	
+
 	return program, nil
 }
+
+// func ParseFile(filename string) (*ast.Program, error) {
+// 	// 1. Stream input
+// 	input, err := antlr.NewFileStream(filename)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to read input file: %w", err)
+// 	}
+
+// 	// 2. Create lexer & parser instance 
+// 	lexer := NewBigCLexer(input)
+// 	tokenStream := antlr.NewCommonTokenStream(lexer, 0)
+// 	p := NewBigCParser(tokenStream)
+
+// 	tree := p.Program() // "program" is the grammar entrypoint
+	
+// 	// 3. Build AST
+// 	builder := NewASTBuilder()
+// 	astRoot := builder.VisitProgram(tree.(*ProgramContext))
+// 	program, ok := astRoot.(*ast.Program)
+// 	if !ok {
+// 		return nil, fmt.Errorf("AST construction failed: expected *ast.Program but got %T", astRoot)
+// 	}
+	
+// 	return program, nil
+// }
 
 type ASTBuilder struct {
 	*BaseBigCVisitor

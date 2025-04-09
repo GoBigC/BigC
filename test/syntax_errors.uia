@@ -1,6 +1,6 @@
 // Test 1: Missing closing brace
-//void main() {
-//   int x = 10;
+void main() {
+   int x = 10;
 // Expected error: Unclosed function block
 
 // Test 2: Invalid identifier name
