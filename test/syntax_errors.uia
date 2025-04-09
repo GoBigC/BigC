@@ -1,57 +1,57 @@
 // Test 1: Missing closing brace
-//void main() {
-//   int x = 10;
+void main() {
+   int x = 10;
 // Expected error: Unclosed function block
 
 // Test 2: Invalid identifier name
-//void test() {
-//    int 123var = 5;
+void test() {
+    int 123var = 5;
 // Expected error: Invalid identifier
-//}
+}
 
 // Test 3: Missing semicolon
-//void semicolonTest() {
-//    int x = 5
-//    int y = 10;
+void semicolonTest() {
+    int x = 5
+    int y = 10;
 // Expected error: missing ';'
-//}
+}
 
 // Test 4: Mismatched type keyword
-//void typeTest() {
-//    int = 5;
+void typeTest() {
+    int = 5;
 // missing Identifier 
-//}
+}
 
 // Test 5: Missing array bracket
-//void arrayTest() {
-//   int arr[10;
+void arrayTest() {
+   int arr[10;
 // Expected error: incomplete array declaration
-//}
+}
 
 // Test 6: Invalid expression
-//void expressionTest() {
-//    int x = *;
+void expressionTest() {
+    int x = *;
 // Expected error: unexpected structure
-//}
+}
 
 // Test 7: Extraneous input
-//void extraTest() {
-//    int x = 5;;
+void extraTest() {
+    int x = 5;;
 // Expected error: extraneous input
-//}
+}
 
 // Test 8: Invalid type name
-//number x = 5;
+number x = 5;
 // Expected error: Invalid type
 
 // Test 9: Missing parenthesis
-//void funcTest {
-//    return 0;
-//}
+void funcTest {
+   return 0;
+}
 // Expected error: unexpected token
 
 // Test 10: Invalid character in identifier
-//void test() {
-//   int 12d = 10;
+void test() {
+   int 12d = 10;
 // Expected error: Invalid identifier
-//}
+}

@@ -2,34 +2,51 @@ package parser
 
 import (
 	"fmt"
+	"os"
 	"strconv"
+	"strings"
 
 	"BigCooker/pkg/syntax/ast"
+
 	"github.com/antlr4-go/antlr/v4"
 )
 
 func ParseFile(filename string) (*ast.Program, error) {
-	// 1. Stream input
-	input, err := antlr.NewFileStream(filename)
+	// 1. Read file manually
+	raw, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read input file: %w", err)
+		return nil, fmt.Errorf("failed to read file: %w", err)
 	}
+	lines := strings.Split(string(raw), "\n")
 
-	// 2. Create lexer & parser instance 
+	// 2. Use NewInputStream instead of NewFileStream
+	input := antlr.NewInputStream(string(raw))
+
+	// 3. Continue as before
 	lexer := NewBigCLexer(input)
 	tokenStream := antlr.NewCommonTokenStream(lexer, 0)
 	p := NewBigCParser(tokenStream)
 
-	tree := p.Program() // "program" is the grammar entrypoint
-	
-	// 3. Build AST
+	errorHandler := NewSyntaxErrorHandler(lines)
+	p.RemoveErrorListeners()
+	p.AddErrorListener(errorHandler)
+
+	tree := p.Program()
+
+	// Check if there were any syntax errors
+	if len(errorHandler.Errors) > 0 {
+		// Return syntax error without attempting to build AST
+		return nil, fmt.Errorf("%s", strings.Join(errorHandler.Errors, "\n"))
+	}
+
+	// Only build AST if there are no syntax errors
 	builder := NewASTBuilder()
 	astRoot := builder.VisitProgram(tree.(*ProgramContext))
 	program, ok := astRoot.(*ast.Program)
 	if !ok {
 		return nil, fmt.Errorf("AST construction failed: expected *ast.Program but got %T", astRoot)
 	}
-	
+
 	return program, nil
 }
 
@@ -344,98 +361,6 @@ func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
 
 	return varDecl
 }
-
-// func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
-// 	typeName := ctx.Type_().GetText()
-// 	identifier := ctx.Identifier().GetText()
-
-// 	var typeNode ast.Type = &ast.PrimitiveType{
-// 		BaseType: ast.BaseType{
-// 			BaseNode: ast.BaseNode {
-// 				Line: 	ctx.GetStart().GetLine(),
-// 				Column: ctx.GetStart().GetColumn(),
-// 			},
-// 		},
-// 		Name: typeName,
-// 	}
-
-// 	arrayNotation := ctx.ArrayNotation()
-// 	if (arrayNotation != nil) {
-// 		sizeExpr := v.Visit(arrayNotation.Expression()).(ast.Expression)
-
-// 		typeNode = &ast.ArrayType{
-// 			BaseType: ast.BaseType{
-// 				BaseNode: ast.BaseNode{
-// 					Line:	arrayNotation.GetStart().GetLine(), 
-// 					Column: arrayNotation.GetStart().GetColumn(),
-// 				}, 
-// 			}, 
-// 			ElementType: typeNode, 
-// 			Size: 		 sizeExpr,
-// 		}
-// 	}
-
-// 	declRemainder := ctx.DeclarationRemainder()
-// 	firstChild := declRemainder.GetChild(0)
-
-// 	if (firstChild != nil) {
-// 		treeNode, ok := firstChild.(antlr.TerminalNode)
-// 		if (ok && treeNode.GetText() == "(") {
-// 			// this is a function declaration 
-// 			funcDecl := &ast.FunctionDeclaration{
-// 				BaseDeclaration: ast.BaseDeclaration{
-// 					BaseNode: ast.BaseNode{
-// 						Line: 	ctx.GetStart().GetLine(),
-// 						Column: ctx.GetStart().GetColumn(),
-// 					},
-// 				},
-// 				Name: 		identifier, 
-// 				ReturnType: typeNode, 
-// 				Parameters: []ast.Parameter{},
-// 			}
-
-// 			paramList := declRemainder.ParameterList()
-// 			if (paramList != nil) {
-// 				params := v.Visit(paramList).([]ast.Parameter)
-// 				funcDecl.Parameters = params
-// 			}
-
-// 			block := declRemainder.Block()
-// 			funcDecl.Body = v.Visit(block).(*ast.Block)
-
-// 			return funcDecl
-// 		}
-// 	}
-
-// 	// else this is a variable declaration
-// 	varDecl := &ast.VarDeclaration{
-// 		BaseDeclaration: ast.BaseDeclaration{
-// 			BaseNode: ast.BaseNode{
-// 				Line: 	ctx.GetStart().GetLine(),
-// 				Column: ctx.GetStart().GetColumn(),
-// 			},
-// 		},
-// 		Name: 	identifier, 
-// 		Type: 	typeNode, 
-// 	}
-
-// 	varInit := declRemainder.VariableInitializer()
-// 	if (varInit != nil) {
-// 		exprCtx := varInit.Expression()
-// 		varDecl.Initializer = v.Visit(exprCtx).(ast.Expression)
-// 	}
-
-// 	return varDecl
-// }
-
-// I kept one version of VisitDeclaration without error handling, 
-// im not sure what for, but dont want to get rid of it for now,
-// i think it looks cleaner without error handling :) the logic 
-// is more clear, not sure if there's a better way to report error
-// without cluttering the main logic :) 
-
-// Also all functions after this line has no error handling or reporting 
-// I did use AI to write those err handling, still, i CBA for now :) 
 
 func (v *ASTBuilder) VisitParameter(ctx *ParameterContext) interface{} {
     typeName := ctx.Type_().GetText()

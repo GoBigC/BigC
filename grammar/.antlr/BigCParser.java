@@ -20,8 +20,8 @@ public class BigCParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		Identifier=32, IntegerConstant=33, FloatingConstant=34, BooleanConstant=35, 
-		CharConstant=36, WS=37, COMMENT=38, MULTILINE_COMMENT=39;
+		BooleanConstant=32, CharConstant=33, Identifier=34, IntegerConstant=35, 
+		FloatingConstant=36, WS=37, COMMENT=38, MULTILINE_COMMENT=39;
 	public static final int
 		RULE_program = 0, RULE_declaration = 1, RULE_arrayNotation = 2, RULE_type = 3, 
 		RULE_declarationRemainder = 4, RULE_parameterList = 5, RULE_parameter = 6, 
@@ -66,8 +66,8 @@ public class BigCParser extends Parser {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, "Identifier", "IntegerConstant", 
-			"FloatingConstant", "BooleanConstant", "CharConstant", "WS", "COMMENT", 
+			null, null, null, null, null, null, null, null, "BooleanConstant", "CharConstant", 
+			"Identifier", "IntegerConstant", "FloatingConstant", "WS", "COMMENT", 
 			"MULTILINE_COMMENT"
 		};
 	}
@@ -135,14 +135,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_program; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterProgram(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitProgram(this);
-		}
 	}
 
 	public final ProgramContext program() throws RecognitionException {
@@ -197,14 +189,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_declaration; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitDeclaration(this);
-		}
 	}
 
 	public final DeclarationContext declaration() throws RecognitionException {
@@ -252,14 +236,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_arrayNotation; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterArrayNotation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitArrayNotation(this);
-		}
 	}
 
 	public final ArrayNotationContext arrayNotation() throws RecognitionException {
@@ -293,14 +269,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitType(this);
-		}
 	}
 
 	public final TypeContext type() throws RecognitionException {
@@ -348,14 +316,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_declarationRemainder; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterDeclarationRemainder(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitDeclarationRemainder(this);
-		}
 	}
 
 	public final DeclarationRemainderContext declarationRemainder() throws RecognitionException {
@@ -432,14 +392,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameterList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterParameterList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitParameterList(this);
-		}
 	}
 
 	public final ParameterListContext parameterList() throws RecognitionException {
@@ -493,14 +445,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameter; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterParameter(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitParameter(this);
-		}
 	}
 
 	public final ParameterContext parameter() throws RecognitionException {
@@ -549,14 +493,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_block; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterBlock(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitBlock(this);
-		}
 	}
 
 	public final BlockContext block() throws RecognitionException {
@@ -609,14 +545,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_blockItem; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterBlockItem(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitBlockItem(this);
-		}
 	}
 
 	public final BlockItemContext blockItem() throws RecognitionException {
@@ -643,11 +571,11 @@ public class BigCParser extends Parser {
 			case T__16:
 			case T__27:
 			case T__30:
+			case BooleanConstant:
+			case CharConstant:
 			case Identifier:
 			case IntegerConstant:
 			case FloatingConstant:
-			case BooleanConstant:
-			case CharConstant:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(142);
@@ -681,14 +609,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitStatement(this);
-		}
 	}
 
 	public final StatementContext statement() throws RecognitionException {
@@ -710,11 +630,11 @@ public class BigCParser extends Parser {
 			case T__16:
 			case T__27:
 			case T__30:
+			case BooleanConstant:
+			case CharConstant:
 			case Identifier:
 			case IntegerConstant:
 			case FloatingConstant:
-			case BooleanConstant:
-			case CharConstant:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(146);
@@ -751,14 +671,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ifStatement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterIfStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitIfStatement(this);
-		}
 	}
 
 	public final IfStatementContext ifStatement() throws RecognitionException {
@@ -813,14 +725,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_elseClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterElseClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitElseClause(this);
-		}
 	}
 
 	public final ElseClauseContext elseClause() throws RecognitionException {
@@ -877,14 +781,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_nonIfStatement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterNonIfStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitNonIfStatement(this);
-		}
 	}
 
 	public final NonIfStatementContext nonIfStatement() throws RecognitionException {
@@ -897,11 +793,11 @@ public class BigCParser extends Parser {
 			case T__7:
 			case T__27:
 			case T__30:
+			case BooleanConstant:
+			case CharConstant:
 			case Identifier:
 			case IntegerConstant:
 			case FloatingConstant:
-			case BooleanConstant:
-			case CharConstant:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(162);
@@ -951,14 +847,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_whileStatement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterWhileStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitWhileStatement(this);
-		}
 	}
 
 	public final WhileStatementContext whileStatement() throws RecognitionException {
@@ -999,14 +887,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_returnStatement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterReturnStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitReturnStatement(this);
-		}
 	}
 
 	public final ReturnStatementContext returnStatement() throws RecognitionException {
@@ -1043,14 +923,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitExpression(this);
-		}
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -1086,14 +958,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assignmentExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterAssignmentExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitAssignmentExpression(this);
-		}
 	}
 
 	public final AssignmentExpressionContext assignmentExpression() throws RecognitionException {
@@ -1137,14 +1001,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assignmentRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterAssignmentRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitAssignmentRest(this);
-		}
 	}
 
 	public final AssignmentRestContext assignmentRest() throws RecognitionException {
@@ -1179,14 +1035,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_variableInitializer; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterVariableInitializer(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitVariableInitializer(this);
-		}
 	}
 
 	public final VariableInitializerContext variableInitializer() throws RecognitionException {
@@ -1227,14 +1075,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_logicalOrExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterLogicalOrExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitLogicalOrExpression(this);
-		}
 	}
 
 	public final LogicalOrExpressionContext logicalOrExpression() throws RecognitionException {
@@ -1282,14 +1122,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_logicalOrRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterLogicalOrRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitLogicalOrRest(this);
-		}
 	}
 
 	public final LogicalOrRestContext logicalOrRest() throws RecognitionException {
@@ -1330,14 +1162,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_logicalAndExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterLogicalAndExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitLogicalAndExpression(this);
-		}
 	}
 
 	public final LogicalAndExpressionContext logicalAndExpression() throws RecognitionException {
@@ -1385,14 +1209,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_logicalAndRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterLogicalAndRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitLogicalAndRest(this);
-		}
 	}
 
 	public final LogicalAndRestContext logicalAndRest() throws RecognitionException {
@@ -1433,14 +1249,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_equalityExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterEqualityExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitEqualityExpression(this);
-		}
 	}
 
 	public final EqualityExpressionContext equalityExpression() throws RecognitionException {
@@ -1491,14 +1299,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_equalityRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterEqualityRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitEqualityRest(this);
-		}
 	}
 
 	public final EqualityRestContext equalityRest() throws RecognitionException {
@@ -1530,14 +1330,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_equalityOperator; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterEqualityOperator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitEqualityOperator(this);
-		}
 	}
 
 	public final EqualityOperatorContext equalityOperator() throws RecognitionException {
@@ -1585,14 +1377,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comparisonExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterComparisonExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitComparisonExpression(this);
-		}
 	}
 
 	public final ComparisonExpressionContext comparisonExpression() throws RecognitionException {
@@ -1643,14 +1427,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comparisonRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterComparisonRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitComparisonRest(this);
-		}
 	}
 
 	public final ComparisonRestContext comparisonRest() throws RecognitionException {
@@ -1682,14 +1458,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comparisonOperator; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterComparisonOperator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitComparisonOperator(this);
-		}
 	}
 
 	public final ComparisonOperatorContext comparisonOperator() throws RecognitionException {
@@ -1737,14 +1505,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_additionExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterAdditionExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitAdditionExpression(this);
-		}
 	}
 
 	public final AdditionExpressionContext additionExpression() throws RecognitionException {
@@ -1795,14 +1555,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_additionExpressionRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterAdditionExpressionRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitAdditionExpressionRest(this);
-		}
 	}
 
 	public final AdditionExpressionRestContext additionExpressionRest() throws RecognitionException {
@@ -1834,14 +1586,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_addSubtractOperator; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterAddSubtractOperator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitAddSubtractOperator(this);
-		}
 	}
 
 	public final AddSubtractOperatorContext addSubtractOperator() throws RecognitionException {
@@ -1889,14 +1633,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_multiplicationExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterMultiplicationExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitMultiplicationExpression(this);
-		}
 	}
 
 	public final MultiplicationExpressionContext multiplicationExpression() throws RecognitionException {
@@ -1947,14 +1683,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_multiplicationExpressionRest; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterMultiplicationExpressionRest(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitMultiplicationExpressionRest(this);
-		}
 	}
 
 	public final MultiplicationExpressionRestContext multiplicationExpressionRest() throws RecognitionException {
@@ -1986,14 +1714,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_multDivModOperator; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterMultDivModOperator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitMultDivModOperator(this);
-		}
 	}
 
 	public final MultDivModOperatorContext multDivModOperator() throws RecognitionException {
@@ -2041,14 +1761,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unaryExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterUnaryExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitUnaryExpression(this);
-		}
 	}
 
 	public final UnaryExpressionContext unaryExpression() throws RecognitionException {
@@ -2059,11 +1771,11 @@ public class BigCParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__7:
+			case BooleanConstant:
+			case CharConstant:
 			case Identifier:
 			case IntegerConstant:
 			case FloatingConstant:
-			case BooleanConstant:
-			case CharConstant:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(259);
@@ -2101,14 +1813,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unaryOperator; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterUnaryOperator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitUnaryOperator(this);
-		}
 	}
 
 	public final UnaryOperatorContext unaryOperator() throws RecognitionException {
@@ -2156,14 +1860,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_postfixExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterPostfixExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitPostfixExpression(this);
-		}
 	}
 
 	public final PostfixExpressionContext postfixExpression() throws RecognitionException {
@@ -2232,14 +1928,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_arrayAccess; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterArrayAccess(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitArrayAccess(this);
-		}
 	}
 
 	public final ArrayAccessContext arrayAccess() throws RecognitionException {
@@ -2276,14 +1964,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionCallArgs; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterFunctionCallArgs(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitFunctionCallArgs(this);
-		}
 	}
 
 	public final FunctionCallArgsContext functionCallArgs() throws RecognitionException {
@@ -2332,14 +2012,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterArgList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitArgList(this);
-		}
 	}
 
 	public final ArgListContext argList() throws RecognitionException {
@@ -2393,14 +2065,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primaryExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterPrimaryExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitPrimaryExpression(this);
-		}
 	}
 
 	public final PrimaryExpressionContext primaryExpression() throws RecognitionException {
@@ -2417,10 +2081,10 @@ public class BigCParser extends Parser {
 				match(Identifier);
 				}
 				break;
-			case IntegerConstant:
-			case FloatingConstant:
 			case BooleanConstant:
 			case CharConstant:
+			case IntegerConstant:
+			case FloatingConstant:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(291);
@@ -2463,14 +2127,6 @@ public class BigCParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_constant; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).enterConstant(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BigCListener ) ((BigCListener)listener).exitConstant(this);
-		}
 	}
 
 	public final ConstantContext constant() throws RecognitionException {
@@ -2482,7 +2138,7 @@ public class BigCParser extends Parser {
 			{
 			setState(298);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 128849018880L) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 115964116992L) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -2550,36 +2206,36 @@ public class BigCParser extends Parser {
 		"\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \""+
 		"$&(*,.02468:<>@BDFHJLNPRT\u0000\u0007\u0001\u0000\u0003\u0007\u0001\u0000"+
 		"\u0015\u0016\u0001\u0000\u0017\u001a\u0001\u0000\u001b\u001c\u0001\u0000"+
-		"\u001d\u001e\u0002\u0000\u001c\u001c\u001f\u001f\u0001\u0000!$\u011d\u0000"+
-		"Y\u0001\u0000\u0000\u0000\u0002^\u0001\u0000\u0000\u0000\u0004e\u0001"+
-		"\u0000\u0000\u0000\u0006i\u0001\u0000\u0000\u0000\bu\u0001\u0000\u0000"+
-		"\u0000\nw\u0001\u0000\u0000\u0000\f\u007f\u0001\u0000\u0000\u0000\u000e"+
-		"\u0084\u0001\u0000\u0000\u0000\u0010\u008f\u0001\u0000\u0000\u0000\u0012"+
-		"\u0093\u0001\u0000\u0000\u0000\u0014\u0095\u0001\u0000\u0000\u0000\u0016"+
-		"\u009d\u0001\u0000\u0000\u0000\u0018\u00a7\u0001\u0000\u0000\u0000\u001a"+
-		"\u00a9\u0001\u0000\u0000\u0000\u001c\u00af\u0001\u0000\u0000\u0000\u001e"+
-		"\u00b3\u0001\u0000\u0000\u0000 \u00b5\u0001\u0000\u0000\u0000\"\u00b9"+
-		"\u0001\u0000\u0000\u0000$\u00bc\u0001\u0000\u0000\u0000&\u00bf\u0001\u0000"+
-		"\u0000\u0000(\u00c6\u0001\u0000\u0000\u0000*\u00c9\u0001\u0000\u0000\u0000"+
-		",\u00d0\u0001\u0000\u0000\u0000.\u00d3\u0001\u0000\u0000\u00000\u00da"+
-		"\u0001\u0000\u0000\u00002\u00dd\u0001\u0000\u0000\u00004\u00df\u0001\u0000"+
-		"\u0000\u00006\u00e6\u0001\u0000\u0000\u00008\u00e9\u0001\u0000\u0000\u0000"+
-		":\u00eb\u0001\u0000\u0000\u0000<\u00f2\u0001\u0000\u0000\u0000>\u00f5"+
-		"\u0001\u0000\u0000\u0000@\u00f7\u0001\u0000\u0000\u0000B\u00fe\u0001\u0000"+
-		"\u0000\u0000D\u0101\u0001\u0000\u0000\u0000F\u0107\u0001\u0000\u0000\u0000"+
-		"H\u0109\u0001\u0000\u0000\u0000J\u010b\u0001\u0000\u0000\u0000L\u0110"+
-		"\u0001\u0000\u0000\u0000N\u0114\u0001\u0000\u0000\u0000P\u011a\u0001\u0000"+
-		"\u0000\u0000R\u0128\u0001\u0000\u0000\u0000T\u012a\u0001\u0000\u0000\u0000"+
-		"VX\u0003\u0002\u0001\u0000WV\u0001\u0000\u0000\u0000X[\u0001\u0000\u0000"+
-		"\u0000YW\u0001\u0000\u0000\u0000YZ\u0001\u0000\u0000\u0000Z\\\u0001\u0000"+
-		"\u0000\u0000[Y\u0001\u0000\u0000\u0000\\]\u0005\u0000\u0000\u0001]\u0001"+
-		"\u0001\u0000\u0000\u0000^_\u0003\u0006\u0003\u0000_a\u0005 \u0000\u0000"+
-		"`b\u0003\u0004\u0002\u0000a`\u0001\u0000\u0000\u0000ab\u0001\u0000\u0000"+
-		"\u0000bc\u0001\u0000\u0000\u0000cd\u0003\b\u0004\u0000d\u0003\u0001\u0000"+
-		"\u0000\u0000ef\u0005\u0001\u0000\u0000fg\u0003\u001e\u000f\u0000gh\u0005"+
-		"\u0002\u0000\u0000h\u0005\u0001\u0000\u0000\u0000ij\u0007\u0000\u0000"+
-		"\u0000j\u0007\u0001\u0000\u0000\u0000km\u0005\b\u0000\u0000ln\u0003\n"+
-		"\u0005\u0000ml\u0001\u0000\u0000\u0000mn\u0001\u0000\u0000\u0000no\u0001"+
+		"\u001d\u001e\u0002\u0000\u001c\u001c\u001f\u001f\u0002\u0000 !#$\u011d"+
+		"\u0000Y\u0001\u0000\u0000\u0000\u0002^\u0001\u0000\u0000\u0000\u0004e"+
+		"\u0001\u0000\u0000\u0000\u0006i\u0001\u0000\u0000\u0000\bu\u0001\u0000"+
+		"\u0000\u0000\nw\u0001\u0000\u0000\u0000\f\u007f\u0001\u0000\u0000\u0000"+
+		"\u000e\u0084\u0001\u0000\u0000\u0000\u0010\u008f\u0001\u0000\u0000\u0000"+
+		"\u0012\u0093\u0001\u0000\u0000\u0000\u0014\u0095\u0001\u0000\u0000\u0000"+
+		"\u0016\u009d\u0001\u0000\u0000\u0000\u0018\u00a7\u0001\u0000\u0000\u0000"+
+		"\u001a\u00a9\u0001\u0000\u0000\u0000\u001c\u00af\u0001\u0000\u0000\u0000"+
+		"\u001e\u00b3\u0001\u0000\u0000\u0000 \u00b5\u0001\u0000\u0000\u0000\""+
+		"\u00b9\u0001\u0000\u0000\u0000$\u00bc\u0001\u0000\u0000\u0000&\u00bf\u0001"+
+		"\u0000\u0000\u0000(\u00c6\u0001\u0000\u0000\u0000*\u00c9\u0001\u0000\u0000"+
+		"\u0000,\u00d0\u0001\u0000\u0000\u0000.\u00d3\u0001\u0000\u0000\u00000"+
+		"\u00da\u0001\u0000\u0000\u00002\u00dd\u0001\u0000\u0000\u00004\u00df\u0001"+
+		"\u0000\u0000\u00006\u00e6\u0001\u0000\u0000\u00008\u00e9\u0001\u0000\u0000"+
+		"\u0000:\u00eb\u0001\u0000\u0000\u0000<\u00f2\u0001\u0000\u0000\u0000>"+
+		"\u00f5\u0001\u0000\u0000\u0000@\u00f7\u0001\u0000\u0000\u0000B\u00fe\u0001"+
+		"\u0000\u0000\u0000D\u0101\u0001\u0000\u0000\u0000F\u0107\u0001\u0000\u0000"+
+		"\u0000H\u0109\u0001\u0000\u0000\u0000J\u010b\u0001\u0000\u0000\u0000L"+
+		"\u0110\u0001\u0000\u0000\u0000N\u0114\u0001\u0000\u0000\u0000P\u011a\u0001"+
+		"\u0000\u0000\u0000R\u0128\u0001\u0000\u0000\u0000T\u012a\u0001\u0000\u0000"+
+		"\u0000VX\u0003\u0002\u0001\u0000WV\u0001\u0000\u0000\u0000X[\u0001\u0000"+
+		"\u0000\u0000YW\u0001\u0000\u0000\u0000YZ\u0001\u0000\u0000\u0000Z\\\u0001"+
+		"\u0000\u0000\u0000[Y\u0001\u0000\u0000\u0000\\]\u0005\u0000\u0000\u0001"+
+		"]\u0001\u0001\u0000\u0000\u0000^_\u0003\u0006\u0003\u0000_a\u0005\"\u0000"+
+		"\u0000`b\u0003\u0004\u0002\u0000a`\u0001\u0000\u0000\u0000ab\u0001\u0000"+
+		"\u0000\u0000bc\u0001\u0000\u0000\u0000cd\u0003\b\u0004\u0000d\u0003\u0001"+
+		"\u0000\u0000\u0000ef\u0005\u0001\u0000\u0000fg\u0003\u001e\u000f\u0000"+
+		"gh\u0005\u0002\u0000\u0000h\u0005\u0001\u0000\u0000\u0000ij\u0007\u0000"+
+		"\u0000\u0000j\u0007\u0001\u0000\u0000\u0000km\u0005\b\u0000\u0000ln\u0003"+
+		"\n\u0005\u0000ml\u0001\u0000\u0000\u0000mn\u0001\u0000\u0000\u0000no\u0001"+
 		"\u0000\u0000\u0000op\u0005\t\u0000\u0000pv\u0003\u000e\u0007\u0000qs\u0003"+
 		"$\u0012\u0000rq\u0001\u0000\u0000\u0000rs\u0001\u0000\u0000\u0000st\u0001"+
 		"\u0000\u0000\u0000tv\u0005\n\u0000\u0000uk\u0001\u0000\u0000\u0000ur\u0001"+
@@ -2587,7 +2243,7 @@ public class BigCParser extends Parser {
 		"\u0005\u000b\u0000\u0000y{\u0003\f\u0006\u0000zx\u0001\u0000\u0000\u0000"+
 		"{~\u0001\u0000\u0000\u0000|z\u0001\u0000\u0000\u0000|}\u0001\u0000\u0000"+
 		"\u0000}\u000b\u0001\u0000\u0000\u0000~|\u0001\u0000\u0000\u0000\u007f"+
-		"\u0080\u0003\u0006\u0003\u0000\u0080\u0082\u0005 \u0000\u0000\u0081\u0083"+
+		"\u0080\u0003\u0006\u0003\u0000\u0080\u0082\u0005\"\u0000\u0000\u0081\u0083"+
 		"\u0003\u0004\u0002\u0000\u0082\u0081\u0001\u0000\u0000\u0000\u0082\u0083"+
 		"\u0001\u0000\u0000\u0000\u0083\r\u0001\u0000\u0000\u0000\u0084\u0088\u0005"+
 		"\f\u0000\u0000\u0085\u0087\u0003\u0010\b\u0000\u0086\u0085\u0001\u0000"+
@@ -2672,7 +2328,7 @@ public class BigCParser extends Parser {
 		"\u0001\u0000\u0000\u0000\u011e\u0121\u0001\u0000\u0000\u0000\u011f\u011d"+
 		"\u0001\u0000\u0000\u0000\u011f\u0120\u0001\u0000\u0000\u0000\u0120Q\u0001"+
 		"\u0000\u0000\u0000\u0121\u011f\u0001\u0000\u0000\u0000\u0122\u0129\u0005"+
-		" \u0000\u0000\u0123\u0129\u0003T*\u0000\u0124\u0125\u0005\b\u0000\u0000"+
+		"\"\u0000\u0000\u0123\u0129\u0003T*\u0000\u0124\u0125\u0005\b\u0000\u0000"+
 		"\u0125\u0126\u0003\u001e\u000f\u0000\u0126\u0127\u0005\t\u0000\u0000\u0127"+
 		"\u0129\u0001\u0000\u0000\u0000\u0128\u0122\u0001\u0000\u0000\u0000\u0128"+
 		"\u0123\u0001\u0000\u0000\u0000\u0128\u0124\u0001\u0000\u0000\u0000\u0129"+
