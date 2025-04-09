@@ -9,11 +9,11 @@ import (
 )
 
 func ParseFile(filename string) (*ast.Program, error) {
-	return parser.ParseFile(filename)
+    return parser.ParseFile(filename)
 }
 
 func GetCST(filename string) string {
-	return getCST(filename)
+    return getCST(filename)
 }
 
 func ProcessFile(filename string)(*ast.Program, error) {
@@ -51,4 +51,3 @@ func ProcessFile(filename string)(*ast.Program, error) {
     
     return program, nil
 }
-
