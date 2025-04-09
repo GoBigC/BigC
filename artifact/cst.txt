@@ -3,7 +3,114 @@
 		declaration (
 			type int
 		)
-		side
+		x
+		(
+			arrayNotation [ (
+				expression (
+					assignmentExpression (
+						logicalOrExpression (
+							logicalAndExpression (
+								equalityExpression (
+									comparisonExpression (
+										additionExpression (
+											multiplicationExpression (
+												unaryExpression (
+													postfixExpression (
+														primaryExpression (
+															constant 3
+														))))))))))))
+			])
+		(
+			declarationRemainder ;
+		))
+	(
+		declaration (
+			type int
+		)
+		main
+		(
+			declarationRemainder (
+				(
+					parameterList (
+						parameter (
+							type int
+						)
+						arg))
+				)
+			(
+				block { (
+					blockItem (
+						declaration (
+							type int
+						)
+						y
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression addInt
+																		)
+																		(
+																			functionCallArgs (
+																				(
+																					argList (
+																						assignmentExpression (
+																							logicalOrExpression (
+																								logicalAndExpression (
+																									equalityExpression (
+																										comparisonExpression (
+																											additionExpression (
+																												multiplicationExpression (
+																													unaryExpression (
+																														postfixExpression (
+																															primaryExpression (
+																																constant 1
+																															)))))))))))
+																					,
+																					(
+																						assignmentExpression (
+																							logicalOrExpression (
+																								logicalAndExpression (
+																									equalityExpression (
+																										comparisonExpression (
+																											additionExpression (
+																												multiplicationExpression (
+																													unaryExpression (
+																														postfixExpression (
+																															primaryExpression (
+																																constant 2
+																															)))))))))))
+																					,
+																					(
+																						assignmentExpression (
+																							logicalOrExpression (
+																								logicalAndExpression (
+																									equalityExpression (
+																										comparisonExpression (
+																											additionExpression (
+																												multiplicationExpression (
+																													unaryExpression (
+																														postfixExpression (
+																															primaryExpression (
+																																constant 6
+																															))))))))))))
+																				)))))))))))))
+							;)))
+				})))
+	(
+		declaration (
+			type void
+		)
+		foo
 		(
 			declarationRemainder (
 				
@@ -25,7 +132,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 0
+																				constant 'c'
 																			))))))))))))
 								;))))
 				})))
@@ -33,7 +140,7 @@
 		declaration (
 			type int
 		)
-		main
+		addInt
 		(
 			declarationRemainder (
 				(
@@ -41,33 +148,16 @@
 						parameter (
 							type int
 						)
-						arg))
+						x)
+					,
+					(
+						parameter (
+							type int
+						)
+						y))
 				)
 			(
 				block { (
-					blockItem (
-						declaration (
-							type bool
-						)
-						c
-						(
-							declarationRemainder (
-								variableInitializer = (
-									expression (
-										assignmentExpression (
-											logicalOrExpression (
-												logicalAndExpression (
-													equalityExpression (
-														comparisonExpression (
-															additionExpression (
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression (
-																				constant true
-																			)))))))))))))
-							;)))
-				(
 					blockItem (
 						statement (
 							nonIfStatement (
@@ -82,8 +172,17 @@
 																multiplicationExpression (
 																	unaryExpression (
 																		postfixExpression (
-																			primaryExpression (
-																				constant 0
+																			primaryExpression x
+																		))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator +
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression yourMom
 																			))))))))))))
 								;))))
 				})))

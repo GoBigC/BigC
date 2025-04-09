@@ -1,17 +1,34 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 2 declarations
-    ├── Function: side returns int with 0 parameters
+└── Program (Line 1, Col 0) with 4 declarations
+    ├── VarDeclaration: x of type array of int with size 3
+    ├── Function: main returns int with 1 parameters
+    │   ├── Parameters:
+    │   │   └── arg of type int
+    │   └── Body:
+    │       └── Block with 1 items
+    │           └── VarDeclaration: y of type int
+    │               ├── Initializer:
+    │               │   └── FunctionCall with 3 arguments
+    │               │       ├── Function:
+    │               │       │   ├── Identifier: addInt
+    │               │       └── Arguments:
+    │               │           ├── IntegerLiteral: 1
+    │               │           ├── IntegerLiteral: 2
+    │               │           └── IntegerLiteral: 6
+    ├── Function: foo returns void with 0 parameters
     │   └── Body:
     │       └── Block with 1 items
     │           └── ReturnStatement
-    │               └── IntegerLiteral: 0
-    └── Function: main returns int with 1 parameters
+    │               └── CharLiteral: 'c'
+    └── Function: addInt returns int with 2 parameters
         ├── Parameters:
-        │   └── arg of type int
+        │   ├── x of type int
+        │   └── y of type int
         └── Body:
-            └── Block with 2 items
-                ├── VarDeclaration: c of type bool
-                │   ├── Initializer:
-                │   │   └── BoolLiteral: true
+            └── Block with 1 items
                 └── ReturnStatement
-                    └── IntegerLiteral: 0
+                    └── BinaryExpression: '+'
+                        ├── Left:
+                        │   ├── Identifier: x
+                        └── Right:
+                            └── Identifier: yourMom
