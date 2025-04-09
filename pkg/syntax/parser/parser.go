@@ -50,31 +50,6 @@ func ParseFile(filename string) (*ast.Program, error) {
 	return program, nil
 }
 
-// func ParseFile(filename string) (*ast.Program, error) {
-// 	// 1. Stream input
-// 	input, err := antlr.NewFileStream(filename)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to read input file: %w", err)
-// 	}
-
-// 	// 2. Create lexer & parser instance 
-// 	lexer := NewBigCLexer(input)
-// 	tokenStream := antlr.NewCommonTokenStream(lexer, 0)
-// 	p := NewBigCParser(tokenStream)
-
-// 	tree := p.Program() // "program" is the grammar entrypoint
-	
-// 	// 3. Build AST
-// 	builder := NewASTBuilder()
-// 	astRoot := builder.VisitProgram(tree.(*ProgramContext))
-// 	program, ok := astRoot.(*ast.Program)
-// 	if !ok {
-// 		return nil, fmt.Errorf("AST construction failed: expected *ast.Program but got %T", astRoot)
-// 	}
-	
-// 	return program, nil
-// }
-
 type ASTBuilder struct {
 	*BaseBigCVisitor
 }
@@ -386,98 +361,6 @@ func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
 
 	return varDecl
 }
-
-// func (v *ASTBuilder) VisitDeclaration(ctx *DeclarationContext) interface{} {
-// 	typeName := ctx.Type_().GetText()
-// 	identifier := ctx.Identifier().GetText()
-
-// 	var typeNode ast.Type = &ast.PrimitiveType{
-// 		BaseType: ast.BaseType{
-// 			BaseNode: ast.BaseNode {
-// 				Line: 	ctx.GetStart().GetLine(),
-// 				Column: ctx.GetStart().GetColumn(),
-// 			},
-// 		},
-// 		Name: typeName,
-// 	}
-
-// 	arrayNotation := ctx.ArrayNotation()
-// 	if (arrayNotation != nil) {
-// 		sizeExpr := v.Visit(arrayNotation.Expression()).(ast.Expression)
-
-// 		typeNode = &ast.ArrayType{
-// 			BaseType: ast.BaseType{
-// 				BaseNode: ast.BaseNode{
-// 					Line:	arrayNotation.GetStart().GetLine(), 
-// 					Column: arrayNotation.GetStart().GetColumn(),
-// 				}, 
-// 			}, 
-// 			ElementType: typeNode, 
-// 			Size: 		 sizeExpr,
-// 		}
-// 	}
-
-// 	declRemainder := ctx.DeclarationRemainder()
-// 	firstChild := declRemainder.GetChild(0)
-
-// 	if (firstChild != nil) {
-// 		treeNode, ok := firstChild.(antlr.TerminalNode)
-// 		if (ok && treeNode.GetText() == "(") {
-// 			// this is a function declaration 
-// 			funcDecl := &ast.FunctionDeclaration{
-// 				BaseDeclaration: ast.BaseDeclaration{
-// 					BaseNode: ast.BaseNode{
-// 						Line: 	ctx.GetStart().GetLine(),
-// 						Column: ctx.GetStart().GetColumn(),
-// 					},
-// 				},
-// 				Name: 		identifier, 
-// 				ReturnType: typeNode, 
-// 				Parameters: []ast.Parameter{},
-// 			}
-
-// 			paramList := declRemainder.ParameterList()
-// 			if (paramList != nil) {
-// 				params := v.Visit(paramList).([]ast.Parameter)
-// 				funcDecl.Parameters = params
-// 			}
-
-// 			block := declRemainder.Block()
-// 			funcDecl.Body = v.Visit(block).(*ast.Block)
-
-// 			return funcDecl
-// 		}
-// 	}
-
-// 	// else this is a variable declaration
-// 	varDecl := &ast.VarDeclaration{
-// 		BaseDeclaration: ast.BaseDeclaration{
-// 			BaseNode: ast.BaseNode{
-// 				Line: 	ctx.GetStart().GetLine(),
-// 				Column: ctx.GetStart().GetColumn(),
-// 			},
-// 		},
-// 		Name: 	identifier, 
-// 		Type: 	typeNode, 
-// 	}
-
-// 	varInit := declRemainder.VariableInitializer()
-// 	if (varInit != nil) {
-// 		exprCtx := varInit.Expression()
-// 		varDecl.Initializer = v.Visit(exprCtx).(ast.Expression)
-// 	}
-
-// 	return varDecl
-// }
-
-// I kept one version of VisitDeclaration without error handling, 
-// im not sure what for, but dont want to get rid of it for now,
-// i think it looks cleaner without error handling :) the logic 
-// is more clear, not sure if there's a better way to report error
-// without cluttering the main logic :) 
-
-// Also all functions after this line has no error handling or reporting 
-// I did use AI to write those err handling, still, i CBA for now :) 
 
 func (v *ASTBuilder) VisitParameter(ctx *ParameterContext) interface{} {
     typeName := ctx.Type_().GetText()
