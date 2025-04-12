@@ -53,58 +53,9 @@ CST Tree:
     │           │           │                               └── multiplicationExpression
     │           │           │                                   └── unaryExpression
     │           │           │                                       └── postfixExpression
-    │           │           │                                           ├── primaryExpression
-    │           │           │                                           │   └── addInt
-    │           │           │                                           └── functionCallArgs
-    │           │           │                                               └── 
-    │           │           │                                                   └── argList
-    │           │           │                                                       ├── assignmentExpression
-    │           │           │                                                       │   └── logicalOrExpression
-    │           │           │                                                       │       └── logicalAndExpression
-    │           │           │                                                       │           └── equalityExpression
-    │           │           │                                                       │               └── comparisonExpression
-    │           │           │                                                       │                   └── additionExpression
-    │           │           │                                                       │                       └── multiplicationExpression
-    │           │           │                                                       │                           └── unaryExpression
-    │           │           │                                                       │                               └── postfixExpression
-    │           │           │                                                       │                                   └── primaryExpression
-    │           │           │                                                       │                                       └── constant
-    │           │           │                                                       │                                           └── 1
-    │           │           │                                                       ├── ,
-    │           │           │                                                       └── assignmentExpression
-    │           │           │                                                           └── logicalOrExpression
-    │           │           │                                                               └── logicalAndExpression
-    │           │           │                                                                   └── equalityExpression
-    │           │           │                                                                       └── comparisonExpression
-    │           │           │                                                                           └── additionExpression
-    │           │           │                                                                               └── multiplicationExpression
-    │           │           │                                                                                   └── unaryExpression
-    │           │           │                                                                                       └── postfixExpression
-    │           │           │                                                                                           └── primaryExpression
-    │           │           │                                                                                               └── constant
-    │           │           │                                                                                                   └── 2
-    │           │           └── ;
-    │           ├── blockItem
-    │           │   └── declaration
-    │           │       ├── type
-    │           │       │   └── char
-    │           │       ├── z
-    │           │       └── declarationRemainder
-    │           │           ├── variableInitializer
-    │           │           │   ├── =
-    │           │           │   └── expression
-    │           │           │       └── assignmentExpression
-    │           │           │           └── logicalOrExpression
-    │           │           │               └── logicalAndExpression
-    │           │           │                   └── equalityExpression
-    │           │           │                       └── comparisonExpression
-    │           │           │                           └── additionExpression
-    │           │           │                               └── multiplicationExpression
-    │           │           │                                   └── unaryExpression
-    │           │           │                                       └── postfixExpression
     │           │           │                                           └── primaryExpression
     │           │           │                                               └── constant
-    │           │           │                                                   └── 'c'
+    │           │           │                                                   └── 2
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -136,7 +87,7 @@ CST Tree:
     │           │               │                                           │                               └── unaryExpression
     │           │               │                                           │                                   └── postfixExpression
     │           │               │                                           │                                       └── primaryExpression
-    │           │               │                                           │                                           └── z
+    │           │               │                                           │                                           └── y
     │           │               │                                           └── ]
     │           │               └── ;
     │           └── }

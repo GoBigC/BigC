@@ -321,10 +321,10 @@ func (analyzer *SemanticAnalyzer) checkUnaryExpression(unaryExpr *ast.UnaryExpre
 func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAcxessExpr *ast.ArrayAccessExpression) ast.Type {
     var arrayType ast.Type = analyzer.checkExpression(arrAcxessExpr.Array)
     if arr, ok := arrayType.(*ast.ArrayType); ok {
+        var size int64 = getArraySize(arr)
         if lit, ok := arrAcxessExpr.Index.(*ast.IntegerLiteral); ok {
-            var size int64 = getArraySize(arr)
             if lit.Value < 0 || (size >= 0 && lit.Value >= size) {
-                analyzer.Error(arrAcxessExpr.Line, "index out of bounds")
+                analyzer.Error(arrAcxessExpr.Line, fmt.Sprintf("index out of bounds, cannot access index %d with array size %d", lit.Value, size))
             }
         } else if variable, ok := arrAcxessExpr.Index.(*ast.Identifier); ok {
             sym, ok := analyzer.SymTable.Lookup(variable.Name)
@@ -332,6 +332,14 @@ func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAcxessExpr *ast.
                 analyzer.Error(arrAcxessExpr.Line, fmt.Sprintf("undefined symbol: %s", variable.Name))
             } else if !isIntType(sym.Type) {
                 analyzer.Error(arrAcxessExpr.Line, fmt.Sprintf("index must be an integer literal or identifier, not %s", typeString(sym.Type)))
+            } else if ok && isIntType(sym.Type) {
+                if sym.Value != nil {
+                    if val, ok := sym.Value.(int64); ok {
+                        if val < 0 || (size >= 0 && val >= size) {
+                            analyzer.Error(arrAcxessExpr.Line, fmt.Sprintf("index out of bounds, cannot access index %d with array size %d", val, size))
+                        }
+                    }
+                }
             }
         } else {
             analyzer.Error(arrAcxessExpr.Line, "index must be an integer literal or identifier")

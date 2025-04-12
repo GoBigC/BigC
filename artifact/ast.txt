@@ -7,26 +7,17 @@ Program (Line 1, Col 0) with 3 declarations
  FunctionDeclaration (Line 2, Col 0): main returns int with 1 parameters
    Parameter 1: arg of type int
    Body:
-   Block (Line 2, Col 18) with 3 items
+   Block (Line 2, Col 18) with 2 items
      Item 1:
      VarDeclaration (Line 3, Col 4): y of type int with initializer:
-       FunctionCallExpression (Line 3, Col 18) with 2 arguments:
-         Function:
-         Identifier (Line 3, Col 12): addInt
-         Argument 1:
-           IntegerLiteral (Line 3, Col 19): 1
-         Argument 2:
-           IntegerLiteral (Line 3, Col 22): 2
+       IntegerLiteral (Line 3, Col 12): 2
      Item 2:
-     VarDeclaration (Line 4, Col 4): z of type char with initializer:
-       CharLiteral (Line 4, Col 13): 'c'
-     Item 3:
      ReturnStatement (Line 5, Col 4):
        ArrayAccessExpression (Line 5, Col 12):
          Array:
          Identifier (Line 5, Col 11): x
          Index:
-         Identifier (Line 5, Col 13): z
+         Identifier (Line 5, Col 13): y
  Declaration 3:
  FunctionDeclaration (Line 8, Col 0): addInt returns int with 2 parameters
    Parameter 1: x of type int

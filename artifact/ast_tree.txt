@@ -5,24 +5,16 @@ AST Tree:
     │   ├── Parameters:
     │   │   └── arg of type int
     │   └── Body:
-    │       └── Block with 3 items
+    │       └── Block with 2 items
     │           ├── VarDeclaration: y of type int
     │           │   ├── Initializer:
-    │           │   │   └── FunctionCall with 2 arguments
-    │           │   │       ├── Function:
-    │           │   │       │   ├── Identifier: addInt
-    │           │   │       └── Arguments:
-    │           │   │           ├── IntegerLiteral: 1
-    │           │   │           └── IntegerLiteral: 2
-    │           ├── VarDeclaration: z of type char
-    │           │   ├── Initializer:
-    │           │   │   └── CharLiteral: 'c'
+    │           │   │   └── IntegerLiteral: 2
     │           └── ReturnStatement
     │               └── ArrayAccess
     │                   ├── Array:
     │                   │   ├── Identifier: x
     │                   └── Index:
-    │                       └── Identifier: z
+    │                       └── Identifier: y
     └── Function: addInt returns int with 2 parameters
         ├── Parameters:
         │   ├── x of type int

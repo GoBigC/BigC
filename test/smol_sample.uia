@@ -1,8 +1,8 @@
 int x[3];
 int main(int arg) {
-    int y = addInt(1, 2);
-    char z = 'c';
-    return x[z];
+    int y = 2;
+    // char z = 'c';
+    return x[y];
 }
 
 int addInt(int x, int y) {

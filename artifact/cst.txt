@@ -57,61 +57,8 @@
 																multiplicationExpression (
 																	unaryExpression (
 																		postfixExpression (
-																			primaryExpression addInt
-																		)
-																		(
-																			functionCallArgs (
-																				(
-																					argList (
-																						assignmentExpression (
-																							logicalOrExpression (
-																								logicalAndExpression (
-																									equalityExpression (
-																										comparisonExpression (
-																											additionExpression (
-																												multiplicationExpression (
-																													unaryExpression (
-																														postfixExpression (
-																															primaryExpression (
-																																constant 1
-																															)))))))))))
-																					,
-																					(
-																						assignmentExpression (
-																							logicalOrExpression (
-																								logicalAndExpression (
-																									equalityExpression (
-																										comparisonExpression (
-																											additionExpression (
-																												multiplicationExpression (
-																													unaryExpression (
-																														postfixExpression (
-																															primaryExpression (
-																																constant 2
-																															))))))))))))
-																				)))))))))))))
-							;)))
-				(
-					blockItem (
-						declaration (
-							type char
-						)
-						z
-						(
-							declarationRemainder (
-								variableInitializer = (
-									expression (
-										assignmentExpression (
-											logicalOrExpression (
-												logicalAndExpression (
-													equalityExpression (
-														comparisonExpression (
-															additionExpression (
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
 																			primaryExpression (
-																				constant 'c'
+																				constant 2
 																			)))))))))))))
 							;)))
 				(
@@ -143,7 +90,7 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression z
+																														primaryExpression y
 																													)))))))))))
 																			])))))))))))
 								;))))
