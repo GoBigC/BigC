@@ -88,35 +88,33 @@
 																														postfixExpression (
 																															primaryExpression (
 																																constant 2
-																															)))))))))))
-																					,
-																					(
-																						assignmentExpression (
-																							logicalOrExpression (
-																								logicalAndExpression (
-																									equalityExpression (
-																										comparisonExpression (
-																											additionExpression (
-																												multiplicationExpression (
-																													unaryExpression (
-																														postfixExpression (
-																															primaryExpression (
-																																constant 6
 																															))))))))))))
 																				)))))))))))))
 							;)))
-				})))
-	(
-		declaration (
-			type void
-		)
-		foo
-		(
-			declarationRemainder (
-				
-			)
-			(
-				block { (
+				(
+					blockItem (
+						declaration (
+							type char
+						)
+						z
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 'c'
+																			)))))))))))))
+							;)))
+				(
 					blockItem (
 						statement (
 							nonIfStatement (
@@ -131,9 +129,23 @@
 																multiplicationExpression (
 																	unaryExpression (
 																		postfixExpression (
-																			primaryExpression (
-																				constant 'c'
-																			))))))))))))
+																			primaryExpression x
+																		)
+																		(
+																			arrayAccess [ (
+																				expression (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression z
+																													)))))))))))
+																			])))))))))))
 								;))))
 				})))
 	(
@@ -182,7 +194,7 @@
 																	multiplicationExpression (
 																		unaryExpression (
 																			postfixExpression (
-																				primaryExpression yourMom
+																				primaryExpression y
 																			))))))))))))
 								;))))
 				})))

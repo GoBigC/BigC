@@ -326,6 +326,15 @@ func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAcxessExpr *ast.
             if lit.Value < 0 || (size >= 0 && lit.Value >= size) {
                 analyzer.Error(arrAcxessExpr.Line, "index out of bounds")
             }
+        } else if variable, ok := arrAcxessExpr.Index.(*ast.Identifier); ok {
+            sym, ok := analyzer.SymTable.Lookup(variable.Name)
+            if !ok  {
+                analyzer.Error(arrAcxessExpr.Line, fmt.Sprintf("undefined symbol: %s", variable.Name))
+            } else if !isIntType(sym.Type) {
+                analyzer.Error(arrAcxessExpr.Line, fmt.Sprintf("index must be an integer literal or identifier, not %s", typeString(sym.Type)))
+            }
+        } else {
+            analyzer.Error(arrAcxessExpr.Line, "index must be an integer literal or identifier")
         }
         return arr.ElementType
     }

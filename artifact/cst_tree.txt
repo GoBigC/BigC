@@ -71,19 +71,6 @@ CST Tree:
     │           │           │                                                       │                                       └── constant
     │           │           │                                                       │                                           └── 1
     │           │           │                                                       ├── ,
-    │           │           │                                                       ├── assignmentExpression
-    │           │           │                                                       │   └── logicalOrExpression
-    │           │           │                                                       │       └── logicalAndExpression
-    │           │           │                                                       │           └── equalityExpression
-    │           │           │                                                       │               └── comparisonExpression
-    │           │           │                                                       │                   └── additionExpression
-    │           │           │                                                       │                       └── multiplicationExpression
-    │           │           │                                                       │                           └── unaryExpression
-    │           │           │                                                       │                               └── postfixExpression
-    │           │           │                                                       │                                   └── primaryExpression
-    │           │           │                                                       │                                       └── constant
-    │           │           │                                                       │                                           └── 2
-    │           │           │                                                       ├── ,
     │           │           │                                                       └── assignmentExpression
     │           │           │                                                           └── logicalOrExpression
     │           │           │                                                               └── logicalAndExpression
@@ -95,17 +82,30 @@ CST Tree:
     │           │           │                                                                                       └── postfixExpression
     │           │           │                                                                                           └── primaryExpression
     │           │           │                                                                                               └── constant
-    │           │           │                                                                                                   └── 6
+    │           │           │                                                                                                   └── 2
     │           │           └── ;
-    │           └── }
-    ├── declaration
-    │   ├── type
-    │   │   └── void
-    │   ├── foo
-    │   └── declarationRemainder
-    │       ├── 
-    │       └── block
-    │           ├── {
+    │           ├── blockItem
+    │           │   └── declaration
+    │           │       ├── type
+    │           │       │   └── char
+    │           │       ├── z
+    │           │       └── declarationRemainder
+    │           │           ├── variableInitializer
+    │           │           │   ├── =
+    │           │           │   └── expression
+    │           │           │       └── assignmentExpression
+    │           │           │           └── logicalOrExpression
+    │           │           │               └── logicalAndExpression
+    │           │           │                   └── equalityExpression
+    │           │           │                       └── comparisonExpression
+    │           │           │                           └── additionExpression
+    │           │           │                               └── multiplicationExpression
+    │           │           │                                   └── unaryExpression
+    │           │           │                                       └── postfixExpression
+    │           │           │                                           └── primaryExpression
+    │           │           │                                               └── constant
+    │           │           │                                                   └── 'c'
+    │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
     │           │       └── nonIfStatement
@@ -121,9 +121,23 @@ CST Tree:
     │           │               │                           └── multiplicationExpression
     │           │               │                               └── unaryExpression
     │           │               │                                   └── postfixExpression
-    │           │               │                                       └── primaryExpression
-    │           │               │                                           └── constant
-    │           │               │                                               └── 'c'
+    │           │               │                                       ├── primaryExpression
+    │           │               │                                       │   └── x
+    │           │               │                                       └── arrayAccess
+    │           │               │                                           ├── [
+    │           │               │                                           ├── expression
+    │           │               │                                           │   └── assignmentExpression
+    │           │               │                                           │       └── logicalOrExpression
+    │           │               │                                           │           └── logicalAndExpression
+    │           │               │                                           │               └── equalityExpression
+    │           │               │                                           │                   └── comparisonExpression
+    │           │               │                                           │                       └── additionExpression
+    │           │               │                                           │                           └── multiplicationExpression
+    │           │               │                                           │                               └── unaryExpression
+    │           │               │                                           │                                   └── postfixExpression
+    │           │               │                                           │                                       └── primaryExpression
+    │           │               │                                           │                                           └── z
+    │           │               │                                           └── ]
     │           │               └── ;
     │           └── }
     ├── declaration
@@ -168,7 +182,7 @@ CST Tree:
     │           │               │                                   └── unaryExpression
     │           │               │                                       └── postfixExpression
     │           │               │                                           └── primaryExpression
-    │           │               │                                               └── yourMom
+    │           │               │                                               └── y
     │           │               └── ;
     │           └── }
     └── <EOF>

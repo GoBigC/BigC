@@ -1,25 +1,28 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 4 declarations
+└── Program (Line 1, Col 0) with 3 declarations
     ├── VarDeclaration: x of type array of int with size 3
     ├── Function: main returns int with 1 parameters
     │   ├── Parameters:
     │   │   └── arg of type int
     │   └── Body:
-    │       └── Block with 1 items
-    │           └── VarDeclaration: y of type int
-    │               ├── Initializer:
-    │               │   └── FunctionCall with 3 arguments
-    │               │       ├── Function:
-    │               │       │   ├── Identifier: addInt
-    │               │       └── Arguments:
-    │               │           ├── IntegerLiteral: 1
-    │               │           ├── IntegerLiteral: 2
-    │               │           └── IntegerLiteral: 6
-    ├── Function: foo returns void with 0 parameters
-    │   └── Body:
-    │       └── Block with 1 items
+    │       └── Block with 3 items
+    │           ├── VarDeclaration: y of type int
+    │           │   ├── Initializer:
+    │           │   │   └── FunctionCall with 2 arguments
+    │           │   │       ├── Function:
+    │           │   │       │   ├── Identifier: addInt
+    │           │   │       └── Arguments:
+    │           │   │           ├── IntegerLiteral: 1
+    │           │   │           └── IntegerLiteral: 2
+    │           ├── VarDeclaration: z of type char
+    │           │   ├── Initializer:
+    │           │   │   └── CharLiteral: 'c'
     │           └── ReturnStatement
-    │               └── CharLiteral: 'c'
+    │               └── ArrayAccess
+    │                   ├── Array:
+    │                   │   ├── Identifier: x
+    │                   └── Index:
+    │                       └── Identifier: z
     └── Function: addInt returns int with 2 parameters
         ├── Parameters:
         │   ├── x of type int
@@ -31,4 +34,4 @@ AST Tree:
                         ├── Left:
                         │   ├── Identifier: x
                         └── Right:
-                            └── Identifier: yourMom
+                            └── Identifier: y
