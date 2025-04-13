@@ -1,16 +1,10 @@
 int x[3];
 int main(int arg) {
-    int y = addInt(1, 2, 6);
-    // if (y == 3) {
-    //     int z = 69;
-    // }
-    // return z;
-
+    int y = 2;
+    // char z = 'c';
+    return x[y];
 }
-    void foo() {
-        return 'c';
-    }
 
 int addInt(int x, int y) {
-    return x + yourMom;
+    return x + y;
 }
