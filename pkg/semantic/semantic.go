@@ -64,7 +64,7 @@ func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
         analyzer.SymTable.Define(d.Name, table.Symbol{
             Name:       d.Name,
             Type:       &ast.PrimitiveType{Name: "function"},
-            Scope:      table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine}, // Requires EndLine
+            Scope:      table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, 
             Parameters: d.Parameters,
             ReturnType: d.ReturnType,
         })

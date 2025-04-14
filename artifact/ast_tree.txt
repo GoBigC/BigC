@@ -1,6 +1,5 @@
 AST Tree:
 └── Program (Line 1, Col 0) with 4 declarations
-└── Program (Line 1, Col 0) with 4 declarations
     ├── VarDeclaration: x of type array of int with size 3
     ├── Function: main returns int with 1 parameters
     │   ├── Parameters:
@@ -88,9 +87,7 @@ AST Tree:
     │                   └── Right:
     │                       └── Identifier: y
     └── Function: testReturnType returns bool with 0 parameters
-    └── Function: testReturnType returns bool with 0 parameters
         └── Body:
             └── Block with 1 items
                 └── ReturnStatement
-                    └── CharLiteral: 'h'
                     └── CharLiteral: 'h'
