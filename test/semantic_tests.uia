@@ -1,0 +1,37 @@
+int x[3];
+int main(int arg) {
+    int goodIntDecl = 3;
+
+    // Index out of bounds
+    int goodIndex = x[1];
+    int badIndex = x[goodIndex];
+
+    // Divide by zero
+    int divZero = addInt(1, 4/0);
+
+    // Assignment type mismatch
+    char asmTypeMismatch1 = 10;
+    bool asmTypeMismatch2 = 'a';
+
+    // Operator type mismatch
+    int opMismatch = true + 1;
+
+    // Function argument type mismatch
+    int funcTypeMismatch = addInt(1, 't');
+
+    // Function argument count mismatch
+    int funcArgCountMismatch = addInt(1, 2, 3);
+
+    char goodCharDecl = 'c';
+
+    return x[goodCharDecl];
+}
+
+int addInt(int x, int y) {
+    return x + y;
+}
+
+// Return type mismatch
+bool testReturnType() {
+    return 'h';
+}
