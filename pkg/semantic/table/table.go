@@ -31,9 +31,7 @@ type ScopeInfo struct {
 // Add helper methods
 func NewSymbolTable(parent *SymbolTable, scopeType string) *SymbolTable {
     return &SymbolTable{
-        Parent:    parent,
         Symbols:   make(map[string]Symbol),
-        ScopeType: scopeType,
     }
 }
 
@@ -45,15 +43,11 @@ func (symTable *SymbolTable) Lookup(name string) (Symbol, bool) {
     if sym, ok := symTable.Symbols[name]; ok {
         return sym, true
     }
-    if symTable.Parent != nil {
-        return symTable.Parent.Lookup(name)
-    }
+
     return Symbol{}, false
 }
 
 func (symTable *SymbolTable) PrintTable() {
-    // Collect all symbols from all scopes
-    symbols := symTable.collectSymbols()
 
     // Set up tabwriter for aligned columns
     w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
@@ -61,7 +55,7 @@ func (symTable *SymbolTable) PrintTable() {
     fmt.Fprintln(w, "----\t----\t-----\t---------\t-----\t----------\t----------")
 
     // Print each symbol as a row
-    for _, sym := range symbols {
+    for _, sym := range symTable.Symbols {
         name := sym.Name
         typ := typeString(sym.Type)
         scope := fmt.Sprintf("%d-%d", sym.Scope.ValidFirstLine, sym.Scope.ValidLastLine)
@@ -94,25 +88,6 @@ func (symTable *SymbolTable) PrintTable() {
 
     w.Flush()
     fmt.Println()
-}
-
-// collectSymbols gathers all symbols from the current scope and its parents.
-func (symTable *SymbolTable) collectSymbols() []Symbol {
-    var symbols []Symbol
-    seen := make(map[string]bool) // Track symbols to avoid duplicates from parent scopes
-
-    // Traverse from current scope up to global
-    current := symTable
-    for current != nil {
-        for name, sym := range current.Symbols {
-            if !seen[name] {
-                symbols = append(symbols, sym)
-                seen[name] = true
-            }
-        }
-        current = current.Parent
-    }
-    return symbols
 }
 
 // typeString converts an ast.Type to a string for printing.
