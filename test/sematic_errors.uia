@@ -1,0 +1,50 @@
+// === Test 1: Index out of bound ===
+void main() {
+    int arr[3];
+    int x = arr[5];
+}
+
+// === Test 2: Divide by zero ===
+void main() {
+    int x = 10 / 0;
+}
+
+// === Test 3: Assignment type mismatch ===
+void main() {
+    int x = true;
+}
+
+// === Test 4: Function return type mismatch ===
+int getNumber() {
+    return true;
+}
+
+// === Test 5: Operator type mismatch ===
+void main() {
+    int x = 5 + false;
+}
+
+// === Test 6: Function argument type mismatch ===
+void printNumber(int x) {}
+void main() {
+    printNumber("hello");
+}
+
+// === Test 7: Argument count mismatch ===
+void add(int a, int b) {}
+void main() {
+    add(10);
+}
+
+// === Test 8: Undefined symbol ===
+void main() {
+    int y = x + 1;
+}
+
+// === Test 9: Variable out of scope ===
+void main() {
+    if (true) {
+        int x = 5;
+    }
+    int y = x + 1;
+}
