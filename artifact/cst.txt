@@ -536,4 +536,34 @@
 																			))))))))))))
 								;))))
 				})))
+	(
+		declaration (
+			type bool
+		)
+		testReturnType
+		(
+			declarationRemainder (
+				
+			)
+			(
+				block { (
+					blockItem (
+						statement (
+							nonIfStatement (
+								returnStatement return (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 'h'
+																			))))))))))))
+								;))))
+				})))
 	<EOF>)
