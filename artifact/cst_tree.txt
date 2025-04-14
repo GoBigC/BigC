@@ -39,7 +39,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── y
+    │           │       ├── goodIntDecl
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -61,7 +61,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── c
+    │           │       ├── goodIndex
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -98,7 +98,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── d
+    │           │       ├── badIndex
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -127,14 +127,14 @@ CST Tree:
     │           │           │                                               │                               └── unaryExpression
     │           │           │                                               │                                   └── postfixExpression
     │           │           │                                               │                                       └── primaryExpression
-    │           │           │                                               │                                           └── y
+    │           │           │                                               │                                           └── goodIndex
     │           │           │                                               └── ]
     │           │           └── ;
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── t
+    │           │       ├── divZero
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -191,7 +191,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── char
-    │           │       ├── c
+    │           │       ├── asmTypeMismatch1
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -213,7 +213,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── bool
-    │           │       ├── test_bool
+    │           │       ├── asmTypeMismatch2
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -235,7 +235,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── op
+    │           │       ├── opMismatch
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -266,7 +266,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── b
+    │           │       ├── funcTypeMismatch
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -315,7 +315,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── a
+    │           │       ├── funcArgCountMismatch
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -377,7 +377,7 @@ CST Tree:
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── char
-    │           │       ├── z
+    │           │       ├── goodCharDecl
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -425,7 +425,7 @@ CST Tree:
     │           │               │                                           │                               └── unaryExpression
     │           │               │                                           │                                   └── postfixExpression
     │           │               │                                           │                                       └── primaryExpression
-    │           │               │                                           │                                           └── z
+    │           │               │                                           │                                           └── goodCharDecl
     │           │               │                                           └── ]
     │           │               └── ;
     │           └── }

@@ -43,7 +43,7 @@
 						declaration (
 							type int
 						)
-						y
+						goodIntDecl
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -66,7 +66,7 @@
 						declaration (
 							type int
 						)
-						c
+						goodIndex
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -104,7 +104,7 @@
 						declaration (
 							type int
 						)
-						d
+						badIndex
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -132,7 +132,7 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression y
+																														primaryExpression goodIndex
 																													)))))))))))
 																			]))))))))))))
 							;)))
@@ -141,7 +141,7 @@
 						declaration (
 							type int
 						)
-						t
+						divZero
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -204,7 +204,7 @@
 						declaration (
 							type char
 						)
-						c
+						asmTypeMismatch1
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -227,7 +227,7 @@
 						declaration (
 							type bool
 						)
-						test_bool
+						asmTypeMismatch2
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -250,7 +250,7 @@
 						declaration (
 							type int
 						)
-						op
+						opMismatch
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -284,7 +284,7 @@
 						declaration (
 							type int
 						)
-						b
+						funcTypeMismatch
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -337,7 +337,7 @@
 						declaration (
 							type int
 						)
-						a
+						funcArgCountMismatch
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -404,7 +404,7 @@
 						declaration (
 							type char
 						)
-						z
+						goodCharDecl
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -451,7 +451,7 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression z
+																														primaryExpression goodCharDecl
 																													)))))))))))
 																			])))))))))))
 								;))))

@@ -6,24 +6,24 @@ AST Tree:
     │   │   └── arg of type int
     │   └── Body:
     │       └── Block with 11 items
-    │           ├── VarDeclaration: y of type int
+    │           ├── VarDeclaration: goodIntDecl of type int
     │           │   ├── Initializer:
     │           │   │   └── IntegerLiteral: 3
-    │           ├── VarDeclaration: c of type int
+    │           ├── VarDeclaration: goodIndex of type int
     │           │   ├── Initializer:
     │           │   │   └── ArrayAccess
     │           │   │       ├── Array:
     │           │   │       │   ├── Identifier: x
     │           │   │       └── Index:
     │           │   │           └── IntegerLiteral: 1
-    │           ├── VarDeclaration: d of type int
+    │           ├── VarDeclaration: badIndex of type int
     │           │   ├── Initializer:
     │           │   │   └── ArrayAccess
     │           │   │       ├── Array:
     │           │   │       │   ├── Identifier: x
     │           │   │       └── Index:
-    │           │   │           └── Identifier: y
-    │           ├── VarDeclaration: t of type int
+    │           │   │           └── Identifier: goodIndex
+    │           ├── VarDeclaration: divZero of type int
     │           │   ├── Initializer:
     │           │   │   └── FunctionCall with 2 arguments
     │           │   │       ├── Function:
@@ -35,20 +35,20 @@ AST Tree:
     │           │   │               │   ├── IntegerLiteral: 4
     │           │   │               └── Right:
     │           │   │                   └── IntegerLiteral: 0
-    │           ├── VarDeclaration: c of type char
+    │           ├── VarDeclaration: asmTypeMismatch1 of type char
     │           │   ├── Initializer:
     │           │   │   └── IntegerLiteral: 10
-    │           ├── VarDeclaration: test_bool of type bool
+    │           ├── VarDeclaration: asmTypeMismatch2 of type bool
     │           │   ├── Initializer:
     │           │   │   └── CharLiteral: 'a'
-    │           ├── VarDeclaration: op of type int
+    │           ├── VarDeclaration: opMismatch of type int
     │           │   ├── Initializer:
     │           │   │   └── BinaryExpression: '+'
     │           │   │       ├── Left:
     │           │   │       │   ├── BoolLiteral: true
     │           │   │       └── Right:
     │           │   │           └── IntegerLiteral: 1
-    │           ├── VarDeclaration: b of type int
+    │           ├── VarDeclaration: funcTypeMismatch of type int
     │           │   ├── Initializer:
     │           │   │   └── FunctionCall with 2 arguments
     │           │   │       ├── Function:
@@ -56,7 +56,7 @@ AST Tree:
     │           │   │       └── Arguments:
     │           │   │           ├── IntegerLiteral: 1
     │           │   │           └── CharLiteral: 't'
-    │           ├── VarDeclaration: a of type int
+    │           ├── VarDeclaration: funcArgCountMismatch of type int
     │           │   ├── Initializer:
     │           │   │   └── FunctionCall with 3 arguments
     │           │   │       ├── Function:
@@ -65,7 +65,7 @@ AST Tree:
     │           │   │           ├── IntegerLiteral: 1
     │           │   │           ├── IntegerLiteral: 2
     │           │   │           └── IntegerLiteral: 3
-    │           ├── VarDeclaration: z of type char
+    │           ├── VarDeclaration: goodCharDecl of type char
     │           │   ├── Initializer:
     │           │   │   └── CharLiteral: 'c'
     │           └── ReturnStatement
@@ -73,7 +73,7 @@ AST Tree:
     │                   ├── Array:
     │                   │   ├── Identifier: x
     │                   └── Index:
-    │                       └── Identifier: z
+    │                       └── Identifier: goodCharDecl
     ├── Function: addInt returns int with 2 parameters
     │   ├── Parameters:
     │   │   ├── x of type int

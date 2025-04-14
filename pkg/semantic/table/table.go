@@ -8,9 +8,7 @@ import (
 )
 
 type SymbolTable struct {
-    Parent    *SymbolTable
     Symbols   map[string]Symbol
-    ScopeType string
 }
 
 type Symbol struct {
@@ -29,7 +27,7 @@ type ScopeInfo struct {
 }
 
 // Add helper methods
-func NewSymbolTable(parent *SymbolTable, scopeType string) *SymbolTable {
+func NewSymbolTable() *SymbolTable {
     return &SymbolTable{
         Symbols:   make(map[string]Symbol),
     }
@@ -43,7 +41,6 @@ func (symTable *SymbolTable) Lookup(name string) (Symbol, bool) {
     if sym, ok := symTable.Symbols[name]; ok {
         return sym, true
     }
-
     return Symbol{}, false
 }
 
