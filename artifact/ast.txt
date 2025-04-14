@@ -1,5 +1,5 @@
 ========== AST ==========
-Program (Line 1, Col 0) with 3 declarations
+Program (Line 1, Col 0) with 4 declarations
  Declaration 1:
  VarDeclaration (Line 1, Col 0): x of type array of int with size IntegerLiteral (Line 1, Col 6): 3
 
@@ -7,27 +7,97 @@ Program (Line 1, Col 0) with 3 declarations
  FunctionDeclaration (Line 2, Col 0): main returns int with 1 parameters
    Parameter 1: arg of type int
    Body:
-   Block (Line 2, Col 18) with 2 items
+   Block (Line 2, Col 18) with 11 items
      Item 1:
      VarDeclaration (Line 3, Col 4): y of type int with initializer:
-       IntegerLiteral (Line 3, Col 12): 2
+       IntegerLiteral (Line 3, Col 12): 3
      Item 2:
-     ReturnStatement (Line 5, Col 4):
-       ArrayAccessExpression (Line 5, Col 12):
+     VarDeclaration (Line 6, Col 4): c of type int with initializer:
+       ArrayAccessExpression (Line 6, Col 13):
          Array:
-         Identifier (Line 5, Col 11): x
+         Identifier (Line 6, Col 12): x
          Index:
-         Identifier (Line 5, Col 13): y
+         IntegerLiteral (Line 6, Col 14): 1
+     Item 3:
+     VarDeclaration (Line 7, Col 4): d of type int with initializer:
+       ArrayAccessExpression (Line 7, Col 13):
+         Array:
+         Identifier (Line 7, Col 12): x
+         Index:
+         Identifier (Line 7, Col 14): y
+     Item 4:
+     VarDeclaration (Line 10, Col 4): t of type int with initializer:
+       FunctionCallExpression (Line 10, Col 18) with 2 arguments:
+         Function:
+         Identifier (Line 10, Col 12): addInt
+         Argument 1:
+           IntegerLiteral (Line 10, Col 19): 1
+         Argument 2:
+           BinaryExpression (Line 10, Col 23): Operator '/'
+             Left:
+             IntegerLiteral (Line 10, Col 22): 4
+             Right:
+             IntegerLiteral (Line 10, Col 24): 0
+     Item 5:
+     VarDeclaration (Line 13, Col 4): c of type char with initializer:
+       IntegerLiteral (Line 13, Col 13): 10
+     Item 6:
+     VarDeclaration (Line 14, Col 4): test_bool of type bool with initializer:
+       CharLiteral (Line 14, Col 21): 'a'
+     Item 7:
+     VarDeclaration (Line 17, Col 4): op of type int with initializer:
+       BinaryExpression (Line 17, Col 18): Operator '+'
+         Left:
+         BoolLiteral (Line 17, Col 13): true
+         Right:
+         IntegerLiteral (Line 17, Col 20): 1
+     Item 8:
+     VarDeclaration (Line 20, Col 4): b of type int with initializer:
+       FunctionCallExpression (Line 20, Col 18) with 2 arguments:
+         Function:
+         Identifier (Line 20, Col 12): addInt
+         Argument 1:
+           IntegerLiteral (Line 20, Col 19): 1
+         Argument 2:
+           CharLiteral (Line 20, Col 22): 't'
+     Item 9:
+     VarDeclaration (Line 23, Col 4): a of type int with initializer:
+       FunctionCallExpression (Line 23, Col 18) with 3 arguments:
+         Function:
+         Identifier (Line 23, Col 12): addInt
+         Argument 1:
+           IntegerLiteral (Line 23, Col 19): 1
+         Argument 2:
+           IntegerLiteral (Line 23, Col 22): 2
+         Argument 3:
+           IntegerLiteral (Line 23, Col 25): 3
+     Item 10:
+     VarDeclaration (Line 25, Col 4): z of type char with initializer:
+       CharLiteral (Line 25, Col 13): 'c'
+     Item 11:
+     ReturnStatement (Line 27, Col 4):
+       ArrayAccessExpression (Line 27, Col 12):
+         Array:
+         Identifier (Line 27, Col 11): x
+         Index:
+         Identifier (Line 27, Col 13): z
  Declaration 3:
- FunctionDeclaration (Line 8, Col 0): addInt returns int with 2 parameters
+ FunctionDeclaration (Line 30, Col 0): addInt returns int with 2 parameters
    Parameter 1: x of type int
    Parameter 2: y of type int
    Body:
-   Block (Line 8, Col 25) with 1 items
+   Block (Line 30, Col 25) with 1 items
      Item 1:
-     ReturnStatement (Line 9, Col 4):
-       BinaryExpression (Line 9, Col 13): Operator '+'
+     ReturnStatement (Line 31, Col 4):
+       BinaryExpression (Line 31, Col 13): Operator '+'
          Left:
-         Identifier (Line 9, Col 11): x
+         Identifier (Line 31, Col 11): x
          Right:
-         Identifier (Line 9, Col 15): y
+         Identifier (Line 31, Col 15): y
+ Declaration 4:
+ FunctionDeclaration (Line 35, Col 0): testReturnType returns bool with 0 parameters
+   Body:
+   Block (Line 35, Col 22) with 1 items
+     Item 1:
+     ReturnStatement (Line 36, Col 4):
+       CharLiteral (Line 36, Col 11): 'h'
