@@ -1,9 +1,12 @@
-package codegen 
+package codegen
 
 import (
-    "strings"
-    "BigCooker/pkg/semantic/table"
-    "BigCooker/pkg/syntax/ast"
+	"BigCooker/pkg/semantic/table"
+	"BigCooker/pkg/syntax/ast"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 type RegisterPool struct {
@@ -94,6 +97,29 @@ func (rp *RegisterPool) AllocateRegisterFallback(regGroups [][]string) string {
     panic("No register available. Don't know what do.")
 }
 
+func contains(arr []string, item string) bool {
+    for _, i := range arr {
+        if i == item {
+            return true
+        }
+    }
+    return false 
+}
+
+func (rp *RegisterPool) ReleaseRegister(reg string) {
+    rp.InUse[reg] = false 
+}
+
+func (rp *RegisterPool) GetAllUsedRegisters() [] string {
+	var used []string
+	for _, reg := range rp.SavedRegs {
+		if rp.InUse[reg] {
+			used = append(used, reg)
+		}
+	}
+	return used
+}
+
 
 type CodeGenerator struct {
     Program     *ast.Program        // ast root
@@ -121,7 +147,7 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
         SymTable:       symTable, 
         Labels:         0, 
         Registers:      NewRegisterPool(), 
-        VarStackOffset: make(map[string]int)
+        VarStackOffset: make(map[string]int),
     }
 
     cg.ExpressionGen = NewExpressionGenerator(cg)
@@ -131,4 +157,37 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg.LoopingGen    = NewLoopingGenerator(cg)
 
     return cg
+}
+
+func (cg *CodeGenerator) emit(format string, args ...interface{}) {
+    instruction := fmt.Sprintf(format, args...)
+    cg.AsmOut.WriteString(instruction + "\n")
+}
+
+func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
+	comment := fmt.Sprintf("# "+format, args...)
+	cg.AsmOut.WriteString(comment + "\n")
+}
+
+func (cg *CodeGenerator) Generate() error {
+    outFile := "asm.asm"
+
+    cg.emit(".text")
+    cg.emit(".globl main") // first function is main
+
+    for _, decl := range cg.Program.Declarations {
+        cg.generateDeclaration(decl)
+    }
+
+    err := os.MkdirAll(filepath.Dir(outFile), 0777)
+    if err != nil {
+        return fmt.Errorf("Cannot create output file: %w", err)
+    }
+
+    err = os.WriteFile(outFile, []byte(cg.AsmOut.String()), 0777)
+    if err != nil {
+        return fmt.Errorf("Failed to write assembly to file: %w", err)
+    }
+
+    return nil
 }
