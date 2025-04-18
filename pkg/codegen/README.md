@@ -1,0 +1,7 @@
+- all assembly code written to `asm.asm` 
+- order of things 
+    - expression (incl. array) -- Sid
+    - assignment (incl. array) -- Khoa
+    - branch                   -- LP
+    - function          -- together
+    - loop              -- together 
