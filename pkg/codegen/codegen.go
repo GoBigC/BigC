@@ -210,6 +210,42 @@ func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
 	cg.AsmOut.WriteString(comment + "\n")
 }
 
+// Insert data into the ".data" section of the assembly output
+// Highly inefficient, copies and creates a new string every time
+// We need it to work first, then we can optimize it later
+func (cg *CodeGenerator) insertData(label string, dataType string, value any) error {
+	// Get the current content of the builder
+	currentContent := cg.AsmOut.String()
+
+	// Find the position of ".data\n"
+	dataMarker := ".data\n"
+	pos := strings.Index(currentContent, dataMarker)
+	if pos == -1 {
+		return fmt.Errorf("marker %q not found", dataMarker)
+	}
+
+	// Calculate insertion point (after ".data\n")
+	insertPos := pos + len(dataMarker)
+
+	// Format the new label (e.g., "    label_name: .float 1.0\n")
+	newLabel := fmt.Sprintf("    %s: %s %s\n", label, dataType, value)
+
+	// Create a new strings.Builder to hold the updated content
+	var newBuilder strings.Builder
+	// Write content before insertion point
+	newBuilder.WriteString(currentContent[:insertPos])
+	// Write the new label
+	newBuilder.WriteString(newLabel)
+	// Write content after insertion point
+	newBuilder.WriteString(currentContent[insertPos:])
+
+	// Reset the original builder and write the updated content
+	cg.AsmOut.Reset()
+	cg.AsmOut.WriteString(newBuilder.String())
+
+	return nil
+}
+
 func (cg *CodeGenerator) Generate() error {
     outFile := "asm.asm"
 
