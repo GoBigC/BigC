@@ -14,6 +14,9 @@ type RegisterPool struct {
     ArgRegs     []string // a0-a7
     SavedRegs   []string // s1-s11
     Reserved    []string // zero, ra, sp, gp, tp, s0/fp
+    FloatTmpRegs []string // ft0-ft11
+    FloatArgRegs []string // fa0-fa7
+    FloatSavedRegs []string // fs1-fs11
 
     InUse       map[string]bool
 }
@@ -24,11 +27,19 @@ func NewRegisterPool() *RegisterPool {
     saves := []string{"s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11"}
     rsv := []string{"zero", "ra", "sp", "gp", "tp", "s0", "fp"}
 
+    floatTmps := []string{"ft0", "ft1", "ft2", "ft3", "ft4", "ft5", "ft6", "ft7", "ft8", "ft9", "ft10", "ft11"}
+    floatArgs := []string{"fa0", "fa1", "fa2", "fa3", "fa4", "fa5", "fa6", "fa7"}
+    floatSaves := []string{"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11"}
+
     return &RegisterPool{
         TmpRegs:    tmps, 
         ArgRegs:    args, 
         SavedRegs:  saves, 
         Reserved:   rsv,
+        FloatTmpRegs: floatTmps,
+        FloatArgRegs: floatArgs,
+        FloatSavedRegs: floatSaves,
+
         InUse:      make(map[string]bool),
     }
 }
@@ -81,6 +92,36 @@ func (rp *RegisterPool) GetSavedRegister() string {
         rp.TmpRegs, 
         rp.ArgRegs[2:], 
         rp.ArgRegs[:2], 
+    })
+}
+
+func (rp *RegisterPool) GetFloatTmpRegister() string {
+    return rp.AllocateRegisterFallback([][]string{
+        rp.FloatTmpRegs,
+        rp.FloatArgRegs[2:], 
+        rp.FloatArgRegs[:2], 
+        rp.FloatSavedRegs,   
+    })
+}
+
+func (rp *RegisterPool) GetFloatArgRegister(index int) string {
+    if index >=0 && index < len(rp.FloatArgRegs) {
+        reg := rp.FloatArgRegs[index]
+        if !rp.InUse[reg]{
+            rp.InUse[reg] = true 
+            return reg
+        }
+    }
+
+    return rp.GetFloatTmpRegister()
+}
+
+func (rp *RegisterPool) GetFloatSavedRegister() string {
+    return rp.AllocateRegisterFallback([][]string{
+        rp.FloatSavedRegs, 
+        rp.FloatTmpRegs, 
+        rp.FloatArgRegs[2:], 
+        rp.FloatArgRegs[:2], 
     })
 }
 
@@ -178,6 +219,8 @@ func (cg *CodeGenerator) Generate() error {
     for _, decl := range cg.Program.Declarations {
         cg.generateDeclaration(decl)
     }
+    
+    cg.emit("li a7, 10 \n ecall") // Exit the program
 
     err := os.MkdirAll(filepath.Dir(outFile), 0777)
     if err != nil {
@@ -190,4 +233,56 @@ func (cg *CodeGenerator) Generate() error {
     }
 
     return nil
+}
+
+type ExpressionGenerator struct {
+    CodeGen     *CodeGenerator
+}
+
+func NewExpressionGenerator(cg *CodeGenerator) *ExpressionGenerator {
+    return &ExpressionGenerator{
+        CodeGen: cg,
+    }
+}
+
+func (epxrGen *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
+    switch e := expr.(type) {
+        case *ast.BinaryExpression:
+            return epxrGen.GenerateBinaryExpression(e)
+        case *ast.UnaryExpression:
+            return epxrGen.GenerateUnaryExpression(e)
+        case *ast.Identifier:
+            return epxrGen.GenerateIdentifier(e)
+        default:
+            return ""
+    }
+}
+
+func (epxrGen *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) string {
+    switch expr.Operator {
+        case "+":
+            return epxrGen.GenerateAddition(expr)
+        case "-":
+            return epxrGen.GenerateSubtraction(expr)
+        case "*":
+            return epxrGen.GenerateMultiplication(expr)
+        case "/":
+            return epxrGen.GenerateDivision(expr)
+        default:
+            return ""
+    }
+}
+
+func (epxrGen *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) string {
+
+    /* Procedure:
+    Load left and right operands into registers
+    Check if able to use immediate values
+    If not, use temporary registers
+    Generate assembly code for addition
+    Store result in a register
+    return string of addition and register of result */
+
+    
+
 }
