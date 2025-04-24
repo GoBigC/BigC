@@ -1,29 +1,17 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 3 declarations
-    ├── VarDeclaration: x of type array of int with size 3
-    ├── Function: main returns int with 1 parameters
-    │   ├── Parameters:
-    │   │   └── arg of type int
-    │   └── Body:
-    │       └── Block with 2 items
-    │           ├── VarDeclaration: y of type int
-    │           │   ├── Initializer:
-    │           │   │   └── IntegerLiteral: 2
-    │           └── ReturnStatement
-    │               └── ArrayAccess
-    │                   ├── Array:
-    │                   │   ├── Identifier: x
-    │                   └── Index:
-    │                       └── Identifier: y
-    └── Function: addInt returns int with 2 parameters
-        ├── Parameters:
-        │   ├── x of type int
-        │   └── y of type int
+└── Program (Line 1, Col 0) with 1 declarations
+    └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 1 items
-                └── ReturnStatement
-                    └── BinaryExpression: '+'
-                        ├── Left:
-                        │   ├── Identifier: x
-                        └── Right:
-                            └── Identifier: y
+            └── Block with 2 items
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── IntegerLiteral: 42
+                └── ExpressionStatement
+                    └── FunctionCall with 1 arguments
+                        ├── Function:
+                        │   ├── Identifier: _printFloat
+                        └── Arguments:
+                            └── FloatLiteral: 6.900000

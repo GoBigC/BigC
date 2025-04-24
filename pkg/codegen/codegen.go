@@ -247,15 +247,20 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 }
 
 func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Generate()
-	cg.emit(".text")
-	cg.emit(".globl main") // first function is main
+	cg.emit(".data")
+	// cg.insertData() 
 
+	cg.emit(".text")
+	cg.emit("j main") // first function is main
+	cg.GenerateAllBuiltinFunctions()
+	
 	for _, decl := range cg.Program.Declarations {
 		cg.GenerateDeclaration(decl)
 	}
 
-	cg.emit("li a7, 10 \n ecall") // Exit the program
-
+	// TODO: fix this by using return, because main() is just a function
+	cg.emit("j _exit") // Exit the program -- this is temporary
+	
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
 		return fmt.Errorf("cannot create output file: %w", err)
@@ -266,7 +271,7 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 		return fmt.Errorf("failed to write assembly to file: %w", err)
 	}
 	return nil
-	}
+}
 
 func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047

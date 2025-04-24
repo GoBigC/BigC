@@ -1,33 +1,20 @@
 ========== AST ==========
-Program (Line 1, Col 0) with 3 declarations
+Program (Line 1, Col 0) with 1 declarations
  Declaration 1:
- VarDeclaration (Line 1, Col 0): x of type array of int with size IntegerLiteral (Line 1, Col 6): 3
-
- Declaration 2:
- FunctionDeclaration (Line 2, Col 0): main returns int with 1 parameters
-   Parameter 1: arg of type int
+ FunctionDeclaration (Line 1, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 2, Col 18) with 2 items
+   Block (Line 1, Col 11) with 2 items
      Item 1:
-     VarDeclaration (Line 3, Col 4): y of type int with initializer:
-       IntegerLiteral (Line 3, Col 12): 2
+     ExpressionStatement (Line 2, Col 4):
+       FunctionCallExpression (Line 2, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 2, Col 4): _printInt
+         Argument 1:
+           IntegerLiteral (Line 2, Col 14): 42
      Item 2:
-     ReturnStatement (Line 5, Col 4):
-       ArrayAccessExpression (Line 5, Col 12):
-         Array:
-         Identifier (Line 5, Col 11): x
-         Index:
-         Identifier (Line 5, Col 13): y
- Declaration 3:
- FunctionDeclaration (Line 8, Col 0): addInt returns int with 2 parameters
-   Parameter 1: x of type int
-   Parameter 2: y of type int
-   Body:
-   Block (Line 8, Col 25) with 1 items
-     Item 1:
-     ReturnStatement (Line 9, Col 4):
-       BinaryExpression (Line 9, Col 13): Operator '+'
-         Left:
-         Identifier (Line 9, Col 11): x
-         Right:
-         Identifier (Line 9, Col 15): y
+     ExpressionStatement (Line 3, Col 4):
+       FunctionCallExpression (Line 3, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 3, Col 4): _printFloat
+         Argument 1:
+           FloatLiteral (Line 3, Col 16): 6.900000
