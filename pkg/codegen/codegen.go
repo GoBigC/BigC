@@ -185,6 +185,7 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg := &CodeGenerator{
 		Program:        program,
 		SymTable:       symTable,
+		AsmOut :		&strings.Builder{},
 		Labels:         0,
 		Registers:      NewRegisterPool(),
 		VarStackOffset: make(map[string]int),
@@ -245,9 +246,7 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 	return nil
 }
 
-func (cg *CodeGenerator) GenerateProgram() error { //renamed Generate()
-	outFile := "asm.asm"
-
+func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Generate()
 	cg.emit(".text")
 	cg.emit(".globl main") // first function is main
 
@@ -259,12 +258,12 @@ func (cg *CodeGenerator) GenerateProgram() error { //renamed Generate()
 
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
-		return fmt.Errorf("Cannot create output file: %w", err)
+		return fmt.Errorf("cannot create output file: %w", err)
 	}
 
 	err = os.WriteFile(outFile, []byte(cg.AsmOut.String()), 0777)
 	if err != nil {
-		return fmt.Errorf("Failed to write assembly to file: %w", err)
+		return fmt.Errorf("failed to write assembly to file: %w", err)
 	}
 	return nil
 	}
