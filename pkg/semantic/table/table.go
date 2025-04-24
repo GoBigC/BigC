@@ -3,6 +3,7 @@ package table
 import (
 	"BigCooker/pkg/syntax/ast"
 	"fmt"
+	"math"
 	"os"
 	"text/tabwriter"
 )
@@ -28,9 +29,11 @@ type ScopeInfo struct {
 
 // Add helper methods
 func NewSymbolTable() *SymbolTable {
-    return &SymbolTable{
+    table := &SymbolTable{
         Symbols:   make(map[string]Symbol),
     }
+    table.RegisterBuiltinFunctions()
+    return table
 }
 
 func (symTable *SymbolTable) Define(name string, symbol Symbol) {
@@ -100,4 +103,65 @@ func typeString(astType ast.Type) string {
         return fmt.Sprintf("%s[%d]", typeString(a.ElementType), size)
     }
     return "unknown"
+}
+
+func (symTable *SymbolTable) RegisterBuiltinFunctions(){
+    lastLine := math.MaxInt
+
+    intType := &ast.PrimitiveType{Name: "int"}
+    floatType := &ast.PrimitiveType{Name: "float"}
+    charType := &ast.PrimitiveType{Name: "char"}
+    boolType := &ast.PrimitiveType{Name: "bool"}
+    
+    // TODO: register functions for reads{int, float, char, bool, string} && printString, readString
+
+    symTable.Define("_printInt", Symbol{
+        Name:       "_printInt",
+        Type:       &ast.PrimitiveType{Name: "function"},
+        Scope:      ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, 
+        Parameters: []ast.Parameter{
+            {Name: "value", Type: intType},
+        },
+        ReturnType: nil,
+    })
+    
+    symTable.Define("_printFloat", Symbol{
+        Name:       "_printFloat",
+        Type:       &ast.PrimitiveType{Name: "function"},
+        Scope:      ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, 
+        Parameters: []ast.Parameter{
+            {Name: "value", Type: floatType},
+        },
+        ReturnType: nil,
+    })
+    
+    symTable.Define("_printChar", Symbol{
+        Name:       "_printChar",
+        Type:       &ast.PrimitiveType{Name: "function"},
+        Scope:      ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, 
+        Parameters: []ast.Parameter{
+            {Name: "c", Type: charType},
+        },
+        ReturnType: nil,
+    })
+    
+    symTable.Define("_printBool", Symbol{
+        Name:       "_printBool",
+        Type:       &ast.PrimitiveType{Name: "function"},
+        Scope:      ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, 
+        Parameters: []ast.Parameter{
+            {Name: "value", Type: boolType},
+        },
+        ReturnType: nil,
+    })
+    
+    symTable.Define("_exit", Symbol{
+        Name:       "_exit",
+        Type:       &ast.PrimitiveType{Name: "function"},
+        Scope:      ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine}, 
+        Parameters: []ast.Parameter{
+            {Name: "status", Type: intType},
+        },
+        ReturnType: nil,
+    })
 }
