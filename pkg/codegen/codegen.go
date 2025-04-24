@@ -185,6 +185,7 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg := &CodeGenerator{
 		Program:        program,
 		SymTable:       symTable,
+		AsmOut :		&strings.Builder{},
 		Labels:         0,
 		Registers:      NewRegisterPool(),
 		VarStackOffset: make(map[string]int),
@@ -245,45 +246,40 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 	return nil
 }
 
-func (cg *CodeGenerator) Generate() error {
-	outFile := "asm.asm"
-
+func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Generate()
 	cg.emit(".text")
 	cg.emit(".globl main") // first function is main
 
 	for _, decl := range cg.Program.Declarations {
-		cg.generateDeclaration(decl)
+		cg.GenerateDeclaration(decl)
 	}
 
 	cg.emit("li a7, 10 \n ecall") // Exit the program
 
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
-		return fmt.Errorf("Cannot create output file: %w", err)
+		return fmt.Errorf("cannot create output file: %w", err)
 	}
 
 	err = os.WriteFile(outFile, []byte(cg.AsmOut.String()), 0777)
 	if err != nil {
-		return fmt.Errorf("Failed to write assembly to file: %w", err)
+		return fmt.Errorf("failed to write assembly to file: %w", err)
 	}
 	return nil
 	}
-type AssignmentGenerator struct {
-    CodeGen     *CodeGenerator 
-}
-
-type BranchingGenerator struct {
-    CodeGen     *CodeGenerator
-}
-
-type FunctionGenerator struct {
-    CodeGen     *CodeGenerator
-}
-
-type LoopingGenerator struct {
-    CodeGen     *CodeGenerator
-}
 
 func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047
+}
+
+func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
+	switch d := decl.(type) {
+	case *ast.FunctionDeclaration:
+		cg.FunctionGen.GenerateFunctionDeclaration(*d)
+	case *ast.VarDeclaration: 
+		cg.AssignmentGen.GenerateVarDeclaration(*d)
+	// add more cases as we generate
+	default: 
+		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
+	}
 }

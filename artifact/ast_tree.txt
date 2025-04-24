@@ -1,93 +1,29 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 4 declarations
+└── Program (Line 1, Col 0) with 3 declarations
     ├── VarDeclaration: x of type array of int with size 3
     ├── Function: main returns int with 1 parameters
     │   ├── Parameters:
     │   │   └── arg of type int
     │   └── Body:
-    │       └── Block with 11 items
-    │           ├── VarDeclaration: goodIntDecl of type int
+    │       └── Block with 2 items
+    │           ├── VarDeclaration: y of type int
     │           │   ├── Initializer:
-    │           │   │   └── IntegerLiteral: 3
-    │           ├── VarDeclaration: goodIndex of type int
-    │           │   ├── Initializer:
-    │           │   │   └── ArrayAccess
-    │           │   │       ├── Array:
-    │           │   │       │   ├── Identifier: x
-    │           │   │       └── Index:
-    │           │   │           └── IntegerLiteral: 1
-    │           ├── VarDeclaration: badIndex of type int
-    │           │   ├── Initializer:
-    │           │   │   └── ArrayAccess
-    │           │   │       ├── Array:
-    │           │   │       │   ├── Identifier: x
-    │           │   │       └── Index:
-    │           │   │           └── Identifier: goodIndex
-    │           ├── VarDeclaration: divZero of type int
-    │           │   ├── Initializer:
-    │           │   │   └── FunctionCall with 2 arguments
-    │           │   │       ├── Function:
-    │           │   │       │   ├── Identifier: addInt
-    │           │   │       └── Arguments:
-    │           │   │           ├── IntegerLiteral: 1
-    │           │   │           └── BinaryExpression: '/'
-    │           │   │               ├── Left:
-    │           │   │               │   ├── IntegerLiteral: 4
-    │           │   │               └── Right:
-    │           │   │                   └── IntegerLiteral: 0
-    │           ├── VarDeclaration: asmTypeMismatch1 of type char
-    │           │   ├── Initializer:
-    │           │   │   └── IntegerLiteral: 10
-    │           ├── VarDeclaration: asmTypeMismatch2 of type bool
-    │           │   ├── Initializer:
-    │           │   │   └── CharLiteral: 'a'
-    │           ├── VarDeclaration: opMismatch of type int
-    │           │   ├── Initializer:
-    │           │   │   └── BinaryExpression: '+'
-    │           │   │       ├── Left:
-    │           │   │       │   ├── BoolLiteral: true
-    │           │   │       └── Right:
-    │           │   │           └── IntegerLiteral: 1
-    │           ├── VarDeclaration: funcTypeMismatch of type int
-    │           │   ├── Initializer:
-    │           │   │   └── FunctionCall with 2 arguments
-    │           │   │       ├── Function:
-    │           │   │       │   ├── Identifier: addInt
-    │           │   │       └── Arguments:
-    │           │   │           ├── IntegerLiteral: 1
-    │           │   │           └── CharLiteral: 't'
-    │           ├── VarDeclaration: funcArgCountMismatch of type int
-    │           │   ├── Initializer:
-    │           │   │   └── FunctionCall with 3 arguments
-    │           │   │       ├── Function:
-    │           │   │       │   ├── Identifier: addInt
-    │           │   │       └── Arguments:
-    │           │   │           ├── IntegerLiteral: 1
-    │           │   │           ├── IntegerLiteral: 2
-    │           │   │           └── IntegerLiteral: 3
-    │           ├── VarDeclaration: goodCharDecl of type char
-    │           │   ├── Initializer:
-    │           │   │   └── CharLiteral: 'c'
+    │           │   │   └── IntegerLiteral: 2
     │           └── ReturnStatement
     │               └── ArrayAccess
     │                   ├── Array:
     │                   │   ├── Identifier: x
     │                   └── Index:
-    │                       └── Identifier: goodCharDecl
-    ├── Function: addInt returns int with 2 parameters
-    │   ├── Parameters:
-    │   │   ├── x of type int
-    │   │   └── y of type int
-    │   └── Body:
-    │       └── Block with 1 items
-    │           └── ReturnStatement
-    │               └── BinaryExpression: '+'
-    │                   ├── Left:
-    │                   │   ├── Identifier: x
-    │                   └── Right:
     │                       └── Identifier: y
-    └── Function: testReturnType returns bool with 0 parameters
+    └── Function: addInt returns int with 2 parameters
+        ├── Parameters:
+        │   ├── x of type int
+        │   └── y of type int
         └── Body:
             └── Block with 1 items
                 └── ReturnStatement
-                    └── CharLiteral: 'h'
+                    └── BinaryExpression: '+'
+                        ├── Left:
+                        │   ├── Identifier: x
+                        └── Right:
+                            └── Identifier: y
