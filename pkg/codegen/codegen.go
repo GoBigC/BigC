@@ -284,12 +284,6 @@ type LoopingGenerator struct {
     CodeGen     *CodeGenerator
 }
 
-func NewExpressionGenerator(cg *CodeGenerator) *ExpressionGenerator {
-    return &ExpressionGenerator{
-        CodeGen: cg,
-    }
-}
-
 func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047
 }
