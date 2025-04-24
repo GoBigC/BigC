@@ -2,6 +2,7 @@ package codegen
 
 import (
 	"BigCooker/pkg/syntax/ast"
+	"fmt"
 )
 
 type FunctionGenerator struct {
@@ -14,7 +15,121 @@ func NewFunctionGenerator(cg *CodeGenerator) *FunctionGenerator {
 	}
 }
 
+func (fg *FunctionGenerator) calculateFrameSize(funcName string) int {
+	fs := 16 // minimum 8(ra) + 8(s0)
+	table := fg.CodeGen.SymTable
+
+	funcSymbol, found := table.Lookup(funcName)
+	if !found {
+		panic(fmt.Sprintf("Function %s not found in symbol table", funcName))
+	}
+
+	n_param := len(funcSymbol.Parameters)
+	if n_param > 8 {
+		// we have 8 registers a0-a7 to store up to 8 params 
+		// but if we need more, we need to allocate additional stack space
+		// the stack is in memory (not cpu like registers)
+		// --> only allocate additional stack space if needed 
+		fs += (n_param - 8) * 8
+	}
+
+	funcScope := funcSymbol.Scope
+	for _, symbol := range table.Symbols {
+		if 	symbol.Scope.ValidFirstLine >= funcScope.ValidFirstLine && 
+			symbol.Scope.ValidLastLine <= funcScope.ValidLastLine &&
+			symbol.Name != funcName {
+				// we counted this before so skip this symbol
+				isParam := false 
+				for _, param := range funcSymbol.Parameters {
+					if param.Name == symbol.Name {
+						isParam = true
+						break
+					}
+				}
+
+				if !isParam {
+					var size int 
+
+					if symbol.ArraySize > 0 {
+						elemSize := 8 
+						size = int(symbol.ArraySize) * elemSize
+					} else {
+						// if not an array then its just 8
+						size = 8
+					}
+
+					fs += size
+				}
+		}
+	}
+
+	// in case the framesize is not multiple of 16 --> round it up to nearest 
+	rem := fs % 16
+	if rem != 0 {
+		fs += 16 - (rem % 16)
+	}
+
+	return fs
+}
+
 func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDeclaration) {
-	fg.CodeGen.CurrentFunction = funcDecl.Name
+	/*
+	Convention: 
+	- registers have roles as described in CodeGenerator struct 
+	- stack frame size: framesize represents the total size of function's stack frame. 
+	because we are in riscv 64-bit mode:
+		- 8 bytes per saved registers
+		- 8 bytes per local variables 
+		- --> total should be a multiple of 16 bytes for proper alignment
+
+	Prologue: 
+	- allocate stack space for local var 
+	- saved calle-save registers (agreement between functions: callee-saved registers s0-s11 must 
+	have the same values when a function returns as when it was called. we backup the values in
+	these registers so that we can use it and restore values before returning)
+	- set value of frame pointer s0/fp to access local var (stable, reliable reference point to access 
+	local var and params)
+
+	Epilogue: 
+	- restore saved register in reverse order (to the values we backup in prologue)
+	- restore frame pointer (because s0/fp itself is a callee-saved register)
+	- deallocate stack frame 
+	- returns to the caller (`ret` instruction returns to address stored in `ra` register)
+	*/
+	cg := fg.CodeGen
+	cg.CurrentFunction = funcDecl.Name
+	funcName := funcDecl.Name
+	fs := fg.calculateFrameSize(funcName)
+	// fsOffset := 16 // begins after ra, s0
 	
+	// function label
+	cg.emit("%s", funcName)
+
+	// function prologue 
+	cg.emitComment("function prologue")
+	cg.emit("	addi sp, sp, -%d", 	fs)		// allocate stack space
+	cg.emit("	sd ra, %d(sp)", 	fs-8)	// save return address (ra)
+	cg.emit("	sd s0, %d(sp)", 	fs-16)  // save frame pointer
+	cg.emit("	addi s0, sp, %d", 	fs)		// set frame pointer to this function's scope
+
+	// function parameters & local var
+	cg.emitComment("setup parameters") 
+	cg.emitComment("setup local var")
+
+	// function body 
+	cg.emitComment("function body")
+	// if funcDecl.Body != nil {
+	// 	for _, stmt := range funcDecl.Body.Items {
+	// 		fg.GenerateStatement(stmt)
+	// 	}
+	// }
+
+	cg.emit("%s_end:", funcName)
+
+	// function epilogue
+	cg.emitComment("function epilogue") 
+	cg.emit("	ld ra, %d(sp)", fs-8)	// restore ra (of caller func)
+	cg.emit("	ld s0, %d(sp)", fs-16)	// restore fp
+	cg.emit("	addi sp, sp, %d", fs) 	// deallocate stack frame pointer
+	cg.emit("	ret") 					// return to caller func, whose address is in `ra`
 }
