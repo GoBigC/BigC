@@ -1,0 +1,4 @@
+int main() {
+    _printInt(42);
+    _printFloat(6.9);
+}
