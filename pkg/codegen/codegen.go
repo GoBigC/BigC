@@ -266,8 +266,28 @@ func (cg *CodeGenerator) Generate() error {
 	if err != nil {
 		return fmt.Errorf("Failed to write assembly to file: %w", err)
 	}
-
 	return nil
+	}
+type AssignmentGenerator struct {
+    CodeGen     *CodeGenerator 
+}
+
+type BranchingGenerator struct {
+    CodeGen     *CodeGenerator
+}
+
+type FunctionGenerator struct {
+    CodeGen     *CodeGenerator
+}
+
+type LoopingGenerator struct {
+    CodeGen     *CodeGenerator
+}
+
+func NewExpressionGenerator(cg *CodeGenerator) *ExpressionGenerator {
+    return &ExpressionGenerator{
+        CodeGen: cg,
+    }
 }
 
 func isImmediateInt(value int64) bool {
