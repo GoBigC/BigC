@@ -64,6 +64,9 @@ func (fg *FunctionGenerator) calculateFrameSize(funcName string) int {
 	}
 
 	// in case the framesize is not multiple of 16 --> round it up to nearest 
+	// see this: https://riscv.org/wp-content/uploads/2024/12/riscv-calling.pdf
+	// tl;dr: "In the standard RISC-V calling convention, the stack grows downward 
+	// and the stack pointer is always kept 16-byte aligned."
 	rem := fs % 16
 	if rem != 0 {
 		fs += 16 - (rem % 16)

@@ -193,9 +193,9 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
 	cg.AssignmentGen = NewAssignmentGenerator(cg)
-	cg.BranchingGen = NewBranchingGenerator(cg)
-	cg.FunctionGen = NewFunctionGenerator(cg)
-	cg.LoopingGen = NewLoopingGenerator(cg)
+	cg.BranchingGen  = NewBranchingGenerator(cg)
+	cg.FunctionGen 	 = NewFunctionGenerator(cg)
+	cg.LoopingGen 	 = NewLoopingGenerator(cg)
 
 	return cg
 }
