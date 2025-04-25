@@ -1,0 +1,10 @@
+int y = 10;
+int h = 97;
+char c = 'a';
+bool flag = true;
+int A[2];
+//int araay[3] = [1, 2, 3];
+int main() {
+    int x;
+    return 0;
+}
