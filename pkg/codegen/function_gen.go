@@ -102,7 +102,7 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	fs := fg.calculateFrameSize(funcName)
 	
 	// function label
-	cg.emit("%s", funcName)
+	cg.emit("%s:", funcName)
 
 	// function prologue 
 	cg.emitComment("function prologue")
@@ -122,21 +122,55 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 			// ...do logic to load the param in a0-a7...
 			cg.emitComment("param %s in register a%d", param.Name, i)
 		} else { // needs stack
-			// fsOffset := 16 // begins after backup of ra, s0
+			// first memory is to backup ra
+			// second memory is to backup s0 
+			offset := 16 + 8*(i-8) 
+			cg.VarStackOffset[param.Name] = offset
+			cg.emitComment("param %s at offset %d(sp)", param.Name, offset)
 		}
 	}
 
 	cg.emitComment("setup local var")
+	localVarOffset := 16 
+	if len(params) > 8 {
+		localVarOffset += (len(params)-8)*8
+	}
+
+	funcScope := funcSymbol.Scope 
+	for _, symbol := range cg.SymTable.Symbols {
+		if 	symbol.Name != funcName &&
+			symbol.Scope.ValidFirstLine >= funcScope.ValidFirstLine &&
+			symbol.Scope.ValidLastLine <= funcScope.ValidLastLine {
+				isParam := false
+				for _, param := range params {
+					if param.Name == symbol.Name {
+						isParam = true 
+						break
+					}
+				}
+
+				if !isParam {
+					var size int 
+					if /*symbol.ArraySize != nil &&*/ symbol.ArraySize > 0 {
+						size = int(symbol.ArraySize)*8
+					} else {
+						size = 8
+					}
+
+					cg.VarStackOffset[symbol.Name] = localVarOffset
+					cg.emitComment("local var %s at offset %d(sp)", symbol.Name, localVarOffset)
+					localVarOffset += size
+				}
+			}
+	}
 
 	// function body 
 	cg.emitComment("function body")
-	// if funcDecl.Body != nil {
-	// 	for _, stmt := range funcDecl.Body.Items {
-	// 		fg.GenerateStatement(stmt)
-	// 	}
-	// }
-
-	cg.emit("%s_end:", funcName)
+	if funcDecl.Body != nil {
+		for _, stmt := range funcDecl.Body.Items {
+			fg.GenerateStatement(stmt)
+		}
+	}
 
 	// function epilogue
 	cg.emitComment("function epilogue") 
@@ -145,3 +179,18 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	cg.emit("	addi sp, sp, %d", fs) 	// deallocate stack frame pointer
 	cg.emit("	ret") 					// return to caller func, whose address is in `ra`
 }
+
+func (fg *FunctionGenerator) GenerateStatement(stmt ast.BlockItem) {}
+
+// func (fg *FunctionGenerator) GenerateStatement(stmt ast.Statement) {
+// 	switch s := stmt.(type) {
+// 	case *ast.ExpressionStatement:
+// 		fg.CodeGen.ExpressionGen.GenerateExpression(s.Expr)
+// 	case *ast.IfStatement:
+// 		fg.CodeGen.BranchingGen.GenerateIfStatement(*s)
+// 	case *ast.WhileStatement: 
+// 		fg.CodeGen.LoopingGen.GenerateWhileStatement(*s)
+// 	case *ast.ReturnStatement: 
+// 		fg.
+// 	}
+// }
