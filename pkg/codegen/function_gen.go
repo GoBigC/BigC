@@ -100,7 +100,6 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	cg.CurrentFunction = funcDecl.Name
 	funcName := funcDecl.Name
 	fs := fg.calculateFrameSize(funcName)
-	// fsOffset := 16 // begins after ra, s0
 	
 	// function label
 	cg.emit("%s", funcName)
@@ -114,6 +113,19 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 
 	// function parameters & local var
 	cg.emitComment("setup parameters") 
+	funcSymbol, _ := cg.SymTable.Lookup(funcName)
+	params := funcSymbol.Parameters
+
+	for i, param := range params {
+		if i < 8 { // first 8 in a0-a7
+			cg.VarStackOffset[param.Name] = -1 // -1 means register (not stack)
+			// ...do logic to load the param in a0-a7...
+			cg.emitComment("param %s in register a%d", param.Name, i)
+		} else { // needs stack
+			// fsOffset := 16 // begins after backup of ra, s0
+		}
+	}
+
 	cg.emitComment("setup local var")
 
 	// function body 
