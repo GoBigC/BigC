@@ -274,9 +274,17 @@ func (fg *FunctionGenerator) GenerateBlockItem(stmt ast.BlockItem) {
 		// it makes sense why this func does not take 
 		// argument but be careful this may cause problem
 		cg.AssignmentGen.GenerateVarDeclaration() // watch out
+	// case *ast.Block:
+    //     fg.GenerateBlock(*s)
 	case *ast.FunctionDeclaration:
 		panic("nested function declaration not allowed")
 	default: 
 		panic(fmt.Sprintf("unknown statement type in function body: %T", stmt))
 	}
 } 
+
+// func (fg *FunctionGenerator) GenerateBlock(block ast.Block) {
+//     for _, item := range block.Items {
+//         fg.GenerateBlockItem(item)
+//     }
+// }
