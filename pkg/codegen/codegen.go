@@ -185,14 +185,14 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg := &CodeGenerator{
 		Program:        program,
 		SymTable:       symTable,
-		AsmOut :		&strings.Builder{},
+		AsmOut:         &strings.Builder{},
 		Labels:         0,
 		Registers:      NewRegisterPool(),
 		VarStackOffset: make(map[string]int),
 	}
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
-	cg.AssignmentGen = NewAssignmentGenerator(cg)
+	cg.AssignmentGen = NewAssignmentGenerator(cg, cg.SymTable)
 	cg.BranchingGen = NewBranchingGenerator(cg)
 	cg.FunctionGen = NewFunctionGenerator(cg)
 	cg.LoopingGen = NewLoopingGenerator(cg)
@@ -216,6 +216,9 @@ func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
 func (cg *CodeGenerator) insertData(label string, dataType string, value any) error {
 	// Get the current content of the builder
 	currentContent := cg.AsmOut.String()
+	if strings.Contains(currentContent, label+":") {
+		return nil // Label already exists, skip insertion
+	}
 
 	// Find the position of ".data\n"
 	dataMarker := ".data\n"
@@ -228,8 +231,32 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 	insertPos := pos + len(dataMarker)
 
 	// Format the new label (e.g., "    label_name: .float 1.0\n")
-	newLabel := fmt.Sprintf("%s: %s %s\n", label, dataType, value)
-
+	var newLabel string
+	switch v := value.(type) {
+	case int, int64, int32, int16, int8:
+		newLabel = fmt.Sprintf("%s: %s %d\n", label, dataType, v)
+	case float64, float32:
+		newLabel = fmt.Sprintf("%s: %s %.6f\n", label, dataType, v)
+	case string:
+		if dataType == ".asciz" || dataType == ".ascii" {
+			newLabel = fmt.Sprintf("%s: %s \"%s\"\n", label, dataType, v)
+		} else {
+			newLabel = fmt.Sprintf("%s: %s %s\n", label, dataType, v)
+		}
+	case []byte:
+		// Handle byte arrays
+		var bytes strings.Builder
+		for i, b := range v {
+			if i > 0 {
+				bytes.WriteString(", ")
+			}
+			bytes.WriteString(fmt.Sprintf("0x%02x", b))
+		}
+		newLabel = fmt.Sprintf("%s: %s %s\n", label, dataType, bytes.String())
+	default:
+		// For other types, just use the default string representation
+		newLabel = fmt.Sprintf("%s: %s %v\n", label, dataType, v)
+	}
 	// Create a new strings.Builder to hold the updated content
 	var newBuilder strings.Builder
 	// Write content before insertion point
@@ -248,19 +275,19 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 
 func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Generate()
 	cg.emit(".data")
-	// cg.insertData() 
+	// cg.insertData()
 
 	cg.emit(".text")
 	cg.emit("j main") // first function is main
 	cg.GenerateAllBuiltinFunctions()
-	
+
 	for _, decl := range cg.Program.Declarations {
 		cg.GenerateDeclaration(decl)
 	}
 
 	// TODO: fix this by using return, because main() is just a function
 	cg.emit("j _exit") // Exit the program -- this is temporary
-	
+
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
 		return fmt.Errorf("cannot create output file: %w", err)
@@ -281,10 +308,10 @@ func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
 	case *ast.FunctionDeclaration:
 		cg.FunctionGen.GenerateFunctionDeclaration(*d)
-	case *ast.VarDeclaration: 
-		cg.AssignmentGen.GenerateVarDeclaration(*d)
+	case *ast.VarDeclaration:
+		cg.AssignmentGen.GenerateVarDeclaration()
 	// add more cases as we generate
-	default: 
+	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
 	}
 }
