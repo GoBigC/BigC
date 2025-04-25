@@ -1,33 +1,26 @@
 ========== AST ==========
-Program (Line 1, Col 0) with 3 declarations
+Program (Line 1, Col 0) with 6 declarations
  Declaration 1:
- VarDeclaration (Line 1, Col 0): x of type array of int with size IntegerLiteral (Line 1, Col 6): 3
-
+ VarDeclaration (Line 1, Col 0): y of type int with initializer:
+   IntegerLiteral (Line 1, Col 8): 10
  Declaration 2:
- FunctionDeclaration (Line 2, Col 0): main returns int with 1 parameters
-   Parameter 1: arg of type int
-   Body:
-   Block (Line 2, Col 18) with 2 items
-     Item 1:
-     VarDeclaration (Line 3, Col 4): y of type int with initializer:
-       IntegerLiteral (Line 3, Col 12): 2
-     Item 2:
-     ReturnStatement (Line 5, Col 4):
-       ArrayAccessExpression (Line 5, Col 12):
-         Array:
-         Identifier (Line 5, Col 11): x
-         Index:
-         Identifier (Line 5, Col 13): y
+ VarDeclaration (Line 2, Col 0): h of type int with initializer:
+   IntegerLiteral (Line 2, Col 8): 97
  Declaration 3:
- FunctionDeclaration (Line 8, Col 0): addInt returns int with 2 parameters
-   Parameter 1: x of type int
-   Parameter 2: y of type int
+ VarDeclaration (Line 3, Col 0): c of type char with initializer:
+   CharLiteral (Line 3, Col 9): 'a'
+ Declaration 4:
+ VarDeclaration (Line 4, Col 0): flag of type bool with initializer:
+   BoolLiteral (Line 4, Col 12): true
+ Declaration 5:
+ VarDeclaration (Line 5, Col 0): A of type array of int with size IntegerLiteral (Line 5, Col 6): 2
+
+ Declaration 6:
+ FunctionDeclaration (Line 7, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 8, Col 25) with 1 items
+   Block (Line 7, Col 11) with 2 items
      Item 1:
+     VarDeclaration (Line 8, Col 4): x of type int
+     Item 2:
      ReturnStatement (Line 9, Col 4):
-       BinaryExpression (Line 9, Col 13): Operator '+'
-         Left:
-         Identifier (Line 9, Col 11): x
-         Right:
-         Identifier (Line 9, Col 15): y
+       IntegerLiteral (Line 9, Col 11): 0

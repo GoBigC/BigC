@@ -3,7 +3,95 @@
 		declaration (
 			type int
 		)
-		x
+		y
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 10
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type int
+		)
+		h
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 97
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type char
+		)
+		c
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 'a'
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type bool
+		)
+		flag
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant true
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type int
+		)
+		A
 		(
 			arrayNotation [ (
 				expression (
@@ -17,7 +105,7 @@
 												unaryExpression (
 													postfixExpression (
 														primaryExpression (
-															constant 3
+															constant 2
 														))))))))))))
 			])
 		(
@@ -30,23 +118,23 @@
 		main
 		(
 			declarationRemainder (
-				(
-					parameterList (
-						parameter (
-							type int
-						)
-						arg))
-				)
+				
+			)
 			(
 				block { (
 					blockItem (
 						declaration (
 							type int
 						)
-						y
+						x
 						(
-							declarationRemainder (
-								variableInitializer = (
+							declarationRemainder ;
+						)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								returnStatement return (
 									expression (
 										assignmentExpression (
 											logicalOrExpression (
@@ -58,90 +146,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 2
-																			)))))))))))))
-							;)))
-				(
-					blockItem (
-						statement (
-							nonIfStatement (
-								returnStatement return (
-									expression (
-										assignmentExpression (
-											logicalOrExpression (
-												logicalAndExpression (
-													equalityExpression (
-														comparisonExpression (
-															additionExpression (
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression x
-																		)
-																		(
-																			arrayAccess [ (
-																				expression (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression y
-																													)))))))))))
-																			])))))))))))
-								;))))
-				})))
-	(
-		declaration (
-			type int
-		)
-		addInt
-		(
-			declarationRemainder (
-				(
-					parameterList (
-						parameter (
-							type int
-						)
-						x)
-					,
-					(
-						parameter (
-							type int
-						)
-						y))
-				)
-			(
-				block { (
-					blockItem (
-						statement (
-							nonIfStatement (
-								returnStatement return (
-									expression (
-										assignmentExpression (
-											logicalOrExpression (
-												logicalAndExpression (
-													equalityExpression (
-														comparisonExpression (
-															additionExpression (
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression x
-																		))))
-															(
-																additionExpressionRest (
-																	addSubtractOperator +
-																)
-																(
-																	multiplicationExpression (
-																		unaryExpression (
-																			postfixExpression (
-																				primaryExpression y
+																				constant 0
 																			))))))))))))
 								;))))
 				})))

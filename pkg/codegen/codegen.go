@@ -185,14 +185,14 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg := &CodeGenerator{
 		Program:        program,
 		SymTable:       symTable,
-		AsmOut :		&strings.Builder{},
+		AsmOut:         &strings.Builder{},
 		Labels:         0,
 		Registers:      NewRegisterPool(),
 		VarStackOffset: make(map[string]int),
 	}
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
-	cg.AssignmentGen = NewAssignmentGenerator(cg)
+	cg.AssignmentGen = NewAssignmentGenerator(cg, cg.SymTable)
 	cg.BranchingGen = NewBranchingGenerator(cg)
 	cg.FunctionGen = NewFunctionGenerator(cg)
 	cg.LoopingGen = NewLoopingGenerator(cg)
@@ -266,7 +266,7 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 		return fmt.Errorf("failed to write assembly to file: %w", err)
 	}
 	return nil
-	}
+}
 
 func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047
@@ -276,10 +276,10 @@ func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
 	case *ast.FunctionDeclaration:
 		cg.FunctionGen.GenerateFunctionDeclaration(*d)
-	case *ast.VarDeclaration: 
-		cg.AssignmentGen.GenerateVarDeclaration(*d)
+	case *ast.VarDeclaration:
+		cg.AssignmentGen.GenerateVarDeclaration()
 	// add more cases as we generate
-	default: 
+	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
 	}
 }

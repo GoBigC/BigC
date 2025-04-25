@@ -1,29 +1,21 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 3 declarations
-    ├── VarDeclaration: x of type array of int with size 3
-    ├── Function: main returns int with 1 parameters
-    │   ├── Parameters:
-    │   │   └── arg of type int
-    │   └── Body:
-    │       └── Block with 2 items
-    │           ├── VarDeclaration: y of type int
-    │           │   ├── Initializer:
-    │           │   │   └── IntegerLiteral: 2
-    │           └── ReturnStatement
-    │               └── ArrayAccess
-    │                   ├── Array:
-    │                   │   ├── Identifier: x
-    │                   └── Index:
-    │                       └── Identifier: y
-    └── Function: addInt returns int with 2 parameters
-        ├── Parameters:
-        │   ├── x of type int
-        │   └── y of type int
+└── Program (Line 1, Col 0) with 6 declarations
+    ├── VarDeclaration: y of type int
+    │   ├── Initializer:
+    │   │   └── IntegerLiteral: 10
+    ├── VarDeclaration: h of type int
+    │   ├── Initializer:
+    │   │   └── IntegerLiteral: 97
+    ├── VarDeclaration: c of type char
+    │   ├── Initializer:
+    │   │   └── CharLiteral: 'a'
+    ├── VarDeclaration: flag of type bool
+    │   ├── Initializer:
+    │   │   └── BoolLiteral: true
+    ├── VarDeclaration: A of type array of int with size 2
+    └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 1 items
+            └── Block with 2 items
+                ├── VarDeclaration: x of type int
                 └── ReturnStatement
-                    └── BinaryExpression: '+'
-                        ├── Left:
-                        │   ├── Identifier: x
-                        └── Right:
-                            └── Identifier: y
+                    └── IntegerLiteral: 0

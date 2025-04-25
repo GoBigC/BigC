@@ -3,7 +3,91 @@ CST Tree:
     ├── declaration
     │   ├── type
     │   │   └── int
-    │   ├── x
+    │   ├── y
+    │   └── declarationRemainder
+    │       ├── variableInitializer
+    │       │   ├── =
+    │       │   └── expression
+    │       │       └── assignmentExpression
+    │       │           └── logicalOrExpression
+    │       │               └── logicalAndExpression
+    │       │                   └── equalityExpression
+    │       │                       └── comparisonExpression
+    │       │                           └── additionExpression
+    │       │                               └── multiplicationExpression
+    │       │                                   └── unaryExpression
+    │       │                                       └── postfixExpression
+    │       │                                           └── primaryExpression
+    │       │                                               └── constant
+    │       │                                                   └── 10
+    │       └── ;
+    ├── declaration
+    │   ├── type
+    │   │   └── int
+    │   ├── h
+    │   └── declarationRemainder
+    │       ├── variableInitializer
+    │       │   ├── =
+    │       │   └── expression
+    │       │       └── assignmentExpression
+    │       │           └── logicalOrExpression
+    │       │               └── logicalAndExpression
+    │       │                   └── equalityExpression
+    │       │                       └── comparisonExpression
+    │       │                           └── additionExpression
+    │       │                               └── multiplicationExpression
+    │       │                                   └── unaryExpression
+    │       │                                       └── postfixExpression
+    │       │                                           └── primaryExpression
+    │       │                                               └── constant
+    │       │                                                   └── 97
+    │       └── ;
+    ├── declaration
+    │   ├── type
+    │   │   └── char
+    │   ├── c
+    │   └── declarationRemainder
+    │       ├── variableInitializer
+    │       │   ├── =
+    │       │   └── expression
+    │       │       └── assignmentExpression
+    │       │           └── logicalOrExpression
+    │       │               └── logicalAndExpression
+    │       │                   └── equalityExpression
+    │       │                       └── comparisonExpression
+    │       │                           └── additionExpression
+    │       │                               └── multiplicationExpression
+    │       │                                   └── unaryExpression
+    │       │                                       └── postfixExpression
+    │       │                                           └── primaryExpression
+    │       │                                               └── constant
+    │       │                                                   └── 'a'
+    │       └── ;
+    ├── declaration
+    │   ├── type
+    │   │   └── bool
+    │   ├── flag
+    │   └── declarationRemainder
+    │       ├── variableInitializer
+    │       │   ├── =
+    │       │   └── expression
+    │       │       └── assignmentExpression
+    │       │           └── logicalOrExpression
+    │       │               └── logicalAndExpression
+    │       │                   └── equalityExpression
+    │       │                       └── comparisonExpression
+    │       │                           └── additionExpression
+    │       │                               └── multiplicationExpression
+    │       │                                   └── unaryExpression
+    │       │                                       └── postfixExpression
+    │       │                                           └── primaryExpression
+    │       │                                               └── constant
+    │       │                                                   └── true
+    │       └── ;
+    ├── declaration
+    │   ├── type
+    │   │   └── int
+    │   ├── A
     │   ├── arrayNotation
     │   │   ├── [
     │   │   ├── expression
@@ -18,7 +102,7 @@ CST Tree:
     │   │   │                                   └── postfixExpression
     │   │   │                                       └── primaryExpression
     │   │   │                                           └── constant
-    │   │   │                                               └── 3
+    │   │   │                                               └── 2
     │   │   └── ]
     │   └── declarationRemainder
     │       └── ;
@@ -28,34 +112,14 @@ CST Tree:
     │   ├── main
     │   └── declarationRemainder
     │       ├── 
-    │       │   └── parameterList
-    │       │       └── parameter
-    │       │           ├── type
-    │       │           │   └── int
-    │       │           └── arg
     │       └── block
     │           ├── {
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
     │           │       │   └── int
-    │           │       ├── y
+    │           │       ├── x
     │           │       └── declarationRemainder
-    │           │           ├── variableInitializer
-    │           │           │   ├── =
-    │           │           │   └── expression
-    │           │           │       └── assignmentExpression
-    │           │           │           └── logicalOrExpression
-    │           │           │               └── logicalAndExpression
-    │           │           │                   └── equalityExpression
-    │           │           │                       └── comparisonExpression
-    │           │           │                           └── additionExpression
-    │           │           │                               └── multiplicationExpression
-    │           │           │                                   └── unaryExpression
-    │           │           │                                       └── postfixExpression
-    │           │           │                                           └── primaryExpression
-    │           │           │                                               └── constant
-    │           │           │                                                   └── 2
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -72,68 +136,9 @@ CST Tree:
     │           │               │                           └── multiplicationExpression
     │           │               │                               └── unaryExpression
     │           │               │                                   └── postfixExpression
-    │           │               │                                       ├── primaryExpression
-    │           │               │                                       │   └── x
-    │           │               │                                       └── arrayAccess
-    │           │               │                                           ├── [
-    │           │               │                                           ├── expression
-    │           │               │                                           │   └── assignmentExpression
-    │           │               │                                           │       └── logicalOrExpression
-    │           │               │                                           │           └── logicalAndExpression
-    │           │               │                                           │               └── equalityExpression
-    │           │               │                                           │                   └── comparisonExpression
-    │           │               │                                           │                       └── additionExpression
-    │           │               │                                           │                           └── multiplicationExpression
-    │           │               │                                           │                               └── unaryExpression
-    │           │               │                                           │                                   └── postfixExpression
-    │           │               │                                           │                                       └── primaryExpression
-    │           │               │                                           │                                           └── y
-    │           │               │                                           └── ]
-    │           │               └── ;
-    │           └── }
-    ├── declaration
-    │   ├── type
-    │   │   └── int
-    │   ├── addInt
-    │   └── declarationRemainder
-    │       ├── 
-    │       │   └── parameterList
-    │       │       ├── parameter
-    │       │       │   ├── type
-    │       │       │   │   └── int
-    │       │       │   └── x
-    │       │       ├── ,
-    │       │       └── parameter
-    │       │           ├── type
-    │       │           │   └── int
-    │       │           └── y
-    │       └── block
-    │           ├── {
-    │           ├── blockItem
-    │           │   └── statement
-    │           │       └── nonIfStatement
-    │           │           └── returnStatement
-    │           │               ├── return
-    │           │               ├── expression
-    │           │               │   └── assignmentExpression
-    │           │               │       └── logicalOrExpression
-    │           │               │           └── logicalAndExpression
-    │           │               │               └── equalityExpression
-    │           │               │                   └── comparisonExpression
-    │           │               │                       └── additionExpression
-    │           │               │                           ├── multiplicationExpression
-    │           │               │                           │   └── unaryExpression
-    │           │               │                           │       └── postfixExpression
-    │           │               │                           │           └── primaryExpression
-    │           │               │                           │               └── x
-    │           │               │                           └── additionExpressionRest
-    │           │               │                               ├── addSubtractOperator
-    │           │               │                               │   └── +
-    │           │               │                               └── multiplicationExpression
-    │           │               │                                   └── unaryExpression
-    │           │               │                                       └── postfixExpression
-    │           │               │                                           └── primaryExpression
-    │           │               │                                               └── y
+    │           │               │                                       └── primaryExpression
+    │           │               │                                           └── constant
+    │           │               │                                               └── 0
     │           │               └── ;
     │           └── }
     └── <EOF>
