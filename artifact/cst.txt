@@ -1,9 +1,9 @@
 (
 	program (
 		declaration (
-			type void
+			type int
 		)
-		y
+		x
 		(
 			declarationRemainder (
 				variableInitializer = (
@@ -150,8 +150,22 @@
 						)
 						x
 						(
-							declarationRemainder ;
-						)))
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 12
+																			)))))))))))))
+							;)))
 				(
 					blockItem (
 						statement (

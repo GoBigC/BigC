@@ -197,4 +197,66 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	cg.emit("	ret") 					// return to caller func, whose address is in `ra`
 }
 
+func (fg *FunctionGenerator) GenerateReturnStatement(stmt ast.ReturnStatement) {
+	if stmt.Value != nil {
+		resultRegister := fg.CodeGen.ExpressionGen.GenerateExpression(stmt.Value)
+		switch expr := stmt.Value.(type) {
+		case *ast.FloatLiteral:
+			fg.CodeGen.emit("	fmv.d fa0, %s", resultRegister)
+		case *ast.IntegerLiteral, *ast.BoolLiteral, *ast.CharLiteral: 
+			fg.CodeGen.emit("	mv a0, %s", resultRegister)
+		case *ast.Identifier:
+			// check symbol table
+			typeName := ""
+			if fg.CodeGen.CurrentFunction != "" { // search local scope first
+				localName := fmt.Sprintf("%s.%s", fg.CodeGen.CurrentFunction, expr.Name)
+				if symbol, found := fg.CodeGen.SymTable.Lookup(localName); found {
+					if isPrimitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
+						typeName = isPrimitiveType.Name
+					}
+				}
+			}
+
+			if typeName == "" { // if cant find in local --> search global 
+				if symbol, found := fg.CodeGen.SymTable.Lookup(expr.Name); found {
+					if isPrimitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
+						typeName = isPrimitiveType.Name
+					}
+				}
+			}
+
+			if typeName == "float" {
+				fg.CodeGen.emit("	fmv.d fa0, %s", resultRegister)
+			} else {
+				fg.CodeGen.emit("	mv a0, %s", resultRegister)	
+			}
+		case *ast.FunctionCallExpression:
+			// function call has already return value into a0/fa0 by convention 
+			// --> no move instruction needed, need to check type or return
+			if id, ok := expr.Function.(*ast.Identifier); ok {
+				if symbol, found := fg.CodeGen.SymTable.Lookup(id.Name); found {
+					if symbol.ReturnType != nil {
+						if  isPrimitiveType, ok := symbol.ReturnType.(*ast.PrimitiveType); ok &&
+							isPrimitiveType.Name == "float" {
+								if resultRegister != "fa0" {
+									fg.CodeGen.emit("    fmv.d fa0, %s", resultRegister)
+								}
+							} else {
+								if resultRegister != "a0" {
+									fg.CodeGen.emit("    mv a0, %s", resultRegister)
+								}
+							}
+					}
+				}
+			}
+		default:
+			panic(fmt.Sprintf("return expression type not recognized: %s", expr)) // is it %s or %T?
+		}
+
+		if resultRegister != "a0" && resultRegister != "fa0" {
+			fg.CodeGen.Registers.ReleaseRegister(resultRegister)
+		}
+	}
+}
+
 func (fg *FunctionGenerator) GenerateStatement(stmt ast.BlockItem) {} 

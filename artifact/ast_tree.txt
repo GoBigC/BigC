@@ -1,6 +1,6 @@
 AST Tree:
 └── Program (Line 1, Col 0) with 7 declarations
-    ├── VarDeclaration: y of type int
+    ├── VarDeclaration: x of type int
     │   ├── Initializer:
     │   │   └── IntegerLiteral: 10
     ├── VarDeclaration: h of type int
@@ -20,5 +20,7 @@ AST Tree:
         └── Body:
             └── Block with 2 items
                 ├── VarDeclaration: x of type int
+                │   ├── Initializer:
+                │   │   └── IntegerLiteral: 12
                 └── ReturnStatement
                     └── IntegerLiteral: 0

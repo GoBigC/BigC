@@ -1,7 +1,7 @@
 ========== AST ==========
 Program (Line 1, Col 0) with 7 declarations
  Declaration 1:
- VarDeclaration (Line 1, Col 0): y of type int with initializer:
+ VarDeclaration (Line 1, Col 0): x of type int with initializer:
    IntegerLiteral (Line 1, Col 8): 10
  Declaration 2:
  VarDeclaration (Line 2, Col 0): h of type int with initializer:
@@ -23,7 +23,8 @@ Program (Line 1, Col 0) with 7 declarations
    Body:
    Block (Line 8, Col 11) with 2 items
      Item 1:
-     VarDeclaration (Line 9, Col 4): x of type int
+     VarDeclaration (Line 9, Col 4): x of type int with initializer:
+       IntegerLiteral (Line 9, Col 10): 12
      Item 2:
      ReturnStatement (Line 10, Col 4):
        IntegerLiteral (Line 10, Col 11): 0

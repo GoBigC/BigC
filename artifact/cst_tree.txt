@@ -3,7 +3,7 @@ CST Tree:
     ├── declaration
     │   ├── type
     │   │   └── int
-    │   ├── y
+    │   ├── x
     │   └── declarationRemainder
     │       ├── variableInitializer
     │       │   ├── =
@@ -133,11 +133,6 @@ CST Tree:
     │   ├── main
     │   └── declarationRemainder
     │       ├── 
-    │       │   └── parameterList
-    │       │       └── parameter
-    │       │           ├── type
-    │       │           │   └── int
-    │       │           └── x
     │       └── block
     │           ├── {
     │           ├── blockItem
@@ -146,21 +141,22 @@ CST Tree:
     │           │       │   └── int
     │           │       ├── x
     │           │       └── declarationRemainder
+    │           │           ├── variableInitializer
+    │           │           │   ├── =
+    │           │           │   └── expression
+    │           │           │       └── assignmentExpression
+    │           │           │           └── logicalOrExpression
+    │           │           │               └── logicalAndExpression
+    │           │           │                   └── equalityExpression
+    │           │           │                       └── comparisonExpression
+    │           │           │                           └── additionExpression
+    │           │           │                               └── multiplicationExpression
+    │           │           │                                   └── unaryExpression
+    │           │           │                                       └── postfixExpression
+    │           │           │                                           └── primaryExpression
+    │           │           │                                               └── constant
+    │           │           │                                                   └── 12
     │           │           └── ;
-    │           └── }
-    ├── declaration
-    │   ├── type
-    │   │   └── void
-    │   ├── print2
-    │   └── declarationRemainder
-    │       ├── 
-    │       │   └── parameterList
-    │       │       └── parameter
-    │       │           ├── type
-    │       │           │   └── float
-    │       │           └── x
-    │       └── block
-    │           ├── {
     │           ├── blockItem
     │           │   └── statement
     │           │       └── nonIfStatement
