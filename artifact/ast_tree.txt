@@ -1,17 +1,24 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 1 declarations
+└── Program (Line 1, Col 0) with 7 declarations
+    ├── VarDeclaration: y of type int
+    │   ├── Initializer:
+    │   │   └── IntegerLiteral: 10
+    ├── VarDeclaration: h of type int
+    │   ├── Initializer:
+    │   │   └── IntegerLiteral: 97
+    ├── VarDeclaration: c of type char
+    │   ├── Initializer:
+    │   │   └── CharLiteral: 'a'
+    ├── VarDeclaration: flag of type bool
+    │   ├── Initializer:
+    │   │   └── BoolLiteral: true
+    ├── VarDeclaration: no of type bool
+    │   ├── Initializer:
+    │   │   └── BoolLiteral: false
+    ├── VarDeclaration: A of type array of int with size 2
     └── Function: main returns int with 0 parameters
         └── Body:
             └── Block with 2 items
-                ├── ExpressionStatement
-                │   └── FunctionCall with 1 arguments
-                │       ├── Function:
-                │       │   ├── Identifier: _printInt
-                │       └── Arguments:
-                │           └── IntegerLiteral: 42
-                └── ExpressionStatement
-                    └── FunctionCall with 1 arguments
-                        ├── Function:
-                        │   ├── Identifier: _printFloat
-                        └── Arguments:
-                            └── FloatLiteral: 6.900000
+                ├── VarDeclaration: x of type int
+                └── ReturnStatement
+                    └── IntegerLiteral: 0
