@@ -1,0 +1,4 @@
+line 20:8
+char c = 'ab';   // Error: char constant can only contain one character
+        ^
+Syntax Error: mismatched input '='. Check for unexpected tokens or typos.  
