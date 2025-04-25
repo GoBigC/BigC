@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	// "BigCooker/pkg/syntax/ast"
+	"BigCooker/pkg/syntax/ast"
 )
 
 type BranchingGenerator struct {
@@ -14,3 +14,4 @@ func NewBranchingGenerator(cg *CodeGenerator) *BranchingGenerator {
 	}
 }
 
+func (bg *BranchingGenerator) GenerateIfStatement(stmt ast.IfStatement) {}
