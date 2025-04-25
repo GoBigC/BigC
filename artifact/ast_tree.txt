@@ -1,21 +1,39 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 6 declarations
-    ├── VarDeclaration: y of type int
-    │   ├── Initializer:
-    │   │   └── IntegerLiteral: 10
-    ├── VarDeclaration: h of type int
-    │   ├── Initializer:
-    │   │   └── IntegerLiteral: 97
-    ├── VarDeclaration: c of type char
-    │   ├── Initializer:
-    │   │   └── CharLiteral: 'a'
-    ├── VarDeclaration: flag of type bool
-    │   ├── Initializer:
-    │   │   └── BoolLiteral: true
-    ├── VarDeclaration: A of type array of int with size 2
+└── Program (Line 2, Col 0) with 3 declarations
+    ├── Function: print1 returns void with 1 parameters
+    │   ├── Parameters:
+    │   │   └── x of type int
+    │   └── Body:
+    │       └── Block with 1 items
+    │           └── ExpressionStatement
+    │               └── FunctionCall with 1 arguments
+    │                   ├── Function:
+    │                   │   ├── Identifier: _printInt
+    │                   └── Arguments:
+    │                       └── Identifier: x
+    ├── Function: print2 returns void with 1 parameters
+    │   ├── Parameters:
+    │   │   └── x of type float
+    │   └── Body:
+    │       └── Block with 1 items
+    │           └── ExpressionStatement
+    │               └── FunctionCall with 1 arguments
+    │                   ├── Function:
+    │                   │   ├── Identifier: _printFloat
+    │                   └── Arguments:
+    │                       └── Identifier: x
     └── Function: main returns int with 0 parameters
         └── Body:
             └── Block with 2 items
-                ├── VarDeclaration: x of type int
-                └── ReturnStatement
-                    └── IntegerLiteral: 0
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: print1
+                │       └── Arguments:
+                │           └── IntegerLiteral: 42
+                └── ExpressionStatement
+                    └── FunctionCall with 1 arguments
+                        ├── Function:
+                        │   ├── Identifier: print2
+                        └── Arguments:
+                            └── FloatLiteral: 6.900000

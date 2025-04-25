@@ -72,6 +72,20 @@ func (fg *FunctionGenerator) calculateFrameSize(funcName string) int {
 	return fs
 }
 
+func typeString(astType ast.Type) string {
+    if p, ok := astType.(*ast.PrimitiveType); ok {
+        return p.Name
+    }
+    if a, ok := astType.(*ast.ArrayType); ok {
+        size := -1
+        if lit, ok := a.Size.(*ast.IntegerLiteral); ok {
+            size = int(lit.Value)
+        }
+        return fmt.Sprintf("%s[%d]", typeString(a.ElementType), size)
+    }
+    return "unknown"
+}
+
 func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDeclaration) {
 	/*
 	Convention: 
@@ -130,7 +144,6 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 		}
 	}
 
-	cg.emitComment("setup local var")
 	localVarOffset := 16 
 	if len(params) > 8 {
 		localVarOffset += (len(params)-8)*8
@@ -138,9 +151,10 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 
 	funcScope := funcSymbol.Scope 
 	for _, symbol := range cg.SymTable.Symbols {
-		if 	symbol.Name != funcName &&
-			symbol.Scope.ValidFirstLine >= funcScope.ValidFirstLine &&
-			symbol.Scope.ValidLastLine <= funcScope.ValidLastLine {
+		if 	(symbol.Name != funcName) &&
+			(typeString(symbol.Type) != "function") &&
+			(symbol.Scope.ValidFirstLine >= funcScope.ValidFirstLine) &&
+			(symbol.Scope.ValidLastLine <= funcScope.ValidLastLine) {
 				isParam := false
 				for _, param := range params {
 					if param.Name == symbol.Name {
@@ -180,17 +194,4 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	cg.emit("	ret") 					// return to caller func, whose address is in `ra`
 }
 
-func (fg *FunctionGenerator) GenerateStatement(stmt ast.BlockItem) {}
-
-// func (fg *FunctionGenerator) GenerateStatement(stmt ast.Statement) {
-// 	switch s := stmt.(type) {
-// 	case *ast.ExpressionStatement:
-// 		fg.CodeGen.ExpressionGen.GenerateExpression(s.Expr)
-// 	case *ast.IfStatement:
-// 		fg.CodeGen.BranchingGen.GenerateIfStatement(*s)
-// 	case *ast.WhileStatement: 
-// 		fg.CodeGen.LoopingGen.GenerateWhileStatement(*s)
-// 	case *ast.ReturnStatement: 
-// 		fg.
-// 	}
-// }
+func (fg *FunctionGenerator) GenerateStatement(stmt ast.BlockItem) {} 
