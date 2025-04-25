@@ -3,100 +3,136 @@
 		declaration (
 			type void
 		)
-		print1
+		y
 		(
 			declarationRemainder (
-				(
-					parameterList (
-						parameter (
-							type int
-						)
-						x))
-				)
-			(
-				block { (
-					blockItem (
-						statement (
-							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression _printInt
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression x
-																													)))))))))))
-																			))))))))))))
-							;)))
-				})))
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 10
+															)))))))))))))
+			;))
 	(
 		declaration (
-			type void
+			type int
 		)
-		print2
+		h
 		(
 			declarationRemainder (
-				(
-					parameterList (
-						parameter (
-							type float
-						)
-						x))
-				)
-			(
-				block { (
-					blockItem (
-						statement (
-							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression _printFloat
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression x
-																													)))))))))))
-																			))))))))))))
-							;)))
-				})))
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 97
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type char
+		)
+		c
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 'a'
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type bool
+		)
+		flag
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant true
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type bool
+		)
+		no
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant false
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type int
+		)
+		A
+		(
+			arrayNotation [ (
+				expression (
+					assignmentExpression (
+						logicalOrExpression (
+							logicalAndExpression (
+								equalityExpression (
+									comparisonExpression (
+										additionExpression (
+											multiplicationExpression (
+												unaryExpression (
+													postfixExpression (
+														primaryExpression (
+															constant 2
+														))))))))))))
+			])
+		(
+			declarationRemainder ;
+		))
 	(
 		declaration (
 			type int
@@ -109,71 +145,31 @@
 			(
 				block { (
 					blockItem (
-						statement (
-							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression print1
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression (
-																															constant 42
-																														))))))))))))
-																			))))))))))))
-							;)))
+						declaration (
+							type int
+						)
+						x
+						(
+							declarationRemainder ;
+						)))
 				(
 					blockItem (
 						statement (
 							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression print2
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression (
-																															constant 6.9
-																														))))))))))))
+								returnStatement return (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 0
 																			))))))))))))
-							;)))
+								;))))
 				})))
 	<EOF>)
