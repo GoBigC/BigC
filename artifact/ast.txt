@@ -1,26 +1,20 @@
 ========== AST ==========
-Program (Line 1, Col 0) with 6 declarations
+Program (Line 1, Col 0) with 1 declarations
  Declaration 1:
- VarDeclaration (Line 1, Col 0): y of type int with initializer:
-   IntegerLiteral (Line 1, Col 8): 10
- Declaration 2:
- VarDeclaration (Line 2, Col 0): h of type int with initializer:
-   IntegerLiteral (Line 2, Col 8): 97
- Declaration 3:
- VarDeclaration (Line 3, Col 0): c of type char with initializer:
-   CharLiteral (Line 3, Col 9): 'a'
- Declaration 4:
- VarDeclaration (Line 4, Col 0): flag of type bool with initializer:
-   BoolLiteral (Line 4, Col 12): true
- Declaration 5:
- VarDeclaration (Line 5, Col 0): A of type array of int with size IntegerLiteral (Line 5, Col 6): 2
-
- Declaration 6:
- FunctionDeclaration (Line 7, Col 0): main returns int with 0 parameters
+ FunctionDeclaration (Line 1, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 7, Col 11) with 2 items
+   Block (Line 1, Col 11) with 2 items
      Item 1:
-     VarDeclaration (Line 8, Col 4): x of type int
+     ExpressionStatement (Line 2, Col 4):
+       FunctionCallExpression (Line 2, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 2, Col 4): _printInt
+         Argument 1:
+           IntegerLiteral (Line 2, Col 14): 42
      Item 2:
-     ReturnStatement (Line 9, Col 4):
-       IntegerLiteral (Line 9, Col 11): 0
+     ExpressionStatement (Line 3, Col 4):
+       FunctionCallExpression (Line 3, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 3, Col 4): _printFloat
+         Argument 1:
+           FloatLiteral (Line 3, Col 16): 6.900000
