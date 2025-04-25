@@ -185,7 +185,7 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	cg.emitComment("function body")
 	if funcDecl.Body != nil {
 		for _, stmt := range funcDecl.Body.Items {
-			fg.GenerateStatement(stmt)
+			fg.GenerateBlockItem(stmt)
 		}
 	}
 
@@ -250,7 +250,7 @@ func (fg *FunctionGenerator) GenerateReturnStatement(stmt ast.ReturnStatement) {
 				}
 			}
 		default:
-			panic(fmt.Sprintf("return expression type not recognized: %s", expr)) // is it %s or %T?
+			panic(fmt.Sprintf("return expression type not recognized: %T", expr)) // is it %s or %T?
 		}
 
 		if resultRegister != "a0" && resultRegister != "fa0" {
@@ -259,4 +259,24 @@ func (fg *FunctionGenerator) GenerateReturnStatement(stmt ast.ReturnStatement) {
 	}
 }
 
-func (fg *FunctionGenerator) GenerateStatement(stmt ast.BlockItem) {} 
+func (fg *FunctionGenerator) GenerateBlockItem(stmt ast.BlockItem) {
+	cg := fg.CodeGen
+	switch s := stmt.(type) {
+	case *ast.ExpressionStatement: 
+		cg.ExpressionGen.GenerateExpression(s.Expr)
+	case *ast.ReturnStatement:
+		fg.GenerateReturnStatement(*s)
+	case *ast.IfStatement:
+		cg.BranchingGen.GenerateIfStatement(*s)
+	case *ast.WhileStatement: 
+		cg.LoopingGen.GenerateWhileStatement(*s)
+	case *ast.VarDeclaration:
+		// it makes sense why this func does not take 
+		// argument but be careful this may cause problem
+		cg.AssignmentGen.GenerateVarDeclaration() // watch out
+	case *ast.FunctionDeclaration:
+		panic("nested function declaration not allowed")
+	default: 
+		panic(fmt.Sprintf("unknown statement type in function body: %T", stmt))
+	}
+} 
