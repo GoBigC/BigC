@@ -21,14 +21,14 @@ func NewAssignmentGenerator(cg *CodeGenerator, symtab *table.SymbolTable) *Assig
 func (ag *AssignmentGenerator) GenerateVarDeclaration() {
 
 	for _, symbol := range ag.SymTab.Symbols {
-		if symbol.ReturnType != nil {
+		if symbol.ReturnType != nil || symbol.Parameters != nil {
 			continue // Skip function symbols
 		}
 
 		switch symbolType := symbol.Type.(type) {
 		case *ast.PrimitiveType:
 			if symbol.Value != nil {
-				ag.CodeGen.insertData(symbol.Name, ".word", symbol.Value)
+				ag.CodeGen.insertData(symbol.Name, ".dword", symbol.Value)
 			} else {
 				ag.CodeGen.insertData(symbol.Name, ".space", 8)
 			}
