@@ -45,25 +45,40 @@ func (epxrGen *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExp
 		return epxrGen.GenerateMultiplication(expr)
 	case "/":
 		return epxrGen.GenerateDivision(expr)
+	// case "==":
+	// 	return epxrGen.GenerateEquality(expr)
+	// case "!=":
+	// 	return epxrGen.GenerateInequality(expr)
+	// case "<":
+	// 	return epxrGen.GenerateLessThan(expr)
+	// case "<=":
+	// 	return epxrGen.GenerateLessThanOrEqual(expr)
+	// case ">":
+	// 	return epxrGen.GenerateGreaterThan(expr)
+	// case ">=":
+	// 	return epxrGen.GenerateGreaterThanOrEqual(expr)
+	// case "&&":
+	// 	return epxrGen.GenerateLogicalAnd(expr)
+	// case "||":
+	// 	return epxrGen.GenerateLogicalOr(expr)
 	default:
 		return "No case should reach here, as everything should be handled in semantic analysis"
 	}
 }
 
 func (epxrGen *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) string {
-	var left, right float64
 	switch expr.Left.(type) {
 	case *ast.IntegerLiteral:
-		left = float64(expr.Left.(*ast.IntegerLiteral).Value)
-		right = float64(expr.Right.(*ast.IntegerLiteral).Value)
+		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
+		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
 
-		return epxrGen.GenerateFloatDivision(left, right)
+		return epxrGen.GenerateIntDivision(leftInt, rightInt)
 
 	case *ast.FloatLiteral:
-		left = expr.Left.(*ast.FloatLiteral).Value
-		right = expr.Right.(*ast.FloatLiteral).Value
+		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
+		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
 
-		return epxrGen.GenerateFloatDivision(left, right)
+		return epxrGen.GenerateFloatDivision(leftFloat, rightFloat)
 
 	case *ast.Identifier:
 		var leftName string = expr.Left.(*ast.Identifier).Name
@@ -75,11 +90,29 @@ func (epxrGen *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression)
 		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
 		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
 
-		return epxrGen.GenerateFloatDivision(leftSym.Value.(float64), rightSym.Value.(float64))
+		switch leftSym.Type.(*ast.PrimitiveType).Name {
+		case "int":
+			return epxrGen.GenerateIntDivision(leftSym.Value.(int64), rightSym.Value.(int64))
+		case "float":
+			return epxrGen.GenerateFloatDivision(leftSym.Value.(float64), rightSym.Value.(float64))
+		}
 
 	}
 	return "No case should reach here, as everything should be handled in semantic analysis"
 
+}
+
+func (epxrGen *ExpressionGenerator) GenerateIntDivision(leftInt int64, rightInt int64) string {
+	leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+
+	epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+	epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+	epxrGen.CodeGen.emit("div a0, %s, %s", leftReg, rightReg)
+	// The result will be a 128 bit integer, but for now we will just return the lower 64 bits
+	// Meaning we will ignore overflow, very C-like
+
+	return "a0"
 }
 
 func (epxrGen *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFloat float64) string {
