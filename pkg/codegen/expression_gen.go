@@ -113,15 +113,15 @@ func (epxrGen *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt 
 			// Both are immediate integers
 			reg := epxrGen.CodeGen.Registers.GetTmpRegister()
 			epxrGen.CodeGen.emit("li %s, %d", reg, leftInt)
-			epxrGen.CodeGen.emit("addi %s, %s, %d", reg, reg, rightInt)
-			return reg
+			epxrGen.CodeGen.emit("addi a0, %s, %d", reg, reg, rightInt)
+			// return reg
 		} else {
 			// Left is immediate, right is not
 			// Load right operand into a register
 			rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
 			epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
-			epxrGen.CodeGen.emit("addi %s, %s, %d", rightReg, rightReg, leftInt)
-			return rightReg
+			epxrGen.CodeGen.emit("addi a0, %s, %d", rightReg, rightReg, leftInt)
+			// return rightReg
 		}
 
 	} else {
@@ -130,8 +130,8 @@ func (epxrGen *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt 
 			// Load left operand into a register
 			leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
 			epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
-			epxrGen.CodeGen.emit("addi %s, %s, %d", leftReg, leftReg, rightInt)
-			return leftReg
+			epxrGen.CodeGen.emit("addi a0, %s, %d", leftReg, leftReg, rightInt)
+			// return leftReg
 		} else {
 			// Both are not immediate integers
 			// Load both operands into registers
@@ -139,10 +139,11 @@ func (epxrGen *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt 
 			rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
 			epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
 			epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
-			epxrGen.CodeGen.emit("add %s, %s, %s", leftReg, leftReg, rightReg)
-			return leftReg
+			epxrGen.CodeGen.emit("add a0, %s, %s", leftReg, leftReg, rightReg)
+			// return leftReg
 		}
 	}
+	return "a0"
 }
 
 func (epxrGen *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFloat float64) string {
@@ -161,13 +162,13 @@ func (epxrGen *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rig
 	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
 	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
 	// Perform addition
-	epxrGen.CodeGen.emit("fadd.d %s, %s, %s", leftReg, leftReg, rightReg)
+	epxrGen.CodeGen.emit("fadd.d fa0, %s, %s", leftReg, leftReg, rightReg)
 	// Should the result be stored inside a register or in the data section?
 	// If the result is assigned to a variable, it should be stored in the data section
 	// Else, it should be stored in a register
 	// For now, we will store it in a register
 
-	return leftReg
+	return "fa0"
 
 }
 
