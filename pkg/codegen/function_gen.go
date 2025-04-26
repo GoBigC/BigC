@@ -273,7 +273,7 @@ func (fg *FunctionGenerator) GenerateBlockItem(stmt ast.BlockItem) {
 	case *ast.VarDeclaration:
 		// it makes sense why this func does not take 
 		// argument but be careful this may cause problem
-		cg.AssignmentGen.GenerateVarDeclaration() // watch out
+		cg.AssignmentGen.GenerateVarDeclaration(*s) // watch out
 	// case *ast.Block:
     //     fg.GenerateBlock(*s)
 	case *ast.FunctionDeclaration:

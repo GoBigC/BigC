@@ -6,102 +6,26 @@
 		print1
 		(
 			declarationRemainder (
-				(
-					parameterList (
-						parameter (
-							type int
-						)
-						x))
-				)
-			(
-				block { (
-					blockItem (
-						statement (
-							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression _printInt
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression x
-																													)))))))))))
-																			))))))))))))
-							;)))
-				})))
-	(
-		declaration (
-			type void
-		)
-		print2
-		(
-			declarationRemainder (
-				(
-					parameterList (
-						parameter (
-							type float
-						)
-						x))
-				)
-			(
-				block { (
-					blockItem (
-						statement (
-							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression _printFloat
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
-																					assignmentExpression (
-																						logicalOrExpression (
-																							logicalAndExpression (
-																								equalityExpression (
-																									comparisonExpression (
-																										additionExpression (
-																											multiplicationExpression (
-																												unaryExpression (
-																													postfixExpression (
-																														primaryExpression x
-																													)))))))))))
-																			))))))))))))
-							;)))
-				})))
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 10
+															)))))))))))))
+			;))
 	(
 		declaration (
 			type int
 		)
-		main
+		h
 		(
 			declarationRemainder (
 				
@@ -109,24 +33,96 @@
 			(
 				block { (
 					blockItem (
-						statement (
-							nonIfStatement (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression print1
-																	)
-																	(
-																		functionCallArgs (
-																			(
-																				argList (
+						declaration (
+							type int
+						)
+						x
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 1
+																			)))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator +
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 3
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type float
+						)
+						y
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 4.2
+																			)))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator +
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 6.9
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type int
+						)
+						sid
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression arr
+																		)
+																		(
+																			arrayAccess [ (
+																				expression (
 																					assignmentExpression (
 																						logicalOrExpression (
 																							logicalAndExpression (
@@ -136,10 +132,9 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression (
-																															constant 42
-																														))))))))))))
-																			))))))))))))
+																														primaryExpression idx
+																													)))))))))))
+																			]))))))))))))
 							;)))
 				(
 					blockItem (
@@ -175,5 +170,96 @@
 																														))))))))))))
 																			))))))))))))
 							;)))
+				})))
+	(
+		declaration (
+			type int
+		)
+		addInt
+		(
+			declarationRemainder (
+				(
+					parameterList (
+						parameter (
+							type int
+						)
+						x)
+					,
+					(
+						parameter (
+							type int
+						)
+						y))
+				)
+			(
+				block { (
+					blockItem (
+						statement (
+							nonIfStatement (
+								returnStatement return (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 0
+																			))))))))))))
+								;))))
+				})))
+	(
+		declaration (
+			type int
+		)
+		addInt
+		(
+			declarationRemainder (
+				(
+					parameterList (
+						parameter (
+							type int
+						)
+						x)
+					,
+					(
+						parameter (
+							type int
+						)
+						y))
+				)
+			(
+				block { (
+					blockItem (
+						statement (
+							nonIfStatement (
+								returnStatement return (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression x
+																		))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator +
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression y
+																			))))))))))))
+								;))))
 				})))
 	<EOF>)

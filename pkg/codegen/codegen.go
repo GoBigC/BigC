@@ -306,16 +306,12 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	return nil
 }
 
-func isImmediateInt(value int64) bool {
-	return value >= -2048 && value <= 2047
-}
-
 func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
 	case *ast.FunctionDeclaration:
 		cg.FunctionGen.GenerateFunctionDeclaration(*d)
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration()
+		cg.AssignmentGen.GenerateVarDeclaration(*d)
 	// add more cases as we generate
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))

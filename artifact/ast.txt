@@ -27,18 +27,21 @@ Program (Line 2, Col 0) with 3 declarations
  Declaration 3:
  FunctionDeclaration (Line 10, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 10, Col 11) with 2 items
+   Block (Line 1, Col 11) with 3 items
      Item 1:
-     ExpressionStatement (Line 11, Col 4):
-       FunctionCallExpression (Line 11, Col 10) with 1 arguments:
-         Function:
-         Identifier (Line 11, Col 4): print1
-         Argument 1:
-           IntegerLiteral (Line 11, Col 11): 42
+     VarDeclaration (Line 2, Col 4): x of type int with initializer:
+       BinaryExpression (Line 2, Col 14): Operator '+'
+         Left:
+         IntegerLiteral (Line 2, Col 12): 1
+         Right:
+         IntegerLiteral (Line 2, Col 16): 3
      Item 2:
-     ExpressionStatement (Line 12, Col 4):
-       FunctionCallExpression (Line 12, Col 10) with 1 arguments:
-         Function:
-         Identifier (Line 12, Col 4): print2
-         Argument 1:
-           FloatLiteral (Line 12, Col 11): 6.900000
+     VarDeclaration (Line 3, Col 4): y of type float with initializer:
+       BinaryExpression (Line 3, Col 18): Operator '+'
+         Left:
+         FloatLiteral (Line 3, Col 14): 4.200000
+         Right:
+         FloatLiteral (Line 3, Col 20): 6.900000
+     Item 3:
+     ReturnStatement (Line 5, Col 4):
+       IntegerLiteral (Line 5, Col 11): 0

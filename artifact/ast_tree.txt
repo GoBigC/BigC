@@ -24,16 +24,24 @@ AST Tree:
     │                       └── Identifier: x
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 2 items
-                ├── ExpressionStatement
-                │   └── FunctionCall with 1 arguments
-                │       ├── Function:
-                │       │   ├── Identifier: print1
-                │       └── Arguments:
-                │           └── IntegerLiteral: 42
-                └── ExpressionStatement
-                    └── FunctionCall with 1 arguments
-                        ├── Function:
-                        │   ├── Identifier: print2
-                        └── Arguments:
-                            └── FloatLiteral: 6.900000
+            └── Block with 3 items
+                ├── VarDeclaration: x of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 1
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 3
+                ├── VarDeclaration: y of type float
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── FloatLiteral: 4.200000
+                │   │       └── Right:
+                │   │           └── FloatLiteral: 6.900000
+                └── ReturnStatement
+                    └── BinaryExpression: '+'
+                        ├── Left:
+                        │   ├── Identifier: x
+                        └── Right:
+                            └── Identifier: y

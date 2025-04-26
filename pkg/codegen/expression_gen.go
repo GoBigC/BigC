@@ -15,126 +15,366 @@ func NewExpressionGenerator(cg *CodeGenerator) *ExpressionGenerator {
 }
 
 func (epxrGen *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
-	return "" // template
+	switch e := expr.(type) {
+	case *ast.BinaryExpression:
+		return epxrGen.GenerateBinaryExpression(e)
+	case *ast.UnaryExpression:
+		return epxrGen.GenerateUnaryExpression(e)
+	case *ast.ArrayAccessExpression:
+		return epxrGen.GenerateArrayAccessExpression(e)
+	default:
+		return ""
+	}
 }
 
-// func (epxrGen *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
-// 	switch e := expr.(type) {
-// 	case *ast.BinaryExpression:
-// 		return epxrGen.GenerateBinaryExpression(e)
-// 	case *ast.UnaryExpression:
-// 		return epxrGen.GenerateUnaryExpression(e)
-// 	case *ast.Identifier:
-// 		return epxrGen.GenerateIdentifier(e)
-// 	default:
-// 		return ""
-// 	}
-// }
+func (epxrGen *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) string {
+	panic("unimplemented")
+}
 
-// func (epxrGen *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) string {
-// 	switch expr.Operator {
-// 	case "+":
-// 		return epxrGen.GenerateAddition(expr)
-// 	case "-":
-// 		return epxrGen.GenerateSubtraction(expr)
-// 	case "*":
-// 		return epxrGen.GenerateMultiplication(expr)
-// 	case "/":
-// 		return epxrGen.GenerateDivision(expr)
-// 	default:
-// 		return ""
-// 	}
-// }
+func (epxrGen *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) string {
+	panic("unimplemented")
+}
 
-// func (epxrGen *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) string {
+func (epxrGen *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) string {
+	switch expr.Operator {
+	case "+":
+		return epxrGen.GenerateAddition(expr)
+	case "-":
+		return epxrGen.GenerateSubtraction(expr)
+	case "*":
+		return epxrGen.GenerateMultiplication(expr)
+	case "/":
+		return epxrGen.GenerateDivision(expr)
+	// case "==":
+	// 	return epxrGen.GenerateEquality(expr)
+	// case "!=":
+	// 	return epxrGen.GenerateInequality(expr)
+	// case "<":
+	// 	return epxrGen.GenerateLessThan(expr)
+	// case "<=":
+	// 	return epxrGen.GenerateLessThanOrEqual(expr)
+	// case ">":
+	// 	return epxrGen.GenerateGreaterThan(expr)
+	// case ">=":
+	// 	return epxrGen.GenerateGreaterThanOrEqual(expr)
+	// case "&&":
+	// 	return epxrGen.GenerateLogicalAnd(expr)
+	// case "||":
+	// 	return epxrGen.GenerateLogicalOr(expr)
+	default:
+		return "No case should reach here, as everything should be handled in semantic analysis"
+	}
+}
 
-// 	/* Procedure:
-// 	   Load left and right operands into registers
-// 	   Check if able to use immediate values
-// 	   If not, use temporary registers
-// 	   Generate assembly code for addition
-// 	   Store result in a register
-// 	   return string of addition and register of result */
+func (epxrGen *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) string {
+	switch expr.Left.(type) {
+	case *ast.IntegerLiteral:
+		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
+		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
 
-// 	// Only need to check for left, right operands must be same type after semantic analysis
-// 	switch expr.Left.(type) {
-// 	case *ast.IntegerLiteral:
-// 		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
-// 		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
+		return epxrGen.GenerateIntDivision(leftInt, rightInt)
 
-// 		return epxrGen.GenerateIntAddition(leftInt, rightInt)
+	case *ast.FloatLiteral:
+		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
+		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
 
-// 	case *ast.FloatLiteral:
-// 		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
-// 		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
+		return epxrGen.GenerateFloatDivision(leftFloat, rightFloat)
 
-// 		return epxrGen.GenerateFloatAddition(leftFloat, rightFloat)
+	case *ast.Identifier:
+		var leftName string = expr.Left.(*ast.Identifier).Name
+		var rightName string = expr.Right.(*ast.Identifier).Name
 
-// 	case *ast.Identifier:
-// 		var leftId string = expr.Left.(*ast.Identifier).Name
-// 		var rightId string = expr.Right.(*ast.Identifier).Name
+		var leftID string = epxrGen.CodeGen.CurrentFunction + leftName
+		var rightID string = epxrGen.CodeGen.CurrentFunction + rightName
 
-// 	}
+		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
+		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
 
-// }
+		switch leftSym.Type.(*ast.PrimitiveType).Name {
+		case "int":
+			return epxrGen.GenerateIntDivision(leftSym.Value.(int64), rightSym.Value.(int64))
+		case "float":
+			return epxrGen.GenerateFloatDivision(leftSym.Value.(float64), rightSym.Value.(float64))
+		}
 
-// func (epxrGen *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64) string {
+	}
+	return "No case should reach here, as everything should be handled in semantic analysis"
 
-// 	if isImmediateInt(leftInt) {
-// 		if isImmediateInt(rightInt) {
-// 			// Both are immediate integers
-// 			reg := epxrGen.CodeGen.Registers.GetTmpRegister()
-// 			epxrGen.CodeGen.emit("li %s, %d", reg, leftInt)
-// 			epxrGen.CodeGen.emit("addi %s, %s, %d", reg, reg, rightInt)
-// 			return reg
-// 		} else {
-// 			// Left is immediate, right is not
-// 			// Load right operand into a register
-// 			rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
-// 			epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
-// 			epxrGen.CodeGen.emit("addi %s, %s, %d", rightReg, rightReg, leftInt)
-// 			return rightReg
-// 		}
+}
 
-// 	} else {
-// 		if isImmediateInt(rightInt) {
-// 			// Left is not immediate, right is
-// 			// Load left operand into a register
-// 			leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
-// 			epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
-// 			epxrGen.CodeGen.emit("addi %s, %s, %d", leftReg, leftReg, rightInt)
-// 			return leftReg
-// 		} else {
-// 			// Both are not immediate integers
-// 			// Load both operands into registers
-// 			leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
-// 			rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
-// 			epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
-// 			epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
-// 			epxrGen.CodeGen.emit("add %s, %s, %s", leftReg, leftReg, rightReg)
-// 			return leftReg
-// 		}
-// 	}
-// }
+func (epxrGen *ExpressionGenerator) GenerateIntDivision(leftInt int64, rightInt int64) string {
+	leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
 
-// func (epxrGen *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFloat float64) string {
-// 	// Insert float data into the data section
-// 	// Temporary names, will think of better names later
-// 	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
-// 	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
+	epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+	epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+	epxrGen.CodeGen.emit("div a0, %s, %s", leftReg, rightReg)
+	// The result will be a 128 bit integer, but for now we will just return the lower 64 bits
+	// Meaning we will ignore overflow, very C-like
 
-// 	// Load float values into registers
-// 	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
-// 	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
-// 	// Load left float value
-// 	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
-// 	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
-// 	// Load right float value
-// 	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
-// 	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
-// 	// Perform addition
-// 	epxrGen.CodeGen.emit("fadd.d %s, %s, %s", leftReg, leftReg, rightReg)
+	return "a0"
+}
 
-// 	return leftReg
+func (epxrGen *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFloat float64) string {
+	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
+	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
 
-// }
+	// Load float values into registers
+	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	// Load left float value
+	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
+	// Load right float value
+	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
+	// Perform subtraction
+	epxrGen.CodeGen.emit("fdiv.d fa0, %s, %s", leftReg, rightReg)
+
+	return "fa0"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression) string {
+	switch expr.Left.(type) {
+	case *ast.IntegerLiteral:
+		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
+		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
+
+		return epxrGen.GenerateIntMultiplication(leftInt, rightInt)
+
+	case *ast.FloatLiteral:
+		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
+		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
+
+		return epxrGen.GenerateFloatMultiplication(leftFloat, rightFloat)
+
+	case *ast.Identifier:
+		var leftName string = expr.Left.(*ast.Identifier).Name
+		var rightName string = expr.Right.(*ast.Identifier).Name
+
+		var leftID string = epxrGen.CodeGen.CurrentFunction + leftName
+		var rightID string = epxrGen.CodeGen.CurrentFunction + rightName
+
+		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
+		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
+
+		switch leftSym.Type.(*ast.PrimitiveType).Name {
+		case "int":
+			return epxrGen.GenerateIntMultiplication(leftSym.Value.(int64), rightSym.Value.(int64))
+		case "float":
+			return epxrGen.GenerateFloatMultiplication(leftSym.Value.(float64), rightSym.Value.(float64))
+		}
+	}
+	return "No case should reach here, as everything should be handled in semantic analysis"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt int64) string {
+	leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+
+	epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+	epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+	epxrGen.CodeGen.emit("mul a0, %s, %s", leftReg, rightReg)
+	// The result will be a 128 bit integer, but for now we will just return the lower 64 bits
+	// Meaning we will ignore overflow, very C-like
+
+	return "a0"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateFloatMultiplication(leftFloat float64, rightFloat float64) string {
+	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
+	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
+
+	// Load float values into registers
+	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	// Load left float value
+	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
+	// Load right float value
+	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
+	// Perform subtraction
+	epxrGen.CodeGen.emit("fmul.d fa0, %s, %s", leftReg, rightReg)
+
+	return "fa0"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) string {
+	switch expr.Left.(type) {
+	case *ast.IntegerLiteral:
+		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
+		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
+
+		return epxrGen.GenerateIntSubtraction(leftInt, rightInt)
+
+	case *ast.FloatLiteral:
+		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
+		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
+
+		return epxrGen.GenerateFloatSubtraction(leftFloat, rightFloat)
+
+	case *ast.Identifier:
+		var leftName string = expr.Left.(*ast.Identifier).Name
+		var rightName string = expr.Right.(*ast.Identifier).Name
+
+		var leftID string = epxrGen.CodeGen.CurrentFunction + leftName
+		var rightID string = epxrGen.CodeGen.CurrentFunction + rightName
+
+		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
+		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
+
+		switch leftSym.Type.(*ast.PrimitiveType).Name {
+		case "int":
+			return epxrGen.GenerateIntSubtraction(leftSym.Value.(int64), rightSym.Value.(int64))
+		case "float":
+			return epxrGen.GenerateFloatSubtraction(leftSym.Value.(float64), rightSym.Value.(float64))
+		}
+	}
+	return "No case should reach here, as everything should be handled in semantic analysis"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateIntSubtraction(leftInt int64, rightInt int64) string {
+	leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+
+	epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+	epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+	epxrGen.CodeGen.emit("sub a0, %s, %s", leftReg, rightReg)
+
+	return "a0"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateFloatSubtraction(leftFloat float64, rightFloat float64) string {
+	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
+	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
+
+	// Load float values into registers
+	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	// Load left float value
+	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
+	// Load right float value
+	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
+	// Perform subtraction
+	epxrGen.CodeGen.emit("fsub.d fa0, %s, %s", leftReg, rightReg)
+
+	return "fa0"
+
+}
+
+func (epxrGen *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) string {
+
+	/* Procedure:
+	   Load left and right operands into registers
+	   Check if able to use immediate values
+	   If not, use temporary registers
+	   Generate assembly code for addition
+	   Store result in a register
+	   return string of addition and register of result */
+
+	// Only need to check for left, right operands must be same type after semantic analysis
+	switch expr.Left.(type) {
+	case *ast.IntegerLiteral:
+		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
+		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
+
+		return epxrGen.GenerateIntAddition(leftInt, rightInt)
+
+	case *ast.FloatLiteral:
+		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
+		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
+
+		return epxrGen.GenerateFloatAddition(leftFloat, rightFloat)
+
+	case *ast.Identifier:
+		var leftName string = expr.Left.(*ast.Identifier).Name
+		var rightName string = expr.Right.(*ast.Identifier).Name
+
+		var leftID string = epxrGen.CodeGen.CurrentFunction + leftName
+		var rightID string = epxrGen.CodeGen.CurrentFunction + rightName
+
+		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
+		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
+
+		switch leftSym.Type.(*ast.PrimitiveType).Name {
+		case "int":
+			return epxrGen.GenerateIntAddition(leftSym.Value.(int64), rightSym.Value.(int64))
+		case "float":
+			return epxrGen.GenerateFloatAddition(leftSym.Value.(float64), rightSym.Value.(float64))
+		}
+	}
+	return "No case should reach here, as everything should be handled in semantic analysis"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64) string {
+
+	if isImmediateInt(leftInt) {
+		if isImmediateInt(rightInt) {
+			// Both are immediate integers
+			reg := epxrGen.CodeGen.Registers.GetTmpRegister()
+			epxrGen.CodeGen.emit("li %s, %d", reg, leftInt)
+			epxrGen.CodeGen.emit("addi a0, %s, %d", reg, rightInt)
+			// return reg
+		} else {
+			// Left is immediate, right is not
+			// Load right operand into a register
+			rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+			epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+			epxrGen.CodeGen.emit("addi a0, %s, %d", rightReg, leftInt)
+			// return rightReg
+		}
+
+	} else {
+		if isImmediateInt(rightInt) {
+			// Left is not immediate, right is
+			// Load left operand into a register
+			leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+			epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+			epxrGen.CodeGen.emit("addi a0, %s, %d", leftReg, rightInt)
+			// return leftReg
+		} else {
+			// Both are not immediate integers
+			// Load both operands into registers
+			leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+			rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+			epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+			epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+			epxrGen.CodeGen.emit("add a0, %s, %s", leftReg, rightReg)
+			// return leftReg
+		}
+	}
+	return "a0"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFloat float64) string {
+	// Insert float data into the data section
+	// Temporary names, will think of better names later
+	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
+	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
+
+	// Load float values into registers
+	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	// Load left float value
+	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
+	// Load right float value
+	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
+	// Perform addition
+	epxrGen.CodeGen.emit("fadd.d fa0, %s, %s", leftReg, rightReg)
+	// Should the result be stored inside a register or in the data section?
+	// If the result is assigned to a variable, it should be stored in the data section
+	// Else, it should be stored in a register
+	// For now, we will store it in a register
+
+	return "fa0"
+
+}
+
+func isImmediateInt(value int64) bool {
+	return value >= -2048 && value <= 2047
+}
