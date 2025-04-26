@@ -311,7 +311,7 @@ func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	case *ast.FunctionDeclaration:
 		cg.FunctionGen.GenerateFunctionDeclaration(*d)
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration()
+		cg.AssignmentGen.GenerateVarDeclaration(*d)
 	// add more cases as we generate
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))

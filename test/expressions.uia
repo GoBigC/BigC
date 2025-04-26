@@ -1,15 +1,14 @@
+// int addInt = 1 + 3;
+// float addFloat = 4.2 + 6.9;
+
+int subInt = 5 - 2;
+// float subFloat = 7.5 - 2.5;
+
+// int mulInt = 3 * 4;
+// float mulFloat = 2.5 * 4.0;
+
+// int divInt = 8 / 2;
+// float divFloat = 9.0 / 3.0;
 int main() {
-    int addInt = 1 + 3;
-    float addFloat = 4.2 + 6.9;
-
-    int subInt = 5 - 2;
-    float subFloat = 7.5 - 2.5;
-
-    int mulInt = 3 * 4;
-    float mulFloat = 2.5 * 4.0;
-
-    int divInt = 8 / 2;
-    float divFloat = 9.0 / 3.0;
-
     return 0;
 }
