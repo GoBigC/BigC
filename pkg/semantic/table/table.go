@@ -47,6 +47,7 @@ func (symTable *SymbolTable) Lookup(name string) (Symbol, bool) {
     return Symbol{}, false
 }
 
+
 func (symTable *SymbolTable) PrintTable() {
 
     // Set up tabwriter for aligned columns

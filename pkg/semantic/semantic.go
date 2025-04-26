@@ -25,6 +25,12 @@ func (analyzer *SemanticAnalyzer) Error(line int, msg string) {
 	analyzer.errors = append(analyzer.errors, fmt.Sprintf("Line %d: %s", line, msg))
 }
 
+func (analyzer *SemanticAnalyzer) PrintErrors() {
+    for _, err := range analyzer.errors {
+        fmt.Println(err)
+    }
+}
+
 // 2 pass analyzer:
 // First pass collect all global symbols
 // Second pass, collect local symbols, check for usage and type checking

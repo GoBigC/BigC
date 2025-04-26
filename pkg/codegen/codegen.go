@@ -306,10 +306,6 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	return nil
 }
 
-func isImmediateInt(value int64) bool {
-	return value >= -2048 && value <= 2047
-}
-
 func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
 	case *ast.FunctionDeclaration:

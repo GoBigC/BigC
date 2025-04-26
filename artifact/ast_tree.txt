@@ -18,7 +18,24 @@ AST Tree:
     ├── VarDeclaration: A of type array of int with size 2
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 2 items
+            └── Block with 3 items
                 ├── VarDeclaration: x of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 1
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 3
+                ├── VarDeclaration: y of type float
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── FloatLiteral: 4.200000
+                │   │       └── Right:
+                │   │           └── FloatLiteral: 6.900000
                 └── ReturnStatement
-                    └── IntegerLiteral: 0
+                    └── BinaryExpression: '+'
+                        ├── Left:
+                        │   ├── Identifier: x
+                        └── Right:
+                            └── Identifier: y
