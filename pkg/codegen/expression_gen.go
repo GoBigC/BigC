@@ -59,7 +59,74 @@ func (epxrGen *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpre
 }
 
 func (epxrGen *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) string {
-	panic("unimplemented")
+	switch expr.Left.(type) {
+	case *ast.IntegerLiteral:
+		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
+		var rightInt int64 = expr.Right.(*ast.IntegerLiteral).Value
+
+		return epxrGen.GenerateIntSubtraction(leftInt, rightInt)
+
+	case *ast.FloatLiteral:
+		var leftFloat float64 = expr.Left.(*ast.FloatLiteral).Value
+		var rightFloat float64 = expr.Right.(*ast.FloatLiteral).Value
+
+		return epxrGen.GenerateFloatSubtraction(leftFloat, rightFloat)
+
+	case *ast.Identifier:
+		var leftName string = expr.Left.(*ast.Identifier).Name
+		var rightName string = expr.Right.(*ast.Identifier).Name
+
+		var leftID string = epxrGen.CodeGen.CurrentFunction + leftName
+		var rightID string = epxrGen.CodeGen.CurrentFunction + rightName
+
+		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
+		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
+
+		switch leftSym.Type.(*ast.PrimitiveType).Name {
+		case "int":
+			return epxrGen.GenerateIntSubtraction(leftSym.Value.(int64), rightSym.Value.(int64))
+		case "float":
+			return epxrGen.GenerateFloatSubtraction(leftSym.Value.(float64), rightSym.Value.(float64))
+		}
+	}
+	return "No case should reach here, as everything should be handled in semantic analysis"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateIntSubtraction(leftInt int64, rightInt int64) string {
+	leftReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetTmpRegister()
+
+	epxrGen.CodeGen.emit("li %s, %d", leftReg, leftInt)
+	epxrGen.CodeGen.emit("li %s, %d", rightReg, rightInt)
+	epxrGen.CodeGen.emit("sub a0, %s, %s", leftReg, rightReg)
+
+	return "a0"
+}
+
+func (epxrGen *ExpressionGenerator) GenerateFloatSubtraction(leftFloat float64, rightFloat float64) string {
+	// Insert float data into the data section
+	// Temporary names, will think of better names later
+	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
+	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
+
+	// Load float values into registers
+	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	// Load left float value
+	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
+	// Load right float value
+	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
+	// Perform subtraction
+	epxrGen.CodeGen.emit("fsub.d fa0, %s, %s", leftReg, rightReg)
+	// Should the result be stored inside a register or in the data section?
+	// If the result is assigned to a variable, it should be stored in the data section
+	// Else, it should be stored in a register
+	// For now, we will store it in a register
+
+	return "fa0"
+
 }
 
 func (epxrGen *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) string {
