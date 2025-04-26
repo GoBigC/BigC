@@ -96,7 +96,7 @@ func (cg *CodeGenerator) Generate_printChar() {
 
 func (cg *CodeGenerator) Generate_printBool() {
 	cg.emit("_printBool:")
-	cg.emit("	j printInt")
+	cg.emit("	j _printInt")
 } 
 
 // i think its just this but not very sure 

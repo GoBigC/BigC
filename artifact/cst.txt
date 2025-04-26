@@ -1,9 +1,9 @@
 (
 	program (
 		declaration (
-			type int
+			type void
 		)
-		y
+		print1
 		(
 			declarationRemainder (
 				variableInitializer = (
@@ -137,6 +137,62 @@
 																			]))))))))))))
 							;)))
 				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression print2
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression (
+																															constant 6.9
+																														))))))))))))
+																			))))))))))))
+							;)))
+				})))
+	(
+		declaration (
+			type int
+		)
+		addInt
+		(
+			declarationRemainder (
+				(
+					parameterList (
+						parameter (
+							type int
+						)
+						x)
+					,
+					(
+						parameter (
+							type int
+						)
+						y))
+				)
+			(
+				block { (
 					blockItem (
 						statement (
 							nonIfStatement (

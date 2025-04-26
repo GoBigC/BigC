@@ -2,29 +2,52 @@ CST Tree:
 └── program
     ├── declaration
     │   ├── type
-    │   │   └── int
-    │   ├── y
+    │   │   └── void
+    │   ├── print1
     │   └── declarationRemainder
-    │       ├── variableInitializer
-    │       │   ├── =
-    │       │   └── expression
-    │       │       └── assignmentExpression
-    │       │           └── logicalOrExpression
-    │       │               └── logicalAndExpression
-    │       │                   └── equalityExpression
-    │       │                       └── comparisonExpression
-    │       │                           └── additionExpression
-    │       │                               └── multiplicationExpression
-    │       │                                   └── unaryExpression
-    │       │                                       └── postfixExpression
-    │       │                                           └── primaryExpression
-    │       │                                               └── constant
-    │       │                                                   └── 10
-    │       └── ;
+    │       ├── 
+    │       │   └── parameterList
+    │       │       └── parameter
+    │       │           ├── type
+    │       │           │   └── int
+    │       │           └── x
+    │       └── block
+    │           ├── {
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       └── logicalOrExpression
+    │           │           │           └── logicalAndExpression
+    │           │           │               └── equalityExpression
+    │           │           │                   └── comparisonExpression
+    │           │           │                       └── additionExpression
+    │           │           │                           └── multiplicationExpression
+    │           │           │                               └── unaryExpression
+    │           │           │                                   └── postfixExpression
+    │           │           │                                       ├── primaryExpression
+    │           │           │                                       │   └── _printInt
+    │           │           │                                       └── functionCallArgs
+    │           │           │                                           └── 
+    │           │           │                                               └── argList
+    │           │           │                                                   └── assignmentExpression
+    │           │           │                                                       └── logicalOrExpression
+    │           │           │                                                           └── logicalAndExpression
+    │           │           │                                                               └── equalityExpression
+    │           │           │                                                                   └── comparisonExpression
+    │           │           │                                                                       └── additionExpression
+    │           │           │                                                                           └── multiplicationExpression
+    │           │           │                                                                               └── unaryExpression
+    │           │           │                                                                                   └── postfixExpression
+    │           │           │                                                                                       └── primaryExpression
+    │           │           │                                                                                           └── x
+    │           │           └── ;
+    │           └── }
     ├── declaration
     │   ├── type
-    │   │   └── int
-    │   ├── h
+    │   │   └── void
+    │   ├── print2
     │   └── declarationRemainder
     │       ├── variableInitializer
     │       │   ├── =
