@@ -1,26 +1,23 @@
 package codegen
 
 import (
-	"BigCooker/pkg/semantic/table"
 	"BigCooker/pkg/syntax/ast"
 	"fmt"
 )
 
 type AssignmentGenerator struct {
 	CodeGen *CodeGenerator
-	SymTab  *table.SymbolTable
 }
 
-func NewAssignmentGenerator(cg *CodeGenerator, symtab *table.SymbolTable) *AssignmentGenerator {
+func NewAssignmentGenerator(cg *CodeGenerator) *AssignmentGenerator {
 	return &AssignmentGenerator{
 		CodeGen: cg,
-		SymTab:  symtab,
 	}
 }
 
 func (ag *AssignmentGenerator) GenerateVarDeclaration() {
 
-	for _, symbol := range ag.SymTab.Symbols {
+	for _, symbol := range ag.CodeGen.SymTable.Symbols {
 		if symbol.ReturnType != nil || symbol.Parameters != nil {
 			continue // Skip function symbols
 		}

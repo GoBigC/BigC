@@ -192,7 +192,7 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	}
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
-	cg.AssignmentGen = NewAssignmentGenerator(cg, cg.SymTable)
+	cg.AssignmentGen = NewAssignmentGenerator(cg)
 	cg.BranchingGen = NewBranchingGenerator(cg)
 	cg.FunctionGen = NewFunctionGenerator(cg)
 	cg.LoopingGen = NewLoopingGenerator(cg)
@@ -253,6 +253,12 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 			bytes.WriteString(fmt.Sprintf("0x%02x", b))
 		}
 		newLabel = fmt.Sprintf("%s: %s %s\n", label, dataType, bytes.String())
+	case bool:
+		intValue := 0
+		if v {
+			intValue = 1
+		}
+		newLabel = fmt.Sprintf("%s: %s %d\n", label, dataType, intValue)
 	default:
 		// For other types, just use the default string representation
 		newLabel = fmt.Sprintf("%s: %s %v\n", label, dataType, v)
