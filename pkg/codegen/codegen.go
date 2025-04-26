@@ -290,6 +290,12 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	for _, decl := range cg.Program.Declarations {
 		cg.GenerateDeclaration(decl)
 	}
+	cg.BranchingGen.GenerateIfStatement(&ast.IfStatement{
+		ThenBlock: &ast.Block{
+			Items: []ast.BlockItem{},
+		},
+		Condition: nil,
+	})
 
 	// TODO: fix this by using return, because main() is just a function
 	cg.emit("j _exit") // Exit the program -- this is temporary
@@ -320,4 +326,20 @@ func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
 	}
+}
+
+func (cg *CodeGenerator) GenerateStatement(stmt ast.Statement) {
+	switch s := stmt.(type) {
+	case *ast.IfStatement:
+		cg.BranchingGen.GenerateIfStatement(s)
+	// add more cases as we generate
+	default:
+		panic(fmt.Sprintf("Unknown statement: %T", stmt))
+	}
+}
+
+func (cg *CodeGenerator) NewLabel() string {
+	label := fmt.Sprintf("L%d", cg.Labels)
+	cg.Labels++
+	return label
 }
