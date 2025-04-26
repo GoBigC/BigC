@@ -51,7 +51,54 @@ func (epxrGen *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExp
 }
 
 func (epxrGen *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) string {
-	panic("unimplemented")
+	var left, right float64
+	switch expr.Left.(type) {
+	case *ast.IntegerLiteral:
+		left = float64(expr.Left.(*ast.IntegerLiteral).Value)
+		right = float64(expr.Right.(*ast.IntegerLiteral).Value)
+
+		return epxrGen.GenerateFloatDivision(left, right)
+
+	case *ast.FloatLiteral:
+		left = expr.Left.(*ast.FloatLiteral).Value
+		right = expr.Right.(*ast.FloatLiteral).Value
+
+		return epxrGen.GenerateFloatDivision(left, right)
+
+	case *ast.Identifier:
+		var leftName string = expr.Left.(*ast.Identifier).Name
+		var rightName string = expr.Right.(*ast.Identifier).Name
+
+		var leftID string = epxrGen.CodeGen.CurrentFunction + leftName
+		var rightID string = epxrGen.CodeGen.CurrentFunction + rightName
+
+		leftSym, _ := epxrGen.CodeGen.SymTable.Lookup(leftID)
+		rightSym, _ := epxrGen.CodeGen.SymTable.Lookup(rightID)
+
+		return epxrGen.GenerateFloatDivision(leftSym.Value.(float64), rightSym.Value.(float64))
+
+	}
+	return "No case should reach here, as everything should be handled in semantic analysis"
+
+}
+
+func (epxrGen *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFloat float64) string {
+	epxrGen.CodeGen.insertData("double_1", ".double", leftFloat)
+	epxrGen.CodeGen.insertData("double_2", ".double", rightFloat)
+
+	// Load float values into registers
+	leftReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	rightReg := epxrGen.CodeGen.Registers.GetFloatTmpRegister()
+	// Load left float value
+	epxrGen.CodeGen.emit("la %s, double_1", leftReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", leftReg, leftReg)
+	// Load right float value
+	epxrGen.CodeGen.emit("la %s, double_2", rightReg)
+	epxrGen.CodeGen.emit("fld %s, 0(%s)", rightReg, rightReg)
+	// Perform subtraction
+	epxrGen.CodeGen.emit("fdiv.d fa0, %s, %s", leftReg, rightReg)
+
+	return "fa0"
 }
 
 func (epxrGen *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression) string {
