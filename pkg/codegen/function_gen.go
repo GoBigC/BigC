@@ -193,70 +193,51 @@ func (fg *FunctionGenerator) GenerateFunctionDeclaration(funcDecl ast.FunctionDe
 	cg.emitComment("function epilogue") 
 	cg.emit("	ld ra, %d(sp)", fs-8)	// restore ra (of caller func)
 	cg.emit("	ld s0, %d(sp)", fs-16)	// restore fp
-	cg.emit("	addi sp, sp, %d", fs) 	// deallocate stack frame pointer
-	cg.emit("	ret") 					// return to caller func, whose address is in `ra`
+	cg.emit("	addi sp, sp, %d", fs) 	// deallocate stack frame pointer				
+
+	if funcName == "main" {
+		cg.emit("	j _exit") // Special case for main
+	} else {
+		cg.emit("	ret") // return to caller func, whose address is in `ra`
+	}
 }
 
 func (fg *FunctionGenerator) GenerateReturnStatement(stmt ast.ReturnStatement) {
+	cg := fg.CodeGen
+
 	if stmt.Value != nil {
-		resultRegister := fg.CodeGen.ExpressionGen.GenerateExpression(stmt.Value)
-		switch expr := stmt.Value.(type) {
-		case *ast.FloatLiteral:
-			fg.CodeGen.emit("	fmv.d fa0, %s", resultRegister)
-		case *ast.IntegerLiteral, *ast.BoolLiteral, *ast.CharLiteral: 
-			fg.CodeGen.emit("	mv a0, %s", resultRegister)
-		case *ast.Identifier:
-			// check symbol table
-			typeName := ""
-			if fg.CodeGen.CurrentFunction != "" { // search local scope first
-				localName := fmt.Sprintf("%s.%s", fg.CodeGen.CurrentFunction, expr.Name)
-				if symbol, found := fg.CodeGen.SymTable.Lookup(localName); found {
-					if isPrimitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
-						typeName = isPrimitiveType.Name
-					}
-				}
-			}
+		resultRegister := cg.ExpressionGen.GenerateExpression(stmt.Value)
+		returnType := fg.getFunctionReturnType(cg.CurrentFunction)
 
-			if typeName == "" { // if cant find in local --> search global 
-				if symbol, found := fg.CodeGen.SymTable.Lookup(expr.Name); found {
-					if isPrimitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
-						typeName = isPrimitiveType.Name
-					}
-				}
-			}
-
-			if typeName == "float" {
-				fg.CodeGen.emit("	fmv.d fa0, %s", resultRegister)
+		if resultRegister == "" {
+			if returnType == "float" {
+				resultRegister = "fa0"
 			} else {
-				fg.CodeGen.emit("	mv a0, %s", resultRegister)	
+				resultRegister = "a0"
 			}
-		case *ast.FunctionCallExpression:
-			// function call has already return value into a0/fa0 by convention 
-			// --> no move instruction needed, need to check type or return
-			if id, ok := expr.Function.(*ast.Identifier); ok {
-				if symbol, found := fg.CodeGen.SymTable.Lookup(id.Name); found {
-					if symbol.ReturnType != nil {
-						if  isPrimitiveType, ok := symbol.ReturnType.(*ast.PrimitiveType); ok &&
-							isPrimitiveType.Name == "float" {
-								if resultRegister != "fa0" {
-									fg.CodeGen.emit("    fmv.d fa0, %s", resultRegister)
-								}
-							} else {
-								if resultRegister != "a0" {
-									fg.CodeGen.emit("    mv a0, %s", resultRegister)
-								}
-							}
-					}
-				}
-			}
-		default:
-			panic(fmt.Sprintf("return expression type not recognized: %T", expr)) // is it %s or %T?
 		}
+
+		if returnType == "float" && resultRegister != "fa0" {
+            fg.CodeGen.emit("    fmv.d fa0, %s", resultRegister)
+        } else if returnType != "float" && resultRegister != "a0" {
+            fg.CodeGen.emit("    mv a0, %s", resultRegister)
+        }
 
 		if resultRegister != "a0" && resultRegister != "fa0" {
 			fg.CodeGen.Registers.ReleaseRegister(resultRegister)
 		}
 	}
+}
+
+func (fg *FunctionGenerator) getFunctionReturnType (funcName string) string {
+	if symbol, found := fg.CodeGen.SymTable.Lookup(funcName); found {
+        if symbol.ReturnType != nil {
+            if primitiveType, ok := symbol.ReturnType.(*ast.PrimitiveType); ok {
+                return primitiveType.Name
+            }
+        }
+    }
+    return ""
 }
 
 func (fg *FunctionGenerator) GenerateBlockItem(stmt ast.BlockItem) {

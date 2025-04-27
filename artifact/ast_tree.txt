@@ -1,17 +1,19 @@
 AST Tree:
-└── Program (Line 2, Col 0) with 3 declarations
-    ├── Function: print1 returns void with 1 parameters
+└── Program (Line 1, Col 0) with 3 declarations
+    ├── Function: printInt returns int with 1 parameters
     │   ├── Parameters:
     │   │   └── x of type int
     │   └── Body:
-    │       └── Block with 1 items
-    │           └── ExpressionStatement
-    │               └── FunctionCall with 1 arguments
-    │                   ├── Function:
-    │                   │   ├── Identifier: _printInt
-    │                   └── Arguments:
-    │                       └── Identifier: x
-    ├── Function: print2 returns void with 1 parameters
+    │       └── Block with 2 items
+    │           ├── ExpressionStatement
+    │           │   └── FunctionCall with 1 arguments
+    │           │       ├── Function:
+    │           │       │   ├── Identifier: _printInt
+    │           │       └── Arguments:
+    │           │           └── Identifier: x
+    │           └── ReturnStatement
+    │               └── IntegerLiteral: 0
+    ├── Function: printFloat returns void with 1 parameters
     │   ├── Parameters:
     │   │   └── x of type float
     │   └── Body:
@@ -25,23 +27,22 @@ AST Tree:
     └── Function: main returns int with 0 parameters
         └── Body:
             └── Block with 3 items
-                ├── VarDeclaration: x of type int
+                ├── VarDeclaration: addInt of type int
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '+'
                 │   │       ├── Left:
                 │   │       │   ├── IntegerLiteral: 1
                 │   │       └── Right:
-                │   │           └── IntegerLiteral: 3
-                ├── VarDeclaration: y of type float
-                │   ├── Initializer:
-                │   │   └── BinaryExpression: '+'
-                │   │       ├── Left:
-                │   │       │   ├── FloatLiteral: 4.200000
-                │   │       └── Right:
-                │   │           └── FloatLiteral: 6.900000
+                │   │           └── IntegerLiteral: 2050
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: printInt
+                │       └── Arguments:
+                │           └── Identifier: addInt
                 └── ReturnStatement
                     └── BinaryExpression: '+'
                         ├── Left:
-                        │   ├── Identifier: x
+                        │   ├── IntegerLiteral: 0
                         └── Right:
-                            └── Identifier: y
+                            └── IntegerLiteral: 0
