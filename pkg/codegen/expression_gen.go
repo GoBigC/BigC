@@ -249,7 +249,37 @@ func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessE
 }
 
 func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) string {
-	panic("unimplemented")
+	cg := eg.CodeGen
+    rp := cg.Registers
+    
+    switch e.Operator {
+    case "!":
+        operandReg := eg.GenerateExpression(e.Operand)
+        resultReg := rp.GetTmpRegister()
+        
+        cg.emit("    seqz %s, %s", resultReg, operandReg)
+        
+        if operandReg != "a0" && operandReg != "fa0" {
+            rp.ReleaseRegister(operandReg)
+        }
+        
+        return resultReg
+        
+    case "-":
+        operandReg := eg.GenerateExpression(e.Operand)
+        resultReg := rp.GetTmpRegister()
+        
+        cg.emit("    neg %s, %s", resultReg, operandReg)
+        
+        if operandReg != "a0" && operandReg != "fa0" {
+            rp.ReleaseRegister(operandReg)
+        }
+        
+        return resultReg
+        
+    default:
+        panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
+    }
 }
 
 func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) string {
@@ -262,18 +292,18 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 		return eg.GenerateMultiplication(expr)
 	case "/":
 		return eg.GenerateDivision(expr)
-	// case "==":
-	// 	return eg.GenerateEquality(expr)
-	// case "!=":
-	// 	return eg.GenerateInequality(expr)
-	// case "<":
-	// 	return eg.GenerateLessThan(expr)
-	// case "<=":
-	// 	return eg.GenerateLessThanOrEqual(expr)
-	// case ">":
-	// 	return eg.GenerateGreaterThan(expr)
-	// case ">=":
-	// 	return eg.GenerateGreaterThanOrEqual(expr)
+	case "==":
+		return eg.GenerateEquality(expr)
+	case "!=":
+		return eg.GenerateInequality(expr)
+	case "<":
+		return eg.GenerateLessThan(expr)
+	case "<=":
+		return eg.GenerateLessThanOrEqual(expr)
+	case ">":
+		return eg.GenerateGreaterThan(expr)
+	case ">=":
+		return eg.GenerateGreaterThanOrEqual(expr)
 	// case "&&":
 	// 	return eg.GenerateLogicalAnd(expr)
 	// case "||":
@@ -624,4 +654,138 @@ func (eg *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFlo
 
 func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047
+}
+
+
+func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) string {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg := eg.GenerateExpression(expr.Left)
+    rightReg := eg.GenerateExpression(expr.Right)
+
+	resultReg := rp.GetTmpRegister()
+	cg.emit("    slt %s, %s, %s", resultReg, rightReg, leftReg)
+
+	if leftReg != "a0" && leftReg != "fa0" {
+        rp.ReleaseRegister(leftReg)
+    }
+    if rightReg != "a0" && rightReg != "fa0" {
+        rp.ReleaseRegister(rightReg)
+    }
+
+    return resultReg
+}
+
+func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) string {
+    cg := eg.CodeGen
+    rp := cg.Registers
+
+    leftReg := eg.GenerateExpression(expr.Left)
+    rightReg := eg.GenerateExpression(expr.Right)
+
+    resultReg := rp.GetTmpRegister()
+
+    cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
+
+    if leftReg != "a0" && leftReg != "fa0" {
+        rp.ReleaseRegister(leftReg)
+    }
+    if rightReg != "a0" && rightReg != "fa0" {
+        rp.ReleaseRegister(rightReg)
+    }
+
+    return resultReg
+}
+
+func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpression) string {
+    cg := eg.CodeGen
+    rp := cg.Registers
+
+    leftReg := eg.GenerateExpression(expr.Left)
+    rightReg := eg.GenerateExpression(expr.Right)
+
+    resultReg := rp.GetTmpRegister()
+    tempReg := rp.GetTmpRegister()
+
+    cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
+    cg.emit("    xori %s, %s, 1", resultReg, tempReg)  // Invert the result
+
+    if leftReg != "a0" && leftReg != "fa0" {
+        rp.ReleaseRegister(leftReg)
+    }
+    if rightReg != "a0" && rightReg != "fa0" {
+        rp.ReleaseRegister(rightReg)
+    }
+    rp.ReleaseRegister(tempReg)
+
+    return resultReg
+}
+
+func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpression) string {
+    cg := eg.CodeGen
+    rp := cg.Registers
+
+    leftReg := eg.GenerateExpression(expr.Left)
+    rightReg := eg.GenerateExpression(expr.Right)
+
+    resultReg := rp.GetTmpRegister()
+    tempReg := rp.GetTmpRegister()
+
+    cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
+    cg.emit("    xori %s, %s, 1", resultReg, tempReg)  // Invert the result
+
+   	if leftReg != "a0" && leftReg != "fa0" {
+        rp.ReleaseRegister(leftReg)
+    }
+    if rightReg != "a0" && rightReg != "fa0" {
+        rp.ReleaseRegister(rightReg)
+    }
+    rp.ReleaseRegister(tempReg)
+
+    return resultReg
+}
+
+func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) string {
+    cg := eg.CodeGen
+    rp := cg.Registers
+
+    leftReg := eg.GenerateExpression(expr.Left)
+    rightReg := eg.GenerateExpression(expr.Right)
+
+    resultReg := rp.GetTmpRegister()
+
+    cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+    cg.emit("    seqz %s, %s", resultReg, resultReg)  // Set to 1 if equal to zero
+
+    if leftReg != "a0" && leftReg != "fa0" {
+        rp.ReleaseRegister(leftReg)
+    }
+    if rightReg != "a0" && rightReg != "fa0" {
+        rp.ReleaseRegister(rightReg)
+    }
+
+    return resultReg
+}
+
+func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) string {
+    cg := eg.CodeGen
+    rp := cg.Registers
+
+    leftReg := eg.GenerateExpression(expr.Left)
+    rightReg := eg.GenerateExpression(expr.Right)
+
+    resultReg := rp.GetTmpRegister()
+
+    cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+    cg.emit("    snez %s, %s", resultReg, resultReg)  // Set to 1 if not equal to zero
+
+    if leftReg != "a0" && leftReg != "fa0" {
+        rp.ReleaseRegister(leftReg)
+    }
+    if rightReg != "a0" && rightReg != "fa0" {
+        rp.ReleaseRegister(rightReg)
+    }
+
+    return resultReg
 }
