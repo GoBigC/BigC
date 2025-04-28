@@ -1,4 +1,13 @@
+
+void print1(int x){
+    _printInt(x);
+}
+
+void print2(float x){
+    _printFloat(x);
+}
+
 int main() {
-    _printInt(42);
-    _printFloat(6.9);
+    print1(42); 
+    print2(6.9);    
 }

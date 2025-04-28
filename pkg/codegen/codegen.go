@@ -193,9 +193,9 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
 	cg.AssignmentGen = NewAssignmentGenerator(cg)
-	cg.BranchingGen = NewBranchingGenerator(cg)
-	cg.FunctionGen = NewFunctionGenerator(cg)
-	cg.LoopingGen = NewLoopingGenerator(cg)
+	cg.BranchingGen  = NewBranchingGenerator(cg)
+	cg.FunctionGen 	 = NewFunctionGenerator(cg)
+	cg.LoopingGen 	 = NewLoopingGenerator(cg)
 
 	return cg
 }
@@ -297,9 +297,6 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 		Condition: nil,
 	})
 
-	// TODO: fix this by using return, because main() is just a function
-	cg.emit("j _exit") // Exit the program -- this is temporary
-
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
 		return fmt.Errorf("cannot create output file: %w", err)
@@ -312,16 +309,12 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	return nil
 }
 
-func isImmediateInt(value int64) bool {
-	return value >= -2048 && value <= 2047
-}
-
 func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
 	case *ast.FunctionDeclaration:
 		cg.FunctionGen.GenerateFunctionDeclaration(*d)
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration()
+		cg.AssignmentGen.GenerateVarDeclaration(*d)
 	// add more cases as we generate
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
