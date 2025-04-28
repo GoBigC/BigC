@@ -180,12 +180,12 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 			if isFloatParam {
                 // float parameter should be in faN
                 if argRegister != fmt.Sprintf("fa%d", i) {
-                    cg.emit("    fmv.d fa%d, %s", i, argRegister)
+                    cg.emit("	fmv.d fa%d, %s", i, argRegister)
                 }
             } else {
                 // non float parameter should be in aN
                 if argRegister != fmt.Sprintf("a%d", i) {
-                    cg.emit("    mv a%d, %s", i, argRegister)
+                    cg.emit("	mv a%d, %s", i, argRegister)
                 }
             }
 		} else {
@@ -357,9 +357,9 @@ func (eg *ExpressionGenerator) GenerateIntDivision(leftInt int64, rightInt int64
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
 
-	cg.emit("li %s, %d", leftReg, leftInt)
-	cg.emit("li %s, %d", rightReg, rightInt)
-	cg.emit("div a0, %s, %s", leftReg, rightReg)
+	cg.emit("	li %s, %d", leftReg, leftInt)
+	cg.emit("	li %s, %d", rightReg, rightInt)
+	cg.emit("	div a0, %s, %s", leftReg, rightReg)
 	// The result will be a 128 bit integer, but for now we will just return the lower 64 bits
 	// Meaning we will ignore overflow, very C-like
 
@@ -373,17 +373,19 @@ func (eg *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFlo
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
 
+	leftAddressReg := rp.GetTmpRegister()
+	rightAddressReg := rp.GetTmpRegister()
 	// Load float values into registers
 	leftReg := rp.GetFloatTmpRegister()
 	rightReg := rp.GetFloatTmpRegister()
 	// Load left float value
-	cg.emit("la %s, double_1", leftReg)
-	cg.emit("fld %s, 0(%s)", leftReg, leftReg)
+	cg.emit("	la %s, double_1", leftAddressReg)
+	cg.emit("	fld %s, 0(%s)", leftReg, leftAddressReg)
 	// Load right float value
-	cg.emit("la %s, double_2", rightReg)
-	cg.emit("fld %s, 0(%s)", rightReg, rightReg)
+	cg.emit("	la %s, double_2", rightAddressReg)
+	cg.emit("	fld %s, 0(%s)", rightReg, rightAddressReg)
 	// Perform subtraction
-	cg.emit("fdiv.d fa0, %s, %s", leftReg, rightReg)
+	cg.emit("	fdiv.d fa0, %s, %s", leftReg, rightReg)
 
 	return "fa0"
 }
@@ -431,9 +433,9 @@ func (eg *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
 
-	cg.emit("li %s, %d", leftReg, leftInt)
-	cg.emit("li %s, %d", rightReg, rightInt)
-	cg.emit("mul a0, %s, %s", leftReg, rightReg)
+	cg.emit("	li %s, %d", leftReg, leftInt)
+	cg.emit("	li %s, %d", rightReg, rightInt)
+	cg.emit("	mul a0, %s, %s", leftReg, rightReg)
 	// The result will be a 128 bit integer, but for now we will just return the lower 64 bits
 	// Meaning we will ignore overflow, very C-like
 
@@ -447,17 +449,19 @@ func (eg *ExpressionGenerator) GenerateFloatMultiplication(leftFloat float64, ri
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
 
+	leftAddressReg := rp.GetTmpRegister()
+	rightAddressReg := rp.GetTmpRegister()
 	// Load float values into registers
 	leftReg := rp.GetFloatTmpRegister()
 	rightReg := rp.GetFloatTmpRegister()
 	// Load left float value
-	cg.emit("la %s, double_1", leftReg)
-	cg.emit("fld %s, 0(%s)", leftReg, leftReg)
+	cg.emit("	la %s, double_1", leftAddressReg)
+	cg.emit("	fld %s, 0(%s)", leftReg, leftAddressReg)
 	// Load right float value
-	cg.emit("la %s, double_2", rightReg)
-	cg.emit("fld %s, 0(%s)", rightReg, rightReg)
+	cg.emit("	la %s, double_2", rightAddressReg)
+	cg.emit("	fld %s, 0(%s)", rightReg, rightAddressReg)
 	// Perform subtraction
-	cg.emit("fmul.d fa0, %s, %s", leftReg, rightReg)
+	cg.emit("	fmul.d fa0, %s, %s", leftReg, rightReg)
 
 	return "fa0"
 }
@@ -505,9 +509,9 @@ func (eg *ExpressionGenerator) GenerateIntSubtraction(leftInt int64, rightInt in
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
 
-	cg.emit("li %s, %d", leftReg, leftInt)
-	cg.emit("li %s, %d", rightReg, rightInt)
-	cg.emit("sub a0, %s, %s", leftReg, rightReg)
+	cg.emit("	li %s, %d", leftReg, leftInt)
+	cg.emit("	li %s, %d", rightReg, rightInt)
+	cg.emit("	sub a0, %s, %s", leftReg, rightReg)
 
 	return "a0"
 }
@@ -519,17 +523,19 @@ func (eg *ExpressionGenerator) GenerateFloatSubtraction(leftFloat float64, right
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
 
+	leftAddressReg := rp.GetTmpRegister()
+	rightAddressReg := rp.GetTmpRegister()
 	// Load float values into registers
 	leftReg := rp.GetFloatTmpRegister()
 	rightReg := rp.GetFloatTmpRegister()
 	// Load left float value
-	cg.emit("la %s, double_1", leftReg)
-	cg.emit("fld %s, 0(%s)", leftReg, leftReg)
+	cg.emit("	la %s, double_1", leftAddressReg)
+	cg.emit("	fld %s, 0(%s)", leftReg, leftAddressReg)
 	// Load right float value
-	cg.emit("la %s, double_2", rightReg)
-	cg.emit("fld %s, 0(%s)", rightReg, rightReg)
+	cg.emit("	la %s, double_2", rightAddressReg)
+	cg.emit("	fld %s, 0(%s)", rightReg, rightAddressReg)
 	// Perform subtraction
-	cg.emit("fsub.d fa0, %s, %s", leftReg, rightReg)
+	cg.emit("	fsub.d fa0, %s, %s", leftReg, rightReg)
 
 	return "fa0"
 
@@ -589,15 +595,15 @@ func (eg *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64
 		if isImmediateInt(rightInt) {
 			// Both are immediate integers
 			reg := rp.GetTmpRegister()
-			cg.emit("li %s, %d", reg, leftInt)
-			cg.emit("addi a0, %s, %d", reg, rightInt)
+			cg.emit("	li %s, %d", reg, leftInt)
+			cg.emit("	addi a0, %s, %d", reg, rightInt)
 			// return reg
 		} else {
 			// Left is immediate, right is not
 			// Load right operand into a register
 			rightReg := rp.GetTmpRegister()
-			cg.emit("li %s, %d", rightReg, rightInt)
-			cg.emit("addi a0, %s, %d", rightReg, leftInt)
+			cg.emit("	li %s, %d", rightReg, rightInt)
+			cg.emit("	addi a0, %s, %d", rightReg, leftInt)
 			// return rightReg
 		}
 
@@ -606,17 +612,17 @@ func (eg *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64
 			// Left is not immediate, right is
 			// Load left operand into a register
 			leftReg := rp.GetTmpRegister()
-			cg.emit("li %s, %d", leftReg, leftInt)
-			cg.emit("addi a0, %s, %d", leftReg, rightInt)
+			cg.emit("	li %s, %d", leftReg, leftInt)
+			cg.emit("	addi a0, %s, %d", leftReg, rightInt)
 			// return leftReg
 		} else {
 			// Both are not immediate integers
 			// Load both operands into registers
 			leftReg := rp.GetTmpRegister()
 			rightReg := rp.GetTmpRegister()
-			cg.emit("li %s, %d", leftReg, leftInt)
-			cg.emit("li %s, %d", rightReg, rightInt)
-			cg.emit("add a0, %s, %s", leftReg, rightReg)
+			cg.emit("	li %s, %d", leftReg, leftInt)
+			cg.emit("	li %s, %d", rightReg, rightInt)
+			cg.emit("	add a0, %s, %s", leftReg, rightReg)
 			// return leftReg
 		}
 	}
@@ -632,17 +638,19 @@ func (eg *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFlo
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
 
+	leftAddressReg := rp.GetTmpRegister()
+	rightAddressReg := rp.GetTmpRegister()
 	// Load float values into registers
 	leftReg := rp.GetFloatTmpRegister()
 	rightReg := rp.GetFloatTmpRegister()
 	// Load left float value
-	cg.emit("la %s, double_1", leftReg)
-	cg.emit("fld %s, 0(%s)", leftReg, leftReg)
+	cg.emit("	la %s, double_1", leftAddressReg)
+	cg.emit("	fld %s, 0(%s)", leftReg, leftAddressReg)
 	// Load right float value
-	cg.emit("la %s, double_2", rightReg)
-	cg.emit("fld %s, 0(%s)", rightReg, rightReg)
+	cg.emit("	la %s, double_2", rightAddressReg)
+	cg.emit("	fld %s, 0(%s)", rightReg, rightAddressReg)
 	// Perform addition
-	cg.emit("fadd.d fa0, %s, %s", leftReg, rightReg)
+	cg.emit("	fadd.d fa0, %s, %s", leftReg, rightReg)
 	// Should the result be stored inside a register or in the data section?
 	// If the result is assigned to a variable, it should be stored in the data section
 	// Else, it should be stored in a register

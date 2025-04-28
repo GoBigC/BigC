@@ -47,7 +47,7 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDeclr ast.VarDeclaratio
 
 		if offset, exists := cg.VarStackOffset[varDeclr.Name]; exists {
 			if isFloatType(varDeclr.Type) {
-				cg.emit("	fs %s, %d(sp)", resultRegister, offset)
+				cg.emit("	fsd %s, %d(sp)", resultRegister, offset)
 			} else {
 				cg.emit("	sd %s, %d(sp)", resultRegister, offset)
 			}
