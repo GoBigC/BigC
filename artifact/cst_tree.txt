@@ -23,21 +23,12 @@ CST Tree:
     │           │           │                   └── equalityExpression
     │           │           │                       └── comparisonExpression
     │           │           │                           └── additionExpression
-    │           │           │                               ├── multiplicationExpression
-    │           │           │                               │   └── unaryExpression
-    │           │           │                               │       └── postfixExpression
-    │           │           │                               │           └── primaryExpression
-    │           │           │                               │               └── constant
-    │           │           │                               │                   └── 4.2
-    │           │           │                               └── additionExpressionRest
-    │           │           │                                   ├── addSubtractOperator
-    │           │           │                                   │   └── +
-    │           │           │                                   └── multiplicationExpression
-    │           │           │                                       └── unaryExpression
-    │           │           │                                           └── postfixExpression
-    │           │           │                                               └── primaryExpression
-    │           │           │                                                   └── constant
-    │           │           │                                                       └── 6.9
+    │           │           │                               └── multiplicationExpression
+    │           │           │                                   └── unaryExpression
+    │           │           │                                       └── postfixExpression
+    │           │           │                                           └── primaryExpression
+    │           │           │                                               └── constant
+    │           │           │                                                   └── 6.9
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement

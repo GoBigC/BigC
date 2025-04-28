@@ -6,11 +6,7 @@ Program (Line 1, Col 0) with 1 declarations
    Block (Line 1, Col 11) with 3 items
      Item 1:
      VarDeclaration (Line 5, Col 4): addFloat of type float with initializer:
-       BinaryExpression (Line 5, Col 25): Operator '+'
-         Left:
-         FloatLiteral (Line 5, Col 21): 4.200000
-         Right:
-         FloatLiteral (Line 5, Col 27): 6.900000
+       FloatLiteral (Line 5, Col 21): 6.900000
      Item 2:
      ExpressionStatement (Line 6, Col 4):
        FunctionCallExpression (Line 6, Col 15) with 1 arguments:

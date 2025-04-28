@@ -49,11 +49,14 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
     cg.emit("    la %s, %s", addressRegister, expr.Name)
 
 	isFloatVar := false
-    if symbol, found := cg.SymTable.Lookup(expr.Name); found {
+	symbol, found := cg.SymTable.Lookup(expr.Name)
+	fmt.Printf("expr.Name is %s\n", expr.Name)
+	fmt.Printf("symbol is %s\n", symbol.Name)
+    if found {
         if primitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
-			fmt.Printf("Primitive type name: %s\n", primitiveType.Name)
+			cg.emitComment(fmt.Sprintf("Primitive type name: %s\n", primitiveType.Name))
             isFloatVar = primitiveType.Name == "float"
-			fmt.Printf("Is float variable: %v\n", isFloatVar)
+			cg.emitComment(fmt.Sprintf("Is float variable: %v\n", isFloatVar))
         }
     }
 
@@ -64,6 +67,7 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
         return valueRegister
     } else {
         valueRegister := rp.GetTmpRegister()
+		cg.emitComment("ld from GenerateIdentifier, case !isFloatVar")
         cg.emit("    ld %s, 0(%s)", valueRegister, addressRegister)
         rp.ReleaseRegister(addressRegister)
         return valueRegister

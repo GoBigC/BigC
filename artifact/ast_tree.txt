@@ -5,11 +5,7 @@ AST Tree:
             └── Block with 3 items
                 ├── VarDeclaration: addFloat of type float
                 │   ├── Initializer:
-                │   │   └── BinaryExpression: '+'
-                │   │       ├── Left:
-                │   │       │   ├── FloatLiteral: 4.200000
-                │   │       └── Right:
-                │   │           └── FloatLiteral: 6.900000
+                │   │   └── FloatLiteral: 6.900000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:

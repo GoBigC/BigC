@@ -29,19 +29,8 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 4.2
-																			)))))
-															(
-																additionExpressionRest (
-																	addSubtractOperator +
-																)
-																(
-																	multiplicationExpression (
-																		unaryExpression (
-																			postfixExpression (
-																				primaryExpression (
-																					constant 6.9
-																				))))))))))))))
+																				constant 6.9
+																			)))))))))))))
 							;)))
 				(
 					blockItem (

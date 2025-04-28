@@ -202,10 +202,10 @@ func (cg *CodeGenerator) emit(format string, args ...interface{}) {
 	cg.AsmOut.WriteString(instruction + "\n")
 }
 
-// func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
-// 	comment := fmt.Sprintf("# "+format, args...)
-// 	cg.AsmOut.WriteString(comment + "\n")
-// }
+func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
+	comment := fmt.Sprintf("# "+format, args...)
+	cg.AsmOut.WriteString(comment + "\n")
+}
 
 // Insert data into the ".data" section of the assembly output
 // Highly inefficient, copies and creates a new string every time
