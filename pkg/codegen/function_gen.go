@@ -250,7 +250,7 @@ func (fg *FunctionGenerator) GenerateBlockItem(stmt ast.BlockItem) {
 	case *ast.IfStatement:
 		cg.BranchingGen.GenerateIfStatement(s)
 	case *ast.WhileStatement:
-		cg.LoopingGen.GenerateWhileStatement(*s)
+		// cg.LoopingGen.GenerateWhileStatement(*s)
 	case *ast.VarDeclaration:
 		// it makes sense why this func does not take
 		// argument but be careful this may cause problem

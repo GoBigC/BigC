@@ -24,17 +24,17 @@ func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
 		return eg.GenerateUnaryExpression(e)
 	case *ast.ArrayAccessExpression:
 		return eg.GenerateArrayAccessExpression(e)
-	case *ast.FunctionCallExpression: 
+	case *ast.FunctionCallExpression:
 		return eg.GenerateFunctionCallExpression(e)
 	case *ast.IntegerLiteral:
 		return eg.GenerateIntegerLiteral(e)
 	case *ast.FloatLiteral:
 		return eg.GenerateFloatLiteral(e)
-	case *ast.BoolLiteral: 
+	case *ast.BoolLiteral:
 		return eg.GenerateBoolLiteral(e)
-	case *ast.CharLiteral: 
+	case *ast.CharLiteral:
 		return eg.GenerateCharLiteral(e)
-	case *ast.Identifier: 
+	case *ast.Identifier:
 		return eg.GenerateIdentifier(e)
 	default:
 		panic(fmt.Sprintf("unknown expression type %T", expr))
@@ -43,7 +43,7 @@ func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
 
 func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
 	cg := eg.CodeGen
-	ename := expr.Name 
+	ename := expr.Name
 	rp := cg.Registers
 
 	if cg.CurrentFunction != "" { // not global var
@@ -78,7 +78,7 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
 		}
 	}
 
-	// if out here --> global var 
+	// if out here --> global var
 	if symbol, found := cg.SymTable.Lookup(ename); found {
 		addressRegister := rp.GetTmpRegister()
 		cg.emit("	la %s, %s", addressRegister, ename)
@@ -106,7 +106,7 @@ func isFloatParameter(param ast.Parameter) bool {
 	if isPrimitiveType, ok := param.Type.(*ast.PrimitiveType); ok {
 		return isPrimitiveType.Name == "float"
 	}
-	return false 
+	return false
 }
 
 func (eg *ExpressionGenerator) isFloatVariable(localId string) bool {
@@ -116,7 +116,7 @@ func (eg *ExpressionGenerator) isFloatVariable(localId string) bool {
 		}
 		return false
 	}
-	return false 
+	return false
 }
 
 func (eg *ExpressionGenerator) GenerateBoolLiteral(expr *ast.BoolLiteral) string {
@@ -128,11 +128,11 @@ func (eg *ExpressionGenerator) GenerateCharLiteral(expr *ast.CharLiteral) string
 }
 
 func (eg *ExpressionGenerator) GenerateIntegerLiteral(expr *ast.IntegerLiteral) string {
-	// TODO: this is not handling the case where the integer is 
+	// TODO: this is not handling the case where the integer is
 	// greater than the  immediate range -- need to cover that too
-    reg := eg.CodeGen.Registers.GetTmpRegister()
-    eg.CodeGen.emit("    li %s, %d", reg, expr.Value)
-    return reg
+	reg := eg.CodeGen.Registers.GetTmpRegister()
+	eg.CodeGen.emit("    li %s, %d", reg, expr.Value)
+	return reg
 }
 
 func (eg *ExpressionGenerator) GenerateFloatLiteral(expr *ast.FloatLiteral) string {
@@ -157,46 +157,46 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-    if id, ok := expr.Function.(*ast.Identifier); ok {
-        funcName = id.Name
-    } else {
-        panic("Function expression not supported")
-    }
-	
-	// if need to save any registers, do it here 
+	if id, ok := expr.Function.(*ast.Identifier); ok {
+		funcName = id.Name
+	} else {
+		panic("Function expression not supported")
+	}
+
+	// if need to save any registers, do it here
 
 	// get function symbol to check parameter types
-    targetFuncSymbol, found := cg.SymTable.Lookup(funcName)
+	targetFuncSymbol, found := cg.SymTable.Lookup(funcName)
 
 	// setup args
 	for i, arg := range expr.Arguments {
 		argRegister := eg.GenerateExpression(arg)
 		if i < 8 {
 			isFloatParam := false
-            if found && i < len(targetFuncSymbol.Parameters) {
-                isFloatParam = isFloatParameter(targetFuncSymbol.Parameters[i])
-            }
+			if found && i < len(targetFuncSymbol.Parameters) {
+				isFloatParam = isFloatParameter(targetFuncSymbol.Parameters[i])
+			}
 
 			if isFloatParam {
-                // float parameter should be in faN
-                if argRegister != fmt.Sprintf("fa%d", i) {
-                    cg.emit("	fmv.d fa%d, %s", i, argRegister)
-                }
-            } else {
-                // non float parameter should be in aN
-                if argRegister != fmt.Sprintf("a%d", i) {
-                    cg.emit("	mv a%d, %s", i, argRegister)
-                }
-            }
+				// float parameter should be in faN
+				if argRegister != fmt.Sprintf("fa%d", i) {
+					cg.emit("	fmv.d fa%d, %s", i, argRegister)
+				}
+			} else {
+				// non float parameter should be in aN
+				if argRegister != fmt.Sprintf("a%d", i) {
+					cg.emit("	mv a%d, %s", i, argRegister)
+				}
+			}
 		} else {
 			// if more than 8 --> need to use stack
-			tmpRegister := argRegister 
+			tmpRegister := argRegister
 			// first: move current arg to a tmp register
 			if strings.HasPrefix(argRegister, "fa") {
 				tmpRegister = rp.GetTmpRegister()
 				cg.emit("	fmv.x.d %s, %s", tmpRegister, argRegister)
 			}
-			// second, store the arg on stack 
+			// second, store the arg on stack
 			offset := 16 + 8*(i-8)
 			cg.emit("	sd %s, %d(sp)", tmpRegister, offset)
 			// finally, release tmp register that was used as intermediate
@@ -210,7 +210,7 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 		}
 	}
 
-	// bread and butter: call function 
+	// bread and butter: call function
 	cg.emit("	jal %s", funcName)
 
 	returnRegister := "a0"
@@ -227,21 +227,21 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 }
 
 func isFloatExpression(expr ast.Expression) bool {
-    switch e := expr.(type) {
-    case *ast.FloatLiteral:
-        return true
-    case *ast.BinaryExpression:
-        // If both operands are float, result is float
-        return isFloatExpression(e.Left) && isFloatExpression(e.Right)
+	switch e := expr.(type) {
+	case *ast.FloatLiteral:
+		return true
+	case *ast.BinaryExpression:
+		// If both operands are float, result is float
+		return isFloatExpression(e.Left) && isFloatExpression(e.Right)
 	case *ast.Identifier:
-        // placeholder
-        return false
-    case *ast.FunctionCallExpression:
-        // placeholder
-        return false
-    default:
-        return false
-    }
+		// placeholder
+		return false
+	case *ast.FunctionCallExpression:
+		// placeholder
+		return false
+	default:
+		return false
+	}
 }
 
 func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) string {
@@ -250,36 +250,36 @@ func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessE
 
 func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) string {
 	cg := eg.CodeGen
-    rp := cg.Registers
-    
-    switch e.Operator {
-    case "!":
-        operandReg := eg.GenerateExpression(e.Operand)
-        resultReg := rp.GetTmpRegister()
-        
-        cg.emit("    seqz %s, %s", resultReg, operandReg)
-        
-        if operandReg != "a0" && operandReg != "fa0" {
-            rp.ReleaseRegister(operandReg)
-        }
-        
-        return resultReg
-        
-    case "-":
-        operandReg := eg.GenerateExpression(e.Operand)
-        resultReg := rp.GetTmpRegister()
-        
-        cg.emit("    neg %s, %s", resultReg, operandReg)
-        
-        if operandReg != "a0" && operandReg != "fa0" {
-            rp.ReleaseRegister(operandReg)
-        }
-        
-        return resultReg
-        
-    default:
-        panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
-    }
+	rp := cg.Registers
+
+	switch e.Operator {
+	case "!":
+		operandReg := eg.GenerateExpression(e.Operand)
+		resultReg := rp.GetTmpRegister()
+
+		cg.emit("    seqz %s, %s", resultReg, operandReg)
+
+		if operandReg != "a0" && operandReg != "fa0" {
+			rp.ReleaseRegister(operandReg)
+		}
+
+		return resultReg
+
+	case "-":
+		operandReg := eg.GenerateExpression(e.Operand)
+		resultReg := rp.GetTmpRegister()
+
+		cg.emit("    neg %s, %s", resultReg, operandReg)
+
+		if operandReg != "a0" && operandReg != "fa0" {
+			rp.ReleaseRegister(operandReg)
+		}
+
+		return resultReg
+
+	default:
+		panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
+	}
 }
 
 func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) string {
@@ -429,7 +429,7 @@ func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression
 func (eg *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt int64) string {
 	cg := eg.CodeGen
 	rp := cg.Registers
-	
+
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
 
@@ -445,7 +445,7 @@ func (eg *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt
 func (eg *ExpressionGenerator) GenerateFloatMultiplication(leftFloat float64, rightFloat float64) string {
 	cg := eg.CodeGen
 	rp := cg.Registers
-	
+
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
 
@@ -627,6 +627,7 @@ func (eg *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64
 		}
 	}
 	return "a0"
+	return "a0"
 }
 
 func (eg *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFloat float64) string {
@@ -657,6 +658,7 @@ func (eg *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFlo
 	// For now, we will store it in a register
 
 	return "fa0"
+	return "fa0"
 
 }
 
@@ -664,136 +666,135 @@ func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047
 }
 
-
 func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) string {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
 	leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	rightReg := eg.GenerateExpression(expr.Right)
 
 	resultReg := rp.GetTmpRegister()
 	cg.emit("    slt %s, %s, %s", resultReg, rightReg, leftReg)
 
 	if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg
 }
 
 func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg := eg.GenerateExpression(expr.Left)
+	rightReg := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
 
-    cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
+	cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg
 }
 
 func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg := eg.GenerateExpression(expr.Left)
+	rightReg := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
-    tempReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
+	tempReg := rp.GetTmpRegister()
 
-    cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
-    cg.emit("    xori %s, %s, 1", resultReg, tempReg)  // Invert the result
+	cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
+	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
-    rp.ReleaseRegister(tempReg)
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+	rp.ReleaseRegister(tempReg)
 
-    return resultReg
+	return resultReg
 }
 
 func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg := eg.GenerateExpression(expr.Left)
+	rightReg := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
-    tempReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
+	tempReg := rp.GetTmpRegister()
 
-    cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
-    cg.emit("    xori %s, %s, 1", resultReg, tempReg)  // Invert the result
+	cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
+	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
 
-   	if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
-    rp.ReleaseRegister(tempReg)
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+	rp.ReleaseRegister(tempReg)
 
-    return resultReg
+	return resultReg
 }
 
 func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg := eg.GenerateExpression(expr.Left)
+	rightReg := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
 
-    cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
-    cg.emit("    seqz %s, %s", resultReg, resultReg)  // Set to 1 if equal to zero
+	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+	cg.emit("    seqz %s, %s", resultReg, resultReg) // Set to 1 if equal to zero
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg
 }
 
 func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg := eg.GenerateExpression(expr.Left)
+	rightReg := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
 
-    cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
-    cg.emit("    snez %s, %s", resultReg, resultReg)  // Set to 1 if not equal to zero
+	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+	cg.emit("    snez %s, %s", resultReg, resultReg) // Set to 1 if not equal to zero
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg
 }
