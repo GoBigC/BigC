@@ -71,7 +71,7 @@ main:
 	la t2, addFloat
 	fsd fa0, 0(t2)
     la t2, addFloat
-    ld t3, 0(t2)
+    ld t3, 0(t2) # this line is wrong, but i cant find where it was generated
     jal _printFloat
 	li t2, 0
 	addi a0, t2, 0

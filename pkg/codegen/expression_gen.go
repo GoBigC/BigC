@@ -43,80 +43,31 @@ func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
 
 func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
 	cg := eg.CodeGen
-	ename := expr.Name 
 	rp := cg.Registers
 
-	if cg.CurrentFunction != "" { // not global var
-		if offset, exists := cg.VarStackOffset[ename]; exists {
-			if offset == -1 { // case: in register, not stack
-				funcSymbol, found := cg.SymTable.Lookup(cg.CurrentFunction)
-				if found {
-					for i, param := range funcSymbol.Parameters {
-						if param.Name == ename {
-							if isFloatParameter(param) {
-								return fmt.Sprintf("fa%d", i)
-							} else {
-								return fmt.Sprintf("a%d", i)
-							}
-						}
-					}
-				}
-				return "a0" // default
-			} else { // case: on stack
-				localId := cg.CurrentFunction + "." + ename
-				isFloatVar := eg.isFloatVariable(localId)
-				if isFloatVar {
-					reg := rp.GetFloatTmpRegister()
-					cg.emit("	fld %s, %d(sp)", reg, offset)
-					return reg
-				} else {
-					reg := rp.GetTmpRegister()
-					cg.emit("	ld %s, %d(sp)", reg, offset)
-					return reg
-				}
-			}
-		}
-	}
+	addressRegister := rp.GetTmpRegister()
+    cg.emit("    la %s, %s", addressRegister, expr.Name)
 
-	// if out here --> global var 
-	if symbol, found := cg.SymTable.Lookup(ename); found {
-		addressRegister := rp.GetTmpRegister()
-		cg.emit("	la %s, %s", addressRegister, ename)
+	isFloatVar := false
+    if symbol, found := cg.SymTable.Lookup(expr.Name); found {
+        if primitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
+			fmt.Printf("Primitive type name: %s\n", primitiveType.Name)
+            isFloatVar = primitiveType.Name == "float"
+			fmt.Printf("Is float variable: %v\n", isFloatVar)
+        }
+    }
 
-		globalId := symbol.Name
-		isFloatVar := eg.isFloatVariable(globalId)
-
-		if isFloatVar {
-			valueRegister := rp.GetFloatTmpRegister()
-			cg.emit("	fld %s, 0(%s)", valueRegister, addressRegister)
-			rp.ReleaseRegister(addressRegister)
-			return valueRegister
-		} else {
-			valueRegister := rp.GetTmpRegister()
-			cg.emit("	lf %s, 0(%s)", valueRegister, addressRegister)
-			rp.ReleaseRegister(addressRegister)
-			return valueRegister
-		}
-	}
-
-	return "if you get out here sth is wrong"
-}
-
-func isFloatParameter(param ast.Parameter) bool {
-	if isPrimitiveType, ok := param.Type.(*ast.PrimitiveType); ok {
-		return isPrimitiveType.Name == "float"
-	}
-	return false 
-}
-
-func (eg *ExpressionGenerator) isFloatVariable(localId string) bool {
-	if symbol, found := eg.CodeGen.SymTable.Lookup(localId); found {
-		if primitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
-			return primitiveType.Name == "float"
-		}
-		return false
-	}
-	return false 
+	if isFloatVar {
+        valueRegister := rp.GetFloatTmpRegister()
+        cg.emit("    fld %s, 0(%s)", valueRegister, addressRegister)
+        rp.ReleaseRegister(addressRegister)
+        return valueRegister
+    } else {
+        valueRegister := rp.GetTmpRegister()
+        cg.emit("    ld %s, 0(%s)", valueRegister, addressRegister)
+        rp.ReleaseRegister(addressRegister)
+        return valueRegister
+    }
 }
 
 func (eg *ExpressionGenerator) GenerateBoolLiteral(expr *ast.BoolLiteral) string {
@@ -153,95 +104,45 @@ func (eg *ExpressionGenerator) GenerateFloatLiteral(expr *ast.FloatLiteral) stri
 }
 
 func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.FunctionCallExpression) string {
-	var funcName string
-	cg := eg.CodeGen
-	rp := cg.Registers
+    var funcName string
+    cg := eg.CodeGen
+    rp := cg.Registers
 
     if id, ok := expr.Function.(*ast.Identifier); ok {
         funcName = id.Name
     } else {
         panic("Function expression not supported")
     }
-	
-	// if need to save any registers, do it here 
-
-	// get function symbol to check parameter types
-    targetFuncSymbol, found := cg.SymTable.Lookup(funcName)
-
-	// setup args
-	for i, arg := range expr.Arguments {
-		argRegister := eg.GenerateExpression(arg)
-		if i < 8 {
-			isFloatParam := false
-            if found && i < len(targetFuncSymbol.Parameters) {
-                isFloatParam = isFloatParameter(targetFuncSymbol.Parameters[i])
+    
+    if len(expr.Arguments) > 0 {
+        argRegister := eg.GenerateExpression(expr.Arguments[0])
+        
+        switch funcName {
+        case "_printFloat":
+            if argRegister != "fa0" && strings.HasPrefix(argRegister, "f") {
+                cg.emit("    fmv.d fa0, %s", argRegister)
             }
-
-			if isFloatParam {
-                // float parameter should be in faN
-                if argRegister != fmt.Sprintf("fa%d", i) {
-                    cg.emit("	fmv.d fa%d, %s", i, argRegister)
-                }
-            } else {
-                // non float parameter should be in aN
-                if argRegister != fmt.Sprintf("a%d", i) {
-                    cg.emit("	mv a%d, %s", i, argRegister)
-                }
+        case "_printInt", "_printChar", "_printBool":
+            if argRegister != "a0" {
+                cg.emit("    mv a0, %s", argRegister)
             }
-		} else {
-			// if more than 8 --> need to use stack
-			tmpRegister := argRegister 
-			// first: move current arg to a tmp register
-			if strings.HasPrefix(argRegister, "fa") {
-				tmpRegister = rp.GetTmpRegister()
-				cg.emit("	fmv.x.d %s, %s", tmpRegister, argRegister)
-			}
-			// second, store the arg on stack 
-			offset := 16 + 8*(i-8)
-			cg.emit("	sd %s, %d(sp)", tmpRegister, offset)
-			// finally, release tmp register that was used as intermediate
-			if tmpRegister != argRegister {
-				rp.ReleaseRegister(tmpRegister)
-			}
-		}
-
-		if !strings.HasPrefix(argRegister, "a") && !strings.HasPrefix(argRegister, "fa") {
-			rp.ReleaseRegister(argRegister)
-		}
-	}
-
-	// bread and butter: call function 
-	cg.emit("	jal %s", funcName)
-
-	returnRegister := "a0"
-	if symbol, found := cg.SymTable.Lookup(funcName); found {
-		if symbol.ReturnType != nil {
-			if isPrimitiveType, ok := symbol.ReturnType.(*ast.PrimitiveType); ok {
-				if isPrimitiveType.Name == "float" {
-					returnRegister = "fa0"
-				}
-			}
-		}
-	}
-	return returnRegister
-}
-
-func isFloatExpression(expr ast.Expression) bool {
-    switch e := expr.(type) {
-    case *ast.FloatLiteral:
-        return true
-    case *ast.BinaryExpression:
-        // If both operands are float, result is float
-        return isFloatExpression(e.Left) && isFloatExpression(e.Right)
-	case *ast.Identifier:
-        // placeholder
-        return false
-    case *ast.FunctionCallExpression:
-        // placeholder
-        return false
-    default:
-        return false
+        case "_printString":
+            if argRegister != "a0" {
+                cg.emit("    mv a0, %s", argRegister)
+            }
+        }
+        
+        if argRegister != "a0" && argRegister != "fa0" {
+            rp.ReleaseRegister(argRegister)
+        }
     }
+    
+    cg.emit("    jal %s", funcName)
+    
+    if funcName == "_printFloat" {
+        return "fa0"
+    }
+    return "a0"
 }
 
 func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) string {
@@ -332,8 +233,8 @@ func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) stri
 		var leftName string = expr.Left.(*ast.Identifier).Name
 		var rightName string = expr.Right.(*ast.Identifier).Name
 
-		var leftID string = cg.CurrentFunction + leftName
-		var rightID string = cg.CurrentFunction + rightName
+		var leftID string = leftName
+		var rightID string = rightName
 
 		leftSym, _ := cg.SymTable.Lookup(leftID)
 		rightSym, _ := cg.SymTable.Lookup(rightID)
@@ -410,8 +311,8 @@ func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression
 		var leftName string = expr.Left.(*ast.Identifier).Name
 		var rightName string = expr.Right.(*ast.Identifier).Name
 
-		var leftID string = cg.CurrentFunction + leftName
-		var rightID string = cg.CurrentFunction + rightName
+		var leftID string = leftName
+		var rightID string = rightName
 
 		leftSym, _ := cg.SymTable.Lookup(leftID)
 		rightSym, _ := cg.SymTable.Lookup(rightID)
@@ -486,8 +387,8 @@ func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) s
 		var leftName string = expr.Left.(*ast.Identifier).Name
 		var rightName string = expr.Right.(*ast.Identifier).Name
 
-		var leftID string = cg.CurrentFunction + leftName
-		var rightID string = cg.CurrentFunction + rightName
+		var leftID string = leftName
+		var rightID string = rightName
 
 		leftSym, _ := cg.SymTable.Lookup(leftID)
 		rightSym, _ := cg.SymTable.Lookup(rightID)
@@ -571,8 +472,8 @@ func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) stri
 		var leftName string = expr.Left.(*ast.Identifier).Name
 		var rightName string = expr.Right.(*ast.Identifier).Name
 
-		var leftID string = cg.CurrentFunction + leftName
-		var rightID string = cg.CurrentFunction + rightName
+		var leftID string = leftName
+		var rightID string = rightName
 
 		leftSym, _ := cg.SymTable.Lookup(leftID)
 		rightSym, _ := cg.SymTable.Lookup(rightID)

@@ -1,45 +1,21 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 3 declarations
-    ├── Function: printInt returns int with 1 parameters
-    │   ├── Parameters:
-    │   │   └── x of type int
-    │   └── Body:
-    │       └── Block with 2 items
-    │           ├── ExpressionStatement
-    │           │   └── FunctionCall with 1 arguments
-    │           │       ├── Function:
-    │           │       │   ├── Identifier: _printInt
-    │           │       └── Arguments:
-    │           │           └── Identifier: x
-    │           └── ReturnStatement
-    │               └── IntegerLiteral: 0
-    ├── Function: printFloat returns void with 1 parameters
-    │   ├── Parameters:
-    │   │   └── x of type float
-    │   └── Body:
-    │       └── Block with 1 items
-    │           └── ExpressionStatement
-    │               └── FunctionCall with 1 arguments
-    │                   ├── Function:
-    │                   │   ├── Identifier: _printFloat
-    │                   └── Arguments:
-    │                       └── Identifier: x
+└── Program (Line 1, Col 0) with 1 declarations
     └── Function: main returns int with 0 parameters
         └── Body:
             └── Block with 3 items
-                ├── VarDeclaration: divInt of type int
+                ├── VarDeclaration: addFloat of type float
                 │   ├── Initializer:
-                │   │   └── BinaryExpression: '/'
+                │   │   └── BinaryExpression: '+'
                 │   │       ├── Left:
-                │   │       │   ├── IntegerLiteral: 8
+                │   │       │   ├── FloatLiteral: 4.200000
                 │   │       └── Right:
-                │   │           └── IntegerLiteral: 2
+                │   │           └── FloatLiteral: 6.900000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: printInt
+                │       │   ├── Identifier: _printFloat
                 │       └── Arguments:
-                │           └── Identifier: divInt
+                │           └── Identifier: addFloat
                 └── ReturnStatement
                     └── BinaryExpression: '+'
                         ├── Left:
