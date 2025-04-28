@@ -77,7 +77,7 @@ func (bg *BranchingGenerator) GenerateBlockItem(item ast.BlockItem) {
 	case *ast.ExpressionStatement:
 		bg.GenerateExpressionStatement(stmt)
 	case *ast.VarDeclaration:
-		bg.CodeGen.AssignmentGen.GenerateVarDeclaration()
+		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(*stmt)
 	case *ast.IfStatement:
 		bg.GenerateIfStatement(stmt)
 	// Add more statement types as needed

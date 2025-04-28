@@ -248,7 +248,7 @@ func (fg *FunctionGenerator) GenerateBlockItem(stmt ast.BlockItem) {
 	case *ast.ReturnStatement:
 		fg.GenerateReturnStatement(*s)
 	case *ast.IfStatement:
-		cg.BranchingGen.GenerateIfStatement(*s)
+		cg.BranchingGen.GenerateIfStatement(s)
 	case *ast.WhileStatement: 
 		cg.LoopingGen.GenerateWhileStatement(*s)
 	case *ast.VarDeclaration:
