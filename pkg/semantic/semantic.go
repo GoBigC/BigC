@@ -26,9 +26,9 @@ func (analyzer *SemanticAnalyzer) Error(line int, msg string) {
 }
 
 func (analyzer *SemanticAnalyzer) PrintErrors() {
-    for _, err := range analyzer.errors {
-        fmt.Println(err)
-    }
+	for _, err := range analyzer.errors {
+		fmt.Println(err)
+	}
 }
 
 // 2 pass analyzer:
@@ -66,14 +66,19 @@ func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
 			ArraySize: getArraySize(d.Type),
 		})
 	case *ast.FunctionDeclaration:
-		// All functions are global, no nested functions allowed
-		analyzer.SymTable.Define(d.Name, table.Symbol{
-			Name:       d.Name,
-			Type:       &ast.PrimitiveType{Name: "function"},
-			Scope:      table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine},
-			Parameters: d.Parameters,
-			ReturnType: d.ReturnType,
-		})
+		funcName := d.Name
+		if funcName != "main" {
+			analyzer.Error(d.Line, "cannot declare function only main is allowed")
+		} else {
+			// All functions are global, no nested functions allowed
+			analyzer.SymTable.Define(d.Name, table.Symbol{
+				Name:       d.Name,
+				Type:       &ast.PrimitiveType{Name: "function"},
+				Scope:      table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine},
+				Parameters: d.Parameters,
+				ReturnType: d.ReturnType,
+			})
+		}
 	}
 }
 
