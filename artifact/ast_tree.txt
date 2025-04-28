@@ -27,19 +27,19 @@ AST Tree:
     └── Function: main returns int with 0 parameters
         └── Body:
             └── Block with 3 items
-                ├── VarDeclaration: addFloat of type float
+                ├── VarDeclaration: divInt of type int
                 │   ├── Initializer:
-                │   │   └── BinaryExpression: '+'
+                │   │   └── BinaryExpression: '/'
                 │   │       ├── Left:
-                │   │       │   ├── FloatLiteral: 4.200000
+                │   │       │   ├── IntegerLiteral: 8
                 │   │       └── Right:
-                │   │           └── FloatLiteral: 6.900000
+                │   │           └── IntegerLiteral: 2
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: printFloat
+                │       │   ├── Identifier: printInt
                 │       └── Arguments:
-                │           └── Identifier: addFloat
+                │           └── Identifier: divInt
                 └── ReturnStatement
                     └── BinaryExpression: '+'
                         ├── Left:

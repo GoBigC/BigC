@@ -11,8 +11,8 @@ int main() {
     // int addInt = 1 + 2050;
     // printInt(addInt);
 
-    float addFloat = 4.2 + 6.9;
-    printFloat(addFloat);
+    // float addFloat = 4.2 + 6.9;
+    // printFloat(addFloat);
 
     // int subInt = 5 - 2;
     // printInt(subInt);

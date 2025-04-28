@@ -129,9 +129,9 @@
 				block { (
 					blockItem (
 						declaration (
-							type float
+							type int
 						)
-						addFloat
+						divInt
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -146,18 +146,17 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 4.2
-																			)))))
-															(
-																additionExpressionRest (
-																	addSubtractOperator +
-																)
+																				constant 8
+																			))))
 																(
-																	multiplicationExpression (
+																	multiplicationExpressionRest (
+																		multDivModOperator /
+																	)
+																	(
 																		unaryExpression (
 																			postfixExpression (
 																				primaryExpression (
-																					constant 6.9
+																					constant 2
 																				))))))))))))))
 							;)))
 				(
@@ -174,7 +173,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression printFloat
+																		primaryExpression printInt
 																	)
 																	(
 																		functionCallArgs (
@@ -189,7 +188,7 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression addFloat
+																														primaryExpression divInt
 																													)))))))))))
 																			))))))))))))
 							;)))
