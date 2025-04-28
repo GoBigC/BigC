@@ -118,8 +118,8 @@ CST Tree:
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── addInt
+    │           │       │   └── float
+    │           │       ├── addFloat
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -135,7 +135,7 @@ CST Tree:
     │           │           │                               │       └── postfixExpression
     │           │           │                               │           └── primaryExpression
     │           │           │                               │               └── constant
-    │           │           │                               │                   └── 1
+    │           │           │                               │                   └── 4.2
     │           │           │                               └── additionExpressionRest
     │           │           │                                   ├── addSubtractOperator
     │           │           │                                   │   └── +
@@ -144,7 +144,7 @@ CST Tree:
     │           │           │                                           └── postfixExpression
     │           │           │                                               └── primaryExpression
     │           │           │                                                   └── constant
-    │           │           │                                                       └── 2050
+    │           │           │                                                       └── 6.9
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -160,7 +160,7 @@ CST Tree:
     │           │           │                               └── unaryExpression
     │           │           │                                   └── postfixExpression
     │           │           │                                       ├── primaryExpression
-    │           │           │                                       │   └── printInt
+    │           │           │                                       │   └── printFloat
     │           │           │                                       └── functionCallArgs
     │           │           │                                           └── 
     │           │           │                                               └── argList
@@ -174,7 +174,7 @@ CST Tree:
     │           │           │                                                                               └── unaryExpression
     │           │           │                                                                                   └── postfixExpression
     │           │           │                                                                                       └── primaryExpression
-    │           │           │                                                                                           └── addInt
+    │           │           │                                                                                           └── addFloat
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement

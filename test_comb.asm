@@ -1,4 +1,6 @@
 .data
+double_2: .double 6.900000
+double_1: .double 4.200000
 .text
 j main
 _exit:
@@ -67,7 +69,7 @@ printInt:
 	addi s0, sp, 80
 # setup parameters
 # param x in register a0
-# local var addInt at offset 16(sp)
+# local var addFloat at offset 16(sp)
 # function body
 	jal _printInt
     li t0, 0
@@ -85,7 +87,7 @@ printFloat:
 	addi s0, sp, 80
 # setup parameters
 # param x in register a0
-# local var addInt at offset 16(sp)
+# local var addFloat at offset 16(sp)
 # function body
 	jal _printFloat
 # function epilogue
@@ -101,17 +103,20 @@ main:
 	addi s0, sp, 96
 # setup parameters
 # local var x at offset 16(sp)
-# local var x at offset 24(sp)
-# local var addInt at offset 32(sp)
+# local var addFloat at offset 24(sp)
+# local var x at offset 32(sp)
 # function body
-li t0, 2050
-addi a0, t0, 1
-	sd a0, 32(sp)
-	ld t1, 32(sp)
-    mv a0, t1
-	jal printInt
-li t1, 0
-addi a0, t1, 0
+la ft0, double_1
+fld ft0, 0(ft0)
+la ft1, double_2
+fld ft1, 0(ft1)
+fadd.d fa0, ft0, ft1
+	fs fa0, 24(sp)
+	fld ft2, 24(sp)
+    fmv.d fa0, ft2
+	jal printFloat
+li t0, 0
+addi a0, t0, 0
 # function epilogue
 	ld ra, 88(sp)
 	ld s0, 80(sp)

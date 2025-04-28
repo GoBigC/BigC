@@ -32,19 +32,19 @@ Program (Line 1, Col 0) with 3 declarations
    Body:
    Block (Line 10, Col 11) with 3 items
      Item 1:
-     VarDeclaration (Line 11, Col 4): addInt of type int with initializer:
-       BinaryExpression (Line 11, Col 19): Operator '+'
+     VarDeclaration (Line 14, Col 4): addFloat of type float with initializer:
+       BinaryExpression (Line 14, Col 25): Operator '+'
          Left:
-         IntegerLiteral (Line 11, Col 17): 1
+         FloatLiteral (Line 14, Col 21): 4.200000
          Right:
-         IntegerLiteral (Line 11, Col 21): 2050
+         FloatLiteral (Line 14, Col 27): 6.900000
      Item 2:
-     ExpressionStatement (Line 12, Col 4):
-       FunctionCallExpression (Line 12, Col 12) with 1 arguments:
+     ExpressionStatement (Line 15, Col 4):
+       FunctionCallExpression (Line 15, Col 14) with 1 arguments:
          Function:
-         Identifier (Line 12, Col 4): printInt
+         Identifier (Line 15, Col 4): printFloat
          Argument 1:
-           Identifier (Line 12, Col 13): addInt
+           Identifier (Line 15, Col 15): addFloat
      Item 3:
      ReturnStatement (Line 35, Col 4):
        BinaryExpression (Line 35, Col 12): Operator '+'
