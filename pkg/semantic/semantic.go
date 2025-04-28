@@ -70,14 +70,19 @@ func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
 		if funcName != "main" {
 			analyzer.Error(d.Line, "cannot declare function only main is allowed")
 		} else {
-			// All functions are global, no nested functions allowed
-			analyzer.SymTable.Define(d.Name, table.Symbol{
-				Name:       d.Name,
-				Type:       &ast.PrimitiveType{Name: "function"},
-				Scope:      table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine},
-				Parameters: d.Parameters,
-				ReturnType: d.ReturnType,
-			})
+			if sym, ok := analyzer.SymTable.Lookup(funcName); ok {
+				analyzer.Error(d.Line, fmt.Sprintf("function %s already declared at line %d", sym.Name, sym.Scope.ValidFirstLine))
+			} else {
+
+				// All functions are global, no nested functions allowed
+				analyzer.SymTable.Define(d.Name, table.Symbol{
+					Name:       d.Name,
+					Type:       &ast.PrimitiveType{Name: "function"},
+					Scope:      table.ScopeInfo{ValidFirstLine: 1, ValidLastLine: lastLine},
+					Parameters: d.Parameters,
+					ReturnType: d.ReturnType,
+				})
+			}
 		}
 	}
 }
