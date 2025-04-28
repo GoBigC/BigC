@@ -3,18 +3,14 @@ AST Tree:
     └── Function: main returns int with 0 parameters
         └── Body:
             └── Block with 3 items
-                ├── VarDeclaration: addFloat of type float
+                ├── VarDeclaration: literalInt of type int
                 │   ├── Initializer:
-                │   │   └── FloatLiteral: 6.900000
+                │   │   └── IntegerLiteral: 4
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: _printFloat
+                │       │   ├── Identifier: _printInt
                 │       └── Arguments:
-                │           └── Identifier: addFloat
+                │           └── Identifier: literalInt
                 └── ReturnStatement
-                    └── BinaryExpression: '+'
-                        ├── Left:
-                        │   ├── IntegerLiteral: 0
-                        └── Right:
-                            └── IntegerLiteral: 0
+                    └── IntegerLiteral: 0

@@ -1,5 +1,5 @@
 .data
-addFloat: .double 6.900000
+literalInt: .dword 4
 .text
 j main
 _exit:
@@ -61,11 +61,12 @@ _printString:
 	addi sp, sp, 16
 	ret
 main:
-    la t0, addFloat
+    la t0, literalInt
 # ld from GenerateIdentifier, case !isFloatVar
     ld t1, 0(t0)
-    jal _printFloat
-	li t0, 0
-	addi a0, t0, 0
+    mv a0, t1
+    jal _printInt
+    li t0, 0
+    mv a0, t0
 	li a0, 0
 	j _exit

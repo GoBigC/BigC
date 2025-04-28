@@ -12,9 +12,9 @@
 				block { (
 					blockItem (
 						declaration (
-							type float
+							type int
 						)
-						addFloat
+						literalInt
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -29,7 +29,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 6.9
+																				constant 4
 																			)))))))))))))
 							;)))
 				(
@@ -46,7 +46,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression _printFloat
+																		primaryExpression _printInt
 																	)
 																	(
 																		functionCallArgs (
@@ -61,7 +61,7 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression addFloat
+																														primaryExpression literalInt
 																													)))))))))))
 																			))))))))))))
 							;)))
@@ -82,18 +82,7 @@
 																		postfixExpression (
 																			primaryExpression (
 																				constant 0
-																			)))))
-															(
-																additionExpressionRest (
-																	addSubtractOperator +
-																)
-																(
-																	multiplicationExpression (
-																		unaryExpression (
-																			postfixExpression (
-																				primaryExpression (
-																					constant 0
-																				)))))))))))))
+																			))))))))))))
 								;))))
 				})))
 	<EOF>)
