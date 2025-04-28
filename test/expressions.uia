@@ -1,14 +1,36 @@
-// int addInt = 1 + 3;
-// float addFloat = 4.2 + 6.9;
+int printInt(int x) {
+    _printInt(x); 
+    return 0; 
+}
 
-int subInt = 5 - 2;
-// float subFloat = 7.5 - 2.5;
+void printFloat(float x) {
+    _printFloat(x);
+}
 
-// int mulInt = 3 * 4;
-// float mulFloat = 2.5 * 4.0;
-
-// int divInt = 8 / 2;
-// float divFloat = 9.0 / 3.0;
 int main() {
-    return 0;
+    // int addInt = 1 + 2050;
+    // printInt(addInt);
+
+    // float addFloat = 4.2 + 6.9;
+    // printFloat(addFloat);
+
+    // int subInt = 5 - 2;
+    // printInt(subInt);
+
+    // float subFloat = 7.5 - 2.5;
+    // printFloat(subFloat);
+
+    // int mulInt = 3 * 4;
+    // printInt(mulInt);
+
+    // float mulFloat = 2.5 * 4.0;
+    // printFloat(mulFloat);
+
+    // int divInt = 8 / 2;
+    // printInt(divInt);
+
+    // float divFloat = 9.0 / 3.0;
+    // printFloat(divFloat);
+
+    return 0+0;
 }

@@ -291,9 +291,6 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 		cg.GenerateDeclaration(decl)
 	}
 
-	// TODO: fix this by using return, because main() is just a function
-	cg.emit("j _exit") // Exit the program -- this is temporary
-
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
 		return fmt.Errorf("cannot create output file: %w", err)
