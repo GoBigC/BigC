@@ -171,7 +171,6 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 
 	case "-":
 		operandReg, operandType := eg.GenerateExpression(e.Operand)
-		resultReg := rp.GetTmpRegister()
 
 		if primitiveType, ok := operandType.(*ast.PrimitiveType); ok {
 			switch primitiveType.Name {
@@ -181,7 +180,6 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 				cg.emit("    fneg.d %s, %s", resultReg, operandReg)
 			default:
 				panic(fmt.Sprintf("Unsupported type for unary minus: %s", primitiveType.Name))
-
 			}
 
 			// cg.emit("    neg %s, %s", resultReg, operandReg)
@@ -193,7 +191,6 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 	default:
 		panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
 	}
-	return "a0", nil
 }
 
 func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) (string, ast.Type) {
@@ -228,15 +225,97 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 }
 
 func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
+
+	var resultReg string
+
+	resultType := determineResultType(leftType, rightType)
+
+	switch resultType.(*ast.PrimitiveType).Name {
+	case "int":
+		resultReg = rp.GetTmpRegister()
+		cg.emit("	div %s, %s, %s", resultReg, leftReg, rightReg)
+		return resultReg, &ast.PrimitiveType{Name: "int"}
+	case "float":
+		resultReg = rp.GetFloatTmpRegister()
+		cg.emit("	fdiv.d %s, %s, %s", resultReg, leftReg, rightReg)
+		return resultReg, &ast.PrimitiveType{Name: "float"}
+	}
+
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+
 	return "GenerateDivision - No case should reach here, as everything should be handled in semantic analysis", nil
 
 }
 
 func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
+
+	var resultReg string
+
+	resultType := determineResultType(leftType, rightType)
+
+	switch resultType.(*ast.PrimitiveType).Name {
+	case "int":
+		resultReg = rp.GetTmpRegister()
+		cg.emit("	mul %s, %s, %s", resultReg, leftReg, rightReg)
+		return resultReg, &ast.PrimitiveType{Name: "int"}
+	case "float":
+		resultReg = rp.GetFloatTmpRegister()
+		cg.emit("	fmul.d %s, %s, %s", resultReg, leftReg, rightReg)
+		return resultReg, &ast.PrimitiveType{Name: "float"}
+	}
+
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 	return "GenerateMultiplication - No case should reach here, as everything should be handled in semantic analysis", nil
 }
 
 func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
+
+	var resultReg string
+
+	resultType := determineResultType(leftType, rightType)
+
+	switch resultType.(*ast.PrimitiveType).Name {
+	case "int":
+		resultReg = rp.GetTmpRegister()
+		cg.emit("	sub %s, %s, %s", resultReg, leftReg, rightReg)
+		return resultReg, &ast.PrimitiveType{Name: "int"}
+	case "float":
+		resultReg = rp.GetFloatTmpRegister()
+		cg.emit("	fsub.d %s, %s, %s", resultReg, leftReg, rightReg)
+		return resultReg, &ast.PrimitiveType{Name: "float"}
+	}
+
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 	return "GenerateSubtraction - No case should reach here, as everything should be handled in semantic analysis", nil
 }
 
@@ -432,17 +511,3 @@ func determineResultType(left, right ast.Type) ast.Type {
 	}
 	return nil
 }
-
-// func isIntType(t ast.Type) bool {
-// 	if p, ok := t.(*ast.PrimitiveType); ok {
-// 		return p.Name == "int"
-// 	}
-// 	return false
-// }
-
-// func isFloatType(t ast.Type) bool {
-// 	if p, ok := t.(*ast.PrimitiveType); ok {
-// 		return p.Name == "float"
-// 	}
-// 	return false
-// }
