@@ -74,7 +74,16 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) (string,
 }
 
 func (eg *ExpressionGenerator) GenerateBoolLiteral(expr *ast.BoolLiteral) (string, ast.Type) {
-	return "unimplemented", &ast.PrimitiveType{Name: "bool"}
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	reg := rp.GetTmpRegister()
+	if expr.Value {
+		cg.emit("    li %s, 1", reg)
+	} else {
+		cg.emit("    li %s, 0", reg)
+	}
+	return reg, &ast.PrimitiveType{Name: "bool"}
 }
 
 func (eg *ExpressionGenerator) GenerateCharLiteral(expr *ast.CharLiteral) (string, ast.Type) {
@@ -217,12 +226,12 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 		return eg.GenerateGreaterThan(expr)
 	case ">=":
 		return eg.GenerateGreaterThanOrEqual(expr)
-	// case "&&":
-	// 	return eg.GenerateLogicalAnd(expr)
-	// case "||":
-	// 	return eg.GenerateLogicalOr(expr)
+	case "&&":
+		return eg.GenerateLogicalAnd(expr)
+	case "||":
+		return eg.GenerateLogicalOr(expr)
 	default:
-		return "No case should reach here, as everything should be handled in semantic analysis", nil
+		return "GenerateBinaryExpression - No case should reach here, as everything should be handled in semantic analysis", nil
 	}
 }
 
@@ -475,6 +484,48 @@ func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (s
 
 	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
 	cg.emit("    snez %s, %s", resultReg, resultReg) // Set to 1 if not equal to zero
+
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
+}
+
+func (eg *ExpressionGenerator) GenerateLogicalOr(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
+
+	resultReg := rp.GetTmpRegister()
+
+	cg.emit("    or %s, %s, %s", resultReg, leftReg, rightReg)
+
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
+}
+
+func (eg *ExpressionGenerator) GenerateLogicalAnd(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
+
+	resultReg := rp.GetTmpRegister()
+
+	cg.emit("    and %s, %s, %s", resultReg, leftReg, rightReg)
 
 	if leftReg != "a0" && leftReg != "fa0" {
 		rp.ReleaseRegister(leftReg)
