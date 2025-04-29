@@ -31,25 +31,23 @@ func (analyzer *SemanticAnalyzer) PrintErrors() {
 	}
 }
 
-// 2 pass analyzer:
+// 3 pass analyzer:
 // First pass collect all global symbols
 // Second pass, collect local symbols, check for usage and type checking
 // Allows for declarations after function call
+// Third pass finalizes all array size into constant
 func (analyzer *SemanticAnalyzer) Analyze(program *ast.Program) []string {
-	fmt.Println("===== first pass")
 	for _, decl := range program.Declarations {
 		analyzer.collectDeclaration(decl)
 	}
-	analyzer.SymTable.PrintTable()
 
-	fmt.Println("===== second pass")
 	for _, decl := range program.Declarations {
 		analyzer.analyzeDeclaration(decl)
 	}
-	analyzer.SymTable.PrintTable()
 
-	fmt.Println("===== third pass")
 	analyzer.finalizeArraySizes()
+	
+	fmt.Println("Symbol table dump:")
 	analyzer.SymTable.PrintTable()
 
 	return analyzer.errors
@@ -63,7 +61,7 @@ func (analyzer *SemanticAnalyzer) finalizeArraySizes() {
 				symbol.ArraySize = lit.Value
 				analyzer.SymTable.Symbols[name] = symbol 
 			} else {
-				size, isConst := analyzer.evaluateConstantExpression(arr.Size) 
+				size, isConst := analyzer.evaluateArraySize(arr.Size) 
 				if isConst {
 					symbol.ArraySize = size 
 					analyzer.SymTable.Symbols[name] = symbol 
@@ -123,7 +121,7 @@ func (analyzer *SemanticAnalyzer) analyzeDeclaration(declr ast.Declaration) {
 			if !typesMatch(d.Type, initType) {
 				analyzer.Error(d.Line, fmt.Sprintf("type mismatch in initializer: expected %s, got %s", typeString(d.Type), typeString(initType)))
 			}
-			if val, ok := analyzer.getConstantValue(d.Initializer); ok {
+			if val, ok := analyzer.evaluateConstantExpression(d.Initializer); ok {
 				sym := analyzer.SymTable.Symbols[name]
 				sym.Value = val
 				analyzer.SymTable.Symbols[name] = sym
@@ -223,7 +221,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 			if lit, ok := arrayType.Size.(*ast.IntegerLiteral); ok {
 				size = lit.Value
 			} else {
-				constSize, isConst := analyzer.evaluateConstantExpression(arrayType.Size)
+				constSize, isConst := analyzer.evaluateArraySize(arrayType.Size)
 
 				if !isConst {
 					analyzer.Error(varDeclr.Line, "array size must be a compile-time constant expression")
@@ -249,7 +247,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 			if !typesMatch(varDeclr.Type, initType) {
 				analyzer.Error(varDeclr.Line, fmt.Sprintf("type mismatch in initializer: expected %s, got %s", typeString(varDeclr.Type), typeString(initType)))
 			}
-			if val, ok := analyzer.evaluateConstantExpression(varDeclr.Initializer); ok {
+			if val, ok := analyzer.evaluateArraySize(varDeclr.Initializer); ok {
 				sym.Value = val
 			}
 		}
@@ -521,7 +519,7 @@ func typeString(t ast.Type) string {
 	return "unknown"
 }
 
-func (analyzer *SemanticAnalyzer) getConstantValue(expr ast.Expression) (any, bool) {
+func (analyzer *SemanticAnalyzer) evaluateConstantExpression(expr ast.Expression) (any, bool) {
 	switch e := expr.(type) {
 	case *ast.IntegerLiteral:
 		return e.Value, true
@@ -535,13 +533,13 @@ func (analyzer *SemanticAnalyzer) getConstantValue(expr ast.Expression) (any, bo
 	return nil, false
 }
 
-func (analyzer *SemanticAnalyzer) evaluateConstantExpression(expr ast.Expression) (int64, bool) {
+func (analyzer *SemanticAnalyzer) evaluateArraySize(expr ast.Expression) (int64, bool) {
 	switch e := expr.(type) {
 	case *ast.IntegerLiteral: 
 		return e.Value, true
 	case *ast.BinaryExpression: 
-		leftVal, leftOk := analyzer.evaluateConstantExpression(e.Left)
-		rightVal, rightOk := analyzer.evaluateConstantExpression(e.Right)
+		leftVal, leftOk := analyzer.evaluateArraySize(e.Left)
+		rightVal, rightOk := analyzer.evaluateArraySize(e.Right)
 
 		if !leftOk {
 			analyzer.Error(e.Line, "Invalid left operand of array size expression")
