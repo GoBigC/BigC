@@ -327,7 +327,7 @@ func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
         cg.ExpressionGen.GenerateExpression(stmt.Expr)
     case *ast.ReturnStatement:
         if stmt.Value != nil {
-            reg := cg.ExpressionGen.GenerateExpression(stmt.Value)
+            reg, _ := cg.ExpressionGen.GenerateExpression(stmt.Value)
             if reg != "a0" {
                 cg.emit("    mv a0, %s", reg)
                 if reg != "a0" && reg != "fa0" {
