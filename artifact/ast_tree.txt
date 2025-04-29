@@ -1,8 +1,63 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 1 declarations
+└── Program (Line 1, Col 0) with 2 declarations
+    ├── VarDeclaration: x of type int
+    │   ├── Initializer:
+    │   │   └── IntegerLiteral: 10
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 3 items
+            └── Block with 11 items
+                ├── VarDeclaration: addInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 1
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 2050
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: addInt
+                ├── VarDeclaration: subInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '-'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 5
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 2
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: subInt
+                ├── VarDeclaration: mulInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '*'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 3
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 4
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: mulInt
+                ├── VarDeclaration: divInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '/'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 8
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 2
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: divInt
                 ├── VarDeclaration: literalInt of type int
                 │   ├── Initializer:
                 │   │   └── IntegerLiteral: 4

@@ -3,6 +3,28 @@
 		declaration (
 			type int
 		)
+		x
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 10
+															)))))))))))))
+			;))
+	(
+		declaration (
+			type int
+		)
 		main
 		(
 			declarationRemainder (
@@ -10,6 +32,272 @@
 			)
 			(
 				block { (
+					blockItem (
+						declaration (
+							type int
+						)
+						addInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 1
+																			)))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator +
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 2050
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression _printInt
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression addInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type int
+						)
+						subInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 5
+																			)))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator -
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 2
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression _printInt
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression subInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type int
+						)
+						mulInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 3
+																			))))
+																(
+																	multiplicationExpressionRest (
+																		multDivModOperator *
+																	)
+																	(
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 4
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression _printInt
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression mulInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type int
+						)
+						divInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression (
+																				constant 8
+																			))))
+																(
+																	multiplicationExpressionRest (
+																		multDivModOperator /
+																	)
+																	(
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 2
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression _printInt
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression divInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
 					blockItem (
 						declaration (
 							type int
