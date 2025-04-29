@@ -69,9 +69,15 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
             }
         }
 	case *ast.ArrayType:
-		arraySize := getArraySize(varDecl.Type)
-		if arraySize > 0 {
-			cg.insertData(varDecl.Name, ".space", 8*arraySize)
+		var id string = varDecl.Name 
+		fmt.Printf("------ id is %s", id)
+		symbol, found := cg.SymTable.Lookup("main." + id) // try local 
+		if !found {
+			symbol, found = cg.SymTable.Lookup(id) // try global
+		}
+
+		if found && symbol.ArraySize > 0{
+			cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize)
 		} else {
 			panic(fmt.Sprintf("Invalid array size at line %d", varDecl.Line))
 		}
@@ -89,15 +95,4 @@ func isFloatType(typeExpr ast.Type) bool {
 		return primitiveType.Name == "float"
 	}
 	return false
-}
-
-func getArraySize(typeExpr ast.Type) int64 {
-    if arrayType, ok := typeExpr.(*ast.ArrayType); ok {
-        if sizeExpr, ok := arrayType.Size.(*ast.IntegerLiteral); ok {
-            return sizeExpr.Value
-        }
-        // other expressions not supported yet
-        return -1
-    }
-    return 0 // not an array
 }

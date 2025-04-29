@@ -42,20 +42,20 @@ int main() {
     // _printInt(13); 
 
     // =================FLOAT===================
-    float addFloat = 3.14 + 2.5;
-    _printFloat(addFloat);
+    // float addFloat = 3.14 + 2.5;
+    // _printFloat(addFloat);
 
-    float subFloat = 10.5 - 4.2;
-    _printFloat(subFloat);
+    // float subFloat = 10.5 - 4.2;
+    // _printFloat(subFloat);
 
-    float mulFloat = 2.0 * 3.5;
-    _printFloat(mulFloat);
+    // float mulFloat = 2.0 * 3.5;
+    // _printFloat(mulFloat);
 
-    float divFloat = 15.0 / 3.0;
-    _printFloat(divFloat);
+    // float divFloat = 15.0 / 3.0;
+    // _printFloat(divFloat);
 
-    float literalFloat = 6.28;
-    _printFloat(literalFloat);
+    // float literalFloat = 6.28;
+    // _printFloat(literalFloat);
 
     // float mixedAddFloat = y + 2.3;
     // _printFloat(mixedAddFloat);
