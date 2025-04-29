@@ -23,6 +23,27 @@ CST Tree:
     │       └── ;
     ├── declaration
     │   ├── type
+    │   │   └── float
+    │   ├── y
+    │   └── declarationRemainder
+    │       ├── variableInitializer
+    │       │   ├── =
+    │       │   └── expression
+    │       │       └── assignmentExpression
+    │       │           └── logicalOrExpression
+    │       │               └── logicalAndExpression
+    │       │                   └── equalityExpression
+    │       │                       └── comparisonExpression
+    │       │                           └── additionExpression
+    │       │                               └── multiplicationExpression
+    │       │                                   └── unaryExpression
+    │       │                                       └── postfixExpression
+    │       │                                           └── primaryExpression
+    │       │                                               └── constant
+    │       │                                                   └── 5.5
+    │       └── ;
+    ├── declaration
+    │   ├── type
     │   │   └── int
     │   ├── main
     │   └── declarationRemainder
@@ -32,8 +53,8 @@ CST Tree:
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── addInt
+    │           │       │   └── float
+    │           │       ├── addFloat
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -49,7 +70,7 @@ CST Tree:
     │           │           │                               │       └── postfixExpression
     │           │           │                               │           └── primaryExpression
     │           │           │                               │               └── constant
-    │           │           │                               │                   └── 1
+    │           │           │                               │                   └── 3.14
     │           │           │                               └── additionExpressionRest
     │           │           │                                   ├── addSubtractOperator
     │           │           │                                   │   └── +
@@ -58,7 +79,7 @@ CST Tree:
     │           │           │                                           └── postfixExpression
     │           │           │                                               └── primaryExpression
     │           │           │                                                   └── constant
-    │           │           │                                                       └── 2050
+    │           │           │                                                       └── 2.5
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -74,7 +95,7 @@ CST Tree:
     │           │           │                               └── unaryExpression
     │           │           │                                   └── postfixExpression
     │           │           │                                       ├── primaryExpression
-    │           │           │                                       │   └── _printInt
+    │           │           │                                       │   └── _printFloat
     │           │           │                                       └── functionCallArgs
     │           │           │                                           └── 
     │           │           │                                               └── argList
@@ -88,13 +109,13 @@ CST Tree:
     │           │           │                                                                               └── unaryExpression
     │           │           │                                                                                   └── postfixExpression
     │           │           │                                                                                       └── primaryExpression
-    │           │           │                                                                                           └── addInt
+    │           │           │                                                                                           └── addFloat
     │           │           └── ;
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── subInt
+    │           │       │   └── float
+    │           │       ├── subFloat
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -110,7 +131,7 @@ CST Tree:
     │           │           │                               │       └── postfixExpression
     │           │           │                               │           └── primaryExpression
     │           │           │                               │               └── constant
-    │           │           │                               │                   └── 5
+    │           │           │                               │                   └── 10.5
     │           │           │                               └── additionExpressionRest
     │           │           │                                   ├── addSubtractOperator
     │           │           │                                   │   └── -
@@ -119,7 +140,7 @@ CST Tree:
     │           │           │                                           └── postfixExpression
     │           │           │                                               └── primaryExpression
     │           │           │                                                   └── constant
-    │           │           │                                                       └── 2
+    │           │           │                                                       └── 4.2
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -135,7 +156,7 @@ CST Tree:
     │           │           │                               └── unaryExpression
     │           │           │                                   └── postfixExpression
     │           │           │                                       ├── primaryExpression
-    │           │           │                                       │   └── _printInt
+    │           │           │                                       │   └── _printFloat
     │           │           │                                       └── functionCallArgs
     │           │           │                                           └── 
     │           │           │                                               └── argList
@@ -149,13 +170,13 @@ CST Tree:
     │           │           │                                                                               └── unaryExpression
     │           │           │                                                                                   └── postfixExpression
     │           │           │                                                                                       └── primaryExpression
-    │           │           │                                                                                           └── subInt
+    │           │           │                                                                                           └── subFloat
     │           │           └── ;
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── mulInt
+    │           │       │   └── float
+    │           │       ├── mulFloat
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -171,7 +192,7 @@ CST Tree:
     │           │           │                                   │   └── postfixExpression
     │           │           │                                   │       └── primaryExpression
     │           │           │                                   │           └── constant
-    │           │           │                                   │               └── 3
+    │           │           │                                   │               └── 2.0
     │           │           │                                   └── multiplicationExpressionRest
     │           │           │                                       ├── multDivModOperator
     │           │           │                                       │   └── *
@@ -179,7 +200,7 @@ CST Tree:
     │           │           │                                           └── postfixExpression
     │           │           │                                               └── primaryExpression
     │           │           │                                                   └── constant
-    │           │           │                                                       └── 4
+    │           │           │                                                       └── 3.5
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -195,7 +216,7 @@ CST Tree:
     │           │           │                               └── unaryExpression
     │           │           │                                   └── postfixExpression
     │           │           │                                       ├── primaryExpression
-    │           │           │                                       │   └── _printInt
+    │           │           │                                       │   └── _printFloat
     │           │           │                                       └── functionCallArgs
     │           │           │                                           └── 
     │           │           │                                               └── argList
@@ -209,13 +230,13 @@ CST Tree:
     │           │           │                                                                               └── unaryExpression
     │           │           │                                                                                   └── postfixExpression
     │           │           │                                                                                       └── primaryExpression
-    │           │           │                                                                                           └── mulInt
+    │           │           │                                                                                           └── mulFloat
     │           │           └── ;
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── divInt
+    │           │       │   └── float
+    │           │       ├── divFloat
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -231,7 +252,7 @@ CST Tree:
     │           │           │                                   │   └── postfixExpression
     │           │           │                                   │       └── primaryExpression
     │           │           │                                   │           └── constant
-    │           │           │                                   │               └── 8
+    │           │           │                                   │               └── 15.0
     │           │           │                                   └── multiplicationExpressionRest
     │           │           │                                       ├── multDivModOperator
     │           │           │                                       │   └── /
@@ -239,7 +260,7 @@ CST Tree:
     │           │           │                                           └── postfixExpression
     │           │           │                                               └── primaryExpression
     │           │           │                                                   └── constant
-    │           │           │                                                       └── 2
+    │           │           │                                                       └── 3.0
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -255,7 +276,7 @@ CST Tree:
     │           │           │                               └── unaryExpression
     │           │           │                                   └── postfixExpression
     │           │           │                                       ├── primaryExpression
-    │           │           │                                       │   └── _printInt
+    │           │           │                                       │   └── _printFloat
     │           │           │                                       └── functionCallArgs
     │           │           │                                           └── 
     │           │           │                                               └── argList
@@ -269,13 +290,13 @@ CST Tree:
     │           │           │                                                                               └── unaryExpression
     │           │           │                                                                                   └── postfixExpression
     │           │           │                                                                                       └── primaryExpression
-    │           │           │                                                                                           └── divInt
+    │           │           │                                                                                           └── divFloat
     │           │           └── ;
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── literalInt
+    │           │       │   └── float
+    │           │       ├── literalFloat
     │           │       └── declarationRemainder
     │           │           ├── variableInitializer
     │           │           │   ├── =
@@ -291,7 +312,7 @@ CST Tree:
     │           │           │                                       └── postfixExpression
     │           │           │                                           └── primaryExpression
     │           │           │                                               └── constant
-    │           │           │                                                   └── 4
+    │           │           │                                                   └── 6.28
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement
@@ -307,7 +328,7 @@ CST Tree:
     │           │           │                               └── unaryExpression
     │           │           │                                   └── postfixExpression
     │           │           │                                       ├── primaryExpression
-    │           │           │                                       │   └── _printInt
+    │           │           │                                       │   └── _printFloat
     │           │           │                                       └── functionCallArgs
     │           │           │                                           └── 
     │           │           │                                               └── argList
@@ -321,7 +342,38 @@ CST Tree:
     │           │           │                                                                               └── unaryExpression
     │           │           │                                                                                   └── postfixExpression
     │           │           │                                                                                       └── primaryExpression
-    │           │           │                                                                                           └── literalInt
+    │           │           │                                                                                           └── literalFloat
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       └── logicalOrExpression
+    │           │           │           └── logicalAndExpression
+    │           │           │               └── equalityExpression
+    │           │           │                   └── comparisonExpression
+    │           │           │                       └── additionExpression
+    │           │           │                           └── multiplicationExpression
+    │           │           │                               └── unaryExpression
+    │           │           │                                   └── postfixExpression
+    │           │           │                                       ├── primaryExpression
+    │           │           │                                       │   └── _printFloat
+    │           │           │                                       └── functionCallArgs
+    │           │           │                                           └── 
+    │           │           │                                               └── argList
+    │           │           │                                                   └── assignmentExpression
+    │           │           │                                                       └── logicalOrExpression
+    │           │           │                                                           └── logicalAndExpression
+    │           │           │                                                               └── equalityExpression
+    │           │           │                                                                   └── comparisonExpression
+    │           │           │                                                                       └── additionExpression
+    │           │           │                                                                           └── multiplicationExpression
+    │           │           │                                                                               └── unaryExpression
+    │           │           │                                                                                   └── postfixExpression
+    │           │           │                                                                                       └── primaryExpression
+    │           │           │                                                                                           └── constant
+    │           │           │                                                                                               └── 3.14159
     │           │           └── ;
     │           ├── blockItem
     │           │   └── statement

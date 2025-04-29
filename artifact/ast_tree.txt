@@ -1,71 +1,80 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 2 declarations
+└── Program (Line 1, Col 0) with 3 declarations
     ├── VarDeclaration: x of type int
     │   ├── Initializer:
     │   │   └── IntegerLiteral: 10
+    ├── VarDeclaration: y of type float
+    │   ├── Initializer:
+    │   │   └── FloatLiteral: 5.500000
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 11 items
-                ├── VarDeclaration: addInt of type int
+            └── Block with 12 items
+                ├── VarDeclaration: addFloat of type float
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '+'
                 │   │       ├── Left:
-                │   │       │   ├── IntegerLiteral: 1
+                │   │       │   ├── FloatLiteral: 3.140000
                 │   │       └── Right:
-                │   │           └── IntegerLiteral: 2050
+                │   │           └── FloatLiteral: 2.500000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: _printInt
+                │       │   ├── Identifier: _printFloat
                 │       └── Arguments:
-                │           └── Identifier: addInt
-                ├── VarDeclaration: subInt of type int
+                │           └── Identifier: addFloat
+                ├── VarDeclaration: subFloat of type float
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '-'
                 │   │       ├── Left:
-                │   │       │   ├── IntegerLiteral: 5
+                │   │       │   ├── FloatLiteral: 10.500000
                 │   │       └── Right:
-                │   │           └── IntegerLiteral: 2
+                │   │           └── FloatLiteral: 4.200000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: _printInt
+                │       │   ├── Identifier: _printFloat
                 │       └── Arguments:
-                │           └── Identifier: subInt
-                ├── VarDeclaration: mulInt of type int
+                │           └── Identifier: subFloat
+                ├── VarDeclaration: mulFloat of type float
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '*'
                 │   │       ├── Left:
-                │   │       │   ├── IntegerLiteral: 3
+                │   │       │   ├── FloatLiteral: 2.000000
                 │   │       └── Right:
-                │   │           └── IntegerLiteral: 4
+                │   │           └── FloatLiteral: 3.500000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: _printInt
+                │       │   ├── Identifier: _printFloat
                 │       └── Arguments:
-                │           └── Identifier: mulInt
-                ├── VarDeclaration: divInt of type int
+                │           └── Identifier: mulFloat
+                ├── VarDeclaration: divFloat of type float
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '/'
                 │   │       ├── Left:
-                │   │       │   ├── IntegerLiteral: 8
+                │   │       │   ├── FloatLiteral: 15.000000
                 │   │       └── Right:
-                │   │           └── IntegerLiteral: 2
+                │   │           └── FloatLiteral: 3.000000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: _printInt
+                │       │   ├── Identifier: _printFloat
                 │       └── Arguments:
-                │           └── Identifier: divInt
-                ├── VarDeclaration: literalInt of type int
+                │           └── Identifier: divFloat
+                ├── VarDeclaration: literalFloat of type float
                 │   ├── Initializer:
-                │   │   └── IntegerLiteral: 4
+                │   │   └── FloatLiteral: 6.280000
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: _printInt
+                │       │   ├── Identifier: _printFloat
                 │       └── Arguments:
-                │           └── Identifier: literalInt
+                │           └── Identifier: literalFloat
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── FloatLiteral: 3.141590
                 └── ReturnStatement
                     └── IntegerLiteral: 0

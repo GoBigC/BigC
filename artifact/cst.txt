@@ -23,6 +23,28 @@
 			;))
 	(
 		declaration (
+			type float
+		)
+		y
+		(
+			declarationRemainder (
+				variableInitializer = (
+					expression (
+						assignmentExpression (
+							logicalOrExpression (
+								logicalAndExpression (
+									equalityExpression (
+										comparisonExpression (
+											additionExpression (
+												multiplicationExpression (
+													unaryExpression (
+														postfixExpression (
+															primaryExpression (
+																constant 5.5
+															)))))))))))))
+			;))
+	(
+		declaration (
 			type int
 		)
 		main
@@ -34,9 +56,9 @@
 				block { (
 					blockItem (
 						declaration (
-							type int
+							type float
 						)
-						addInt
+						addFloat
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -51,7 +73,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 1
+																				constant 3.14
 																			)))))
 															(
 																additionExpressionRest (
@@ -62,7 +84,7 @@
 																		unaryExpression (
 																			postfixExpression (
 																				primaryExpression (
-																					constant 2050
+																					constant 2.5
 																				))))))))))))))
 							;)))
 				(
@@ -79,7 +101,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression _printInt
+																		primaryExpression _printFloat
 																	)
 																	(
 																		functionCallArgs (
@@ -94,16 +116,16 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression addInt
+																														primaryExpression addFloat
 																													)))))))))))
 																			))))))))))))
 							;)))
 				(
 					blockItem (
 						declaration (
-							type int
+							type float
 						)
-						subInt
+						subFloat
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -118,7 +140,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 5
+																				constant 10.5
 																			)))))
 															(
 																additionExpressionRest (
@@ -129,7 +151,7 @@
 																		unaryExpression (
 																			postfixExpression (
 																				primaryExpression (
-																					constant 2
+																					constant 4.2
 																				))))))))))))))
 							;)))
 				(
@@ -146,7 +168,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression _printInt
+																		primaryExpression _printFloat
 																	)
 																	(
 																		functionCallArgs (
@@ -161,16 +183,16 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression subInt
+																														primaryExpression subFloat
 																													)))))))))))
 																			))))))))))))
 							;)))
 				(
 					blockItem (
 						declaration (
-							type int
+							type float
 						)
-						mulInt
+						mulFloat
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -185,7 +207,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 3
+																				constant 2.0
 																			))))
 																(
 																	multiplicationExpressionRest (
@@ -195,7 +217,7 @@
 																		unaryExpression (
 																			postfixExpression (
 																				primaryExpression (
-																					constant 4
+																					constant 3.5
 																				))))))))))))))
 							;)))
 				(
@@ -212,7 +234,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression _printInt
+																		primaryExpression _printFloat
 																	)
 																	(
 																		functionCallArgs (
@@ -227,16 +249,16 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression mulInt
+																														primaryExpression mulFloat
 																													)))))))))))
 																			))))))))))))
 							;)))
 				(
 					blockItem (
 						declaration (
-							type int
+							type float
 						)
-						divInt
+						divFloat
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -251,7 +273,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 8
+																				constant 15.0
 																			))))
 																(
 																	multiplicationExpressionRest (
@@ -261,7 +283,7 @@
 																		unaryExpression (
 																			postfixExpression (
 																				primaryExpression (
-																					constant 2
+																					constant 3.0
 																				))))))))))))))
 							;)))
 				(
@@ -278,7 +300,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression _printInt
+																		primaryExpression _printFloat
 																	)
 																	(
 																		functionCallArgs (
@@ -293,16 +315,16 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression divInt
+																														primaryExpression divFloat
 																													)))))))))))
 																			))))))))))))
 							;)))
 				(
 					blockItem (
 						declaration (
-							type int
+							type float
 						)
-						literalInt
+						literalFloat
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -317,7 +339,7 @@
 																	unaryExpression (
 																		postfixExpression (
 																			primaryExpression (
-																				constant 4
+																				constant 6.28
 																			)))))))))))))
 							;)))
 				(
@@ -334,7 +356,7 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression _printInt
+																		primaryExpression _printFloat
 																	)
 																	(
 																		functionCallArgs (
@@ -349,8 +371,42 @@
 																											multiplicationExpression (
 																												unaryExpression (
 																													postfixExpression (
-																														primaryExpression literalInt
+																														primaryExpression literalFloat
 																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression _printFloat
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression (
+																															constant 3.14159
+																														))))))))))))
 																			))))))))))))
 							;)))
 				(
