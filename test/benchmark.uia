@@ -2,6 +2,15 @@ int x = 10;
 float y = 5.5;
 
 int main() {
+    // ================ARRAY====================
+    int a[10]; 
+
+    a[0] = 1; 
+    a[1] = 1; 
+    a[2] = 1.2; // should error
+
+    int b[x]; 
+
     // ================INT====================
     // int addInt = 1 + 2050;
     // _printInt(addInt);

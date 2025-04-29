@@ -7,6 +7,7 @@ subFloat: .double 0.000000
 addFloat: .double 0.000000
 double_2: .double 2.500000
 double_1: .double 3.140000
+a: .space 80
 y: .double 5.500000
 x: .dword 10
 .text
@@ -81,7 +82,6 @@ main:
     fld ft2, 0(t2)
     fmv.d fa0, ft2
     jal _printFloat
-
 	la t2, double_1
 	fld ft2, 0(t2)
 	la t3, double_2
@@ -93,7 +93,6 @@ main:
     fld ft4, 0(t4)
     fmv.d fa0, ft4
     jal _printFloat
-
 	la t4, double_1
 	fld ft4, 0(t4)
 	la t5, double_2
@@ -105,7 +104,6 @@ main:
     fld ft6, 0(t6)
     fmv.d fa0, ft6
     jal _printFloat
-
 	la t6, double_1
 	fld ft6, 0(t6)
 	la a2, double_2
@@ -117,12 +115,10 @@ main:
     fld ft8, 0(a3)
     fmv.d fa0, ft8
     jal _printFloat
-
     la a3, literalFloat
     fld ft8, 0(a3)
     fmv.d fa0, ft8
     jal _printFloat
-	
 	la a3, float_imm_0
 	fld ft8, 0(a3)
     fmv.d fa0, ft8

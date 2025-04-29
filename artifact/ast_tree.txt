@@ -8,7 +8,39 @@ AST Tree:
     │   │   └── FloatLiteral: 5.500000
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 12 items
+            └── Block with 17 items
+                ├── VarDeclaration: a of type array of int with size 10
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 0
+                │       └── Right:
+                │           └── IntegerLiteral: 1
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 1
+                │       └── Right:
+                │           └── IntegerLiteral: 1
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 2
+                │       └── Right:
+                │           └── FloatLiteral: 1.200000
+                ├── VarDeclaration: b of type array of int with size [expression]
                 ├── VarDeclaration: addFloat of type float
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '+'

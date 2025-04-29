@@ -56,6 +56,196 @@
 				block { (
 					blockItem (
 						declaration (
+							type int
+						)
+						a
+						(
+							arrayNotation [ (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression (
+																			constant 10
+																		))))))))))))
+							])
+						(
+							declarationRemainder ;
+						)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression a
+																	)
+																	(
+																		arrayAccess [ (
+																			expression (
+																				assignmentExpression (
+																					logicalOrExpression (
+																						logicalAndExpression (
+																							equalityExpression (
+																								comparisonExpression (
+																									additionExpression (
+																										multiplicationExpression (
+																											unaryExpression (
+																												postfixExpression (
+																													primaryExpression (
+																														constant 0
+																													))))))))))))
+																		])))))))))
+									(
+										assignmentRest = (
+											assignmentExpression (
+												logicalOrExpression (
+													logicalAndExpression (
+														equalityExpression (
+															comparisonExpression (
+																additionExpression (
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 1
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression a
+																	)
+																	(
+																		arrayAccess [ (
+																			expression (
+																				assignmentExpression (
+																					logicalOrExpression (
+																						logicalAndExpression (
+																							equalityExpression (
+																								comparisonExpression (
+																									additionExpression (
+																										multiplicationExpression (
+																											unaryExpression (
+																												postfixExpression (
+																													primaryExpression (
+																														constant 1
+																													))))))))))))
+																		])))))))))
+									(
+										assignmentRest = (
+											assignmentExpression (
+												logicalOrExpression (
+													logicalAndExpression (
+														equalityExpression (
+															comparisonExpression (
+																additionExpression (
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 1
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression a
+																	)
+																	(
+																		arrayAccess [ (
+																			expression (
+																				assignmentExpression (
+																					logicalOrExpression (
+																						logicalAndExpression (
+																							equalityExpression (
+																								comparisonExpression (
+																									additionExpression (
+																										multiplicationExpression (
+																											unaryExpression (
+																												postfixExpression (
+																													primaryExpression (
+																														constant 2
+																													))))))))))))
+																		])))))))))
+									(
+										assignmentRest = (
+											assignmentExpression (
+												logicalOrExpression (
+													logicalAndExpression (
+														equalityExpression (
+															comparisonExpression (
+																additionExpression (
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 1.2
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type int
+						)
+						b
+						(
+							arrayNotation [ (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression x
+																	)))))))))))
+							])
+						(
+							declarationRemainder ;
+						)))
+				(
+					blockItem (
+						declaration (
 							type float
 						)
 						addFloat

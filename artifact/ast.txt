@@ -9,80 +9,119 @@ Program (Line 1, Col 0) with 3 declarations
  Declaration 3:
  FunctionDeclaration (Line 4, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 4, Col 11) with 12 items
+   Block (Line 4, Col 11) with 17 items
      Item 1:
-     VarDeclaration (Line 36, Col 4): addFloat of type float with initializer:
-       BinaryExpression (Line 36, Col 26): Operator '+'
-         Left:
-         FloatLiteral (Line 36, Col 21): 3.140000
-         Right:
-         FloatLiteral (Line 36, Col 28): 2.500000
+     VarDeclaration (Line 6, Col 4): a of type array of int with size IntegerLiteral (Line 6, Col 10): 10
+
      Item 2:
-     ExpressionStatement (Line 37, Col 4):
-       FunctionCallExpression (Line 37, Col 15) with 1 arguments:
-         Function:
-         Identifier (Line 37, Col 4): _printFloat
-         Argument 1:
-           Identifier (Line 37, Col 16): addFloat
+     ExpressionStatement (Line 8, Col 4):
+       BinaryExpression (Line 8, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 8, Col 5):
+           Array:
+           Identifier (Line 8, Col 4): a
+           Index:
+           IntegerLiteral (Line 8, Col 6): 0
+         Right:
+         IntegerLiteral (Line 8, Col 11): 1
      Item 3:
-     VarDeclaration (Line 39, Col 4): subFloat of type float with initializer:
-       BinaryExpression (Line 39, Col 26): Operator '-'
+     ExpressionStatement (Line 9, Col 4):
+       BinaryExpression (Line 9, Col 9): Operator '='
          Left:
-         FloatLiteral (Line 39, Col 21): 10.500000
+         ArrayAccessExpression (Line 9, Col 5):
+           Array:
+           Identifier (Line 9, Col 4): a
+           Index:
+           IntegerLiteral (Line 9, Col 6): 1
          Right:
-         FloatLiteral (Line 39, Col 28): 4.200000
+         IntegerLiteral (Line 9, Col 11): 1
      Item 4:
-     ExpressionStatement (Line 40, Col 4):
-       FunctionCallExpression (Line 40, Col 15) with 1 arguments:
-         Function:
-         Identifier (Line 40, Col 4): _printFloat
-         Argument 1:
-           Identifier (Line 40, Col 16): subFloat
+     ExpressionStatement (Line 10, Col 4):
+       BinaryExpression (Line 10, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 10, Col 5):
+           Array:
+           Identifier (Line 10, Col 4): a
+           Index:
+           IntegerLiteral (Line 10, Col 6): 2
+         Right:
+         FloatLiteral (Line 10, Col 11): 1.200000
      Item 5:
-     VarDeclaration (Line 42, Col 4): mulFloat of type float with initializer:
-       BinaryExpression (Line 42, Col 25): Operator '*'
-         Left:
-         FloatLiteral (Line 42, Col 21): 2.000000
-         Right:
-         FloatLiteral (Line 42, Col 27): 3.500000
+     VarDeclaration (Line 12, Col 4): b of type array of int with size Identifier (Line 12, Col 10): x
+
      Item 6:
-     ExpressionStatement (Line 43, Col 4):
-       FunctionCallExpression (Line 43, Col 15) with 1 arguments:
-         Function:
-         Identifier (Line 43, Col 4): _printFloat
-         Argument 1:
-           Identifier (Line 43, Col 16): mulFloat
-     Item 7:
-     VarDeclaration (Line 45, Col 4): divFloat of type float with initializer:
-       BinaryExpression (Line 45, Col 26): Operator '/'
+     VarDeclaration (Line 45, Col 4): addFloat of type float with initializer:
+       BinaryExpression (Line 45, Col 26): Operator '+'
          Left:
-         FloatLiteral (Line 45, Col 21): 15.000000
+         FloatLiteral (Line 45, Col 21): 3.140000
          Right:
-         FloatLiteral (Line 45, Col 28): 3.000000
-     Item 8:
+         FloatLiteral (Line 45, Col 28): 2.500000
+     Item 7:
      ExpressionStatement (Line 46, Col 4):
        FunctionCallExpression (Line 46, Col 15) with 1 arguments:
          Function:
          Identifier (Line 46, Col 4): _printFloat
          Argument 1:
-           Identifier (Line 46, Col 16): divFloat
+           Identifier (Line 46, Col 16): addFloat
+     Item 8:
+     VarDeclaration (Line 48, Col 4): subFloat of type float with initializer:
+       BinaryExpression (Line 48, Col 26): Operator '-'
+         Left:
+         FloatLiteral (Line 48, Col 21): 10.500000
+         Right:
+         FloatLiteral (Line 48, Col 28): 4.200000
      Item 9:
-     VarDeclaration (Line 48, Col 4): literalFloat of type float with initializer:
-       FloatLiteral (Line 48, Col 25): 6.280000
-     Item 10:
      ExpressionStatement (Line 49, Col 4):
        FunctionCallExpression (Line 49, Col 15) with 1 arguments:
          Function:
          Identifier (Line 49, Col 4): _printFloat
          Argument 1:
-           Identifier (Line 49, Col 16): literalFloat
+           Identifier (Line 49, Col 16): subFloat
+     Item 10:
+     VarDeclaration (Line 51, Col 4): mulFloat of type float with initializer:
+       BinaryExpression (Line 51, Col 25): Operator '*'
+         Left:
+         FloatLiteral (Line 51, Col 21): 2.000000
+         Right:
+         FloatLiteral (Line 51, Col 27): 3.500000
      Item 11:
-     ExpressionStatement (Line 63, Col 4):
-       FunctionCallExpression (Line 63, Col 15) with 1 arguments:
+     ExpressionStatement (Line 52, Col 4):
+       FunctionCallExpression (Line 52, Col 15) with 1 arguments:
          Function:
-         Identifier (Line 63, Col 4): _printFloat
+         Identifier (Line 52, Col 4): _printFloat
          Argument 1:
-           FloatLiteral (Line 63, Col 16): 3.141590
+           Identifier (Line 52, Col 16): mulFloat
      Item 12:
-     ReturnStatement (Line 99, Col 4):
-       IntegerLiteral (Line 99, Col 11): 0
+     VarDeclaration (Line 54, Col 4): divFloat of type float with initializer:
+       BinaryExpression (Line 54, Col 26): Operator '/'
+         Left:
+         FloatLiteral (Line 54, Col 21): 15.000000
+         Right:
+         FloatLiteral (Line 54, Col 28): 3.000000
+     Item 13:
+     ExpressionStatement (Line 55, Col 4):
+       FunctionCallExpression (Line 55, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 55, Col 4): _printFloat
+         Argument 1:
+           Identifier (Line 55, Col 16): divFloat
+     Item 14:
+     VarDeclaration (Line 57, Col 4): literalFloat of type float with initializer:
+       FloatLiteral (Line 57, Col 25): 6.280000
+     Item 15:
+     ExpressionStatement (Line 58, Col 4):
+       FunctionCallExpression (Line 58, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 58, Col 4): _printFloat
+         Argument 1:
+           Identifier (Line 58, Col 16): literalFloat
+     Item 16:
+     ExpressionStatement (Line 72, Col 4):
+       FunctionCallExpression (Line 72, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 72, Col 4): _printFloat
+         Argument 1:
+           FloatLiteral (Line 72, Col 16): 3.141590
+     Item 17:
+     ReturnStatement (Line 108, Col 4):
+       IntegerLiteral (Line 108, Col 11): 0
