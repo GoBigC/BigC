@@ -156,10 +156,12 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 	cg := eg.CodeGen
 	rp := cg.Registers
 
+	var resultReg string
+
 	switch e.Operator {
 	case "!":
 		operandReg, _ := eg.GenerateExpression(e.Operand)
-		resultReg := rp.GetTmpRegister()
+		resultReg = rp.GetTmpRegister()
 
 		cg.emit("    seqz %s, %s", resultReg, operandReg)
 
@@ -175,19 +177,19 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 		if primitiveType, ok := operandType.(*ast.PrimitiveType); ok {
 			switch primitiveType.Name {
 			case "int":
+				resultReg = rp.GetTmpRegister()
 				cg.emit("    neg %s, %s", resultReg, operandReg)
 			case "float":
+				resultReg = rp.GetFloatTmpRegister()
 				cg.emit("    fneg.d %s, %s", resultReg, operandReg)
 			default:
 				panic(fmt.Sprintf("Unsupported type for unary minus: %s", primitiveType.Name))
 			}
-
-			// cg.emit("    neg %s, %s", resultReg, operandReg)
-
-			if operandReg != "a0" && operandReg != "fa0" {
-				rp.ReleaseRegister(operandReg)
-			}
 		}
+		if operandReg != "a0" && operandReg != "fa0" {
+			rp.ReleaseRegister(operandReg)
+		}
+		return resultReg, operandType
 	default:
 		panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
 	}
