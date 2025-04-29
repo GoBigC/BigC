@@ -537,16 +537,6 @@ func (eg *ExpressionGenerator) GenerateLogicalAnd(expr *ast.BinaryExpression) (s
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func typeString(t ast.Type) string {
-	if p, ok := t.(*ast.PrimitiveType); ok {
-		return p.Name
-	}
-	if a, ok := t.(*ast.ArrayType); ok {
-		return fmt.Sprintf("%s[%d]", typeString(a.ElementType), getArraySize(a))
-	}
-	return "unknown"
-}
-
 func determineResultType(left, right ast.Type) ast.Type {
 	if left == nil || right == nil {
 		return nil
