@@ -16,7 +16,7 @@ func NewExpressionGenerator(cg *CodeGenerator) *ExpressionGenerator {
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
+func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) (string, ast.Type) {
 	switch e := expr.(type) {
 	case *ast.BinaryExpression:
 		return eg.GenerateBinaryExpression(e)
@@ -24,29 +24,29 @@ func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) string {
 		return eg.GenerateUnaryExpression(e)
 	case *ast.ArrayAccessExpression:
 		return eg.GenerateArrayAccessExpression(e)
-	case *ast.FunctionCallExpression: 
+	case *ast.FunctionCallExpression:
 		return eg.GenerateFunctionCallExpression(e)
 	case *ast.IntegerLiteral:
 		return eg.GenerateIntegerLiteral(e)
 	case *ast.FloatLiteral:
 		return eg.GenerateFloatLiteral(e)
-	case *ast.BoolLiteral: 
+	case *ast.BoolLiteral:
 		return eg.GenerateBoolLiteral(e)
-	case *ast.CharLiteral: 
+	case *ast.CharLiteral:
 		return eg.GenerateCharLiteral(e)
-	case *ast.Identifier: 
+	case *ast.Identifier:
 		return eg.GenerateIdentifier(e)
 	default:
 		panic(fmt.Sprintf("unknown expression type %T", expr))
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
+func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
 	addressRegister := rp.GetTmpRegister()
-    cg.emit("    la %s, %s", addressRegister, expr.Name)
+	cg.emit("    la %s, %s", addressRegister, expr.Name)
 
 	isFloatVar := false
 	symbol, found := cg.SymTable.Lookup(expr.Name)
@@ -54,42 +54,42 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) string {
 		symbol, found = cg.SymTable.Lookup("main." + expr.Name)
 	}
 
-    if found {
-        if primitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
-            isFloatVar = primitiveType.Name == "float"
-        }
-    }
+	if found {
+		if primitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
+			isFloatVar = primitiveType.Name == "float"
+		}
+	}
 
 	if isFloatVar {
-        valueRegister := rp.GetFloatTmpRegister()
-        cg.emit("    fld %s, 0(%s)", valueRegister, addressRegister)
-        rp.ReleaseRegister(addressRegister)
-        return valueRegister
-    } else {
-        valueRegister := rp.GetTmpRegister()
-        cg.emit("    ld %s, 0(%s)", valueRegister, addressRegister)
-        rp.ReleaseRegister(addressRegister)
-        return valueRegister
-    }
+		valueRegister := rp.GetFloatTmpRegister()
+		cg.emit("    fld %s, 0(%s)", valueRegister, addressRegister)
+		rp.ReleaseRegister(addressRegister)
+		return valueRegister, symbol.Type
+	} else {
+		valueRegister := rp.GetTmpRegister()
+		cg.emit("    ld %s, 0(%s)", valueRegister, addressRegister)
+		rp.ReleaseRegister(addressRegister)
+		return valueRegister, symbol.Type
+	}
 }
 
-func (eg *ExpressionGenerator) GenerateBoolLiteral(expr *ast.BoolLiteral) string {
-	return "unimplemented"
+func (eg *ExpressionGenerator) GenerateBoolLiteral(expr *ast.BoolLiteral) (string, ast.Type) {
+	return "unimplemented", &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateCharLiteral(expr *ast.CharLiteral) string {
-	return "unimplemented"
+func (eg *ExpressionGenerator) GenerateCharLiteral(expr *ast.CharLiteral) (string, ast.Type) {
+	return "unimplemented", &ast.PrimitiveType{Name: "char"}
 }
 
-func (eg *ExpressionGenerator) GenerateIntegerLiteral(expr *ast.IntegerLiteral) string {
-	// TODO: this is not handling the case where the integer is 
+func (eg *ExpressionGenerator) GenerateIntegerLiteral(expr *ast.IntegerLiteral) (string, ast.Type) {
+	// TODO: this is not handling the case where the integer is
 	// greater than the  immediate range -- need to cover that too
-    reg := eg.CodeGen.Registers.GetTmpRegister()
-    eg.CodeGen.emit("    li %s, %d", reg, expr.Value)
-    return reg
+	reg := eg.CodeGen.Registers.GetTmpRegister()
+	eg.CodeGen.emit("    li %s, %d", reg, expr.Value)
+	return reg, &ast.PrimitiveType{Name: "int"}
 }
 
-func (eg *ExpressionGenerator) GenerateFloatLiteral(expr *ast.FloatLiteral) string {
+func (eg *ExpressionGenerator) GenerateFloatLiteral(expr *ast.FloatLiteral) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 	label := fmt.Sprintf("float_imm_%d", cg.Labels)
@@ -103,90 +103,100 @@ func (eg *ExpressionGenerator) GenerateFloatLiteral(expr *ast.FloatLiteral) stri
 	cg.emit("	fld %s, 0(%s)", valueRegister, addressRegister)
 
 	rp.ReleaseRegister(addressRegister)
-	return valueRegister
+	return valueRegister, &ast.PrimitiveType{Name: "float"}
 }
 
-func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.FunctionCallExpression) string {
-    var funcName string
-    cg := eg.CodeGen
-    rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.FunctionCallExpression) (string, ast.Type) {
+	var funcName string
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    if id, ok := expr.Function.(*ast.Identifier); ok {
-        funcName = id.Name
-    } else {
-        panic("Function expression not supported")
-    }
-    
-    if len(expr.Arguments) > 0 {
-        argRegister := eg.GenerateExpression(expr.Arguments[0])
-        
-        switch funcName {
-        case "_printFloat":
-            if argRegister != "fa0" && strings.HasPrefix(argRegister, "f") {
-                cg.emit("    fmv.d fa0, %s", argRegister)
-            }
-        case "_printInt", "_printChar", "_printBool":
-            if argRegister != "a0" {
-                cg.emit("    mv a0, %s", argRegister)
-            }
-        case "_printString":
-            if argRegister != "a0" {
-                cg.emit("    mv a0, %s", argRegister)
-            }
-        }
-        
-        if argRegister != "a0" && argRegister != "fa0" {
-            rp.ReleaseRegister(argRegister)
-        }
-    }
-    
-    cg.emit("    jal %s", funcName)
-    
-    if funcName == "_printFloat" {
-        return "fa0"
-    }
-    return "a0"
+	if id, ok := expr.Function.(*ast.Identifier); ok {
+		funcName = id.Name
+	} else {
+		panic("Function expression not supported")
+	}
+
+	if len(expr.Arguments) > 0 {
+		argRegister, argType := eg.GenerateExpression(expr.Arguments[0])
+
+		switch funcName {
+		case "_printFloat":
+			if argRegister != "fa0" && strings.HasPrefix(argRegister, "f") {
+				cg.emit("    fmv.d fa0, %s", argRegister)
+			}
+		case "_printInt", "_printChar", "_printBool":
+			if argRegister != "a0" {
+				cg.emit("    mv a0, %s", argRegister)
+			}
+		case "_printString":
+			if argRegister != "a0" {
+				cg.emit("    mv a0, %s", argRegister)
+			}
+		}
+
+		if argRegister != "a0" && argRegister != "fa0" {
+			rp.ReleaseRegister(argRegister)
+		}
+	}
+
+	cg.emit("    jal %s", funcName)
+
+	if funcName == "_printFloat" {
+		return "fa0"
+	}
+	return "a0"
 }
 
-func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) string {
+func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) (string, ast.Type) {
 	panic("unimplemented")
 }
 
-func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) string {
+func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (string, ast.Type) {
 	cg := eg.CodeGen
-    rp := cg.Registers
-    
-    switch e.Operator {
-    case "!":
-        operandReg := eg.GenerateExpression(e.Operand)
-        resultReg := rp.GetTmpRegister()
-        
-        cg.emit("    seqz %s, %s", resultReg, operandReg)
-        
-        if operandReg != "a0" && operandReg != "fa0" {
-            rp.ReleaseRegister(operandReg)
-        }
-        
-        return resultReg
-        
-    case "-":
-        operandReg := eg.GenerateExpression(e.Operand)
-        resultReg := rp.GetTmpRegister()
-        
-        cg.emit("    neg %s, %s", resultReg, operandReg)
-        
-        if operandReg != "a0" && operandReg != "fa0" {
-            rp.ReleaseRegister(operandReg)
-        }
-        
-        return resultReg
-        
-    default:
-        panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
-    }
+	rp := cg.Registers
+
+	switch e.Operator {
+	case "!":
+		operandReg, _ := eg.GenerateExpression(e.Operand)
+		resultReg := rp.GetTmpRegister()
+
+		cg.emit("    seqz %s, %s", resultReg, operandReg)
+
+		if operandReg != "a0" && operandReg != "fa0" {
+			rp.ReleaseRegister(operandReg)
+		}
+
+		return resultReg, &ast.PrimitiveType{Name: "bool"}
+
+	case "-":
+		operandReg, operandType := eg.GenerateExpression(e.Operand)
+		resultReg := rp.GetTmpRegister()
+
+		if primitiveType, ok := operandType.(*ast.PrimitiveType); ok {
+			switch primitiveType.Name {
+			case "int":
+				cg.emit("    neg %s, %s", resultReg, operandReg)
+			case "float":
+				cg.emit("    fneg.d %s, %s", resultReg, operandReg)
+			default:
+				panic(fmt.Sprintf("Unsupported type for unary minus: %s", primitiveType.Name))
+
+			}
+
+			// cg.emit("    neg %s, %s", resultReg, operandReg)
+
+			if operandReg != "a0" && operandReg != "fa0" {
+				rp.ReleaseRegister(operandReg)
+			}
+		}
+	default:
+		panic(fmt.Sprintf("Unsupported unary operator: %s", e.Operator))
+	}
+	return "a0", nil
 }
 
-func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) string {
+func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) (string, ast.Type) {
 	switch expr.Operator {
 	case "+":
 		return eg.GenerateAddition(expr)
@@ -213,11 +223,11 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 	// case "||":
 	// 	return eg.GenerateLogicalOr(expr)
 	default:
-		return "No case should reach here, as everything should be handled in semantic analysis"
+		return "No case should reach here, as everything should be handled in semantic analysis", nil
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) string {
+func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (string, ast.Type) {
 	switch expr.Left.(type) {
 	case *ast.IntegerLiteral:
 		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
@@ -250,13 +260,14 @@ func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) stri
 		}
 
 	}
-	return "No case should reach here, as everything should be handled in semantic analysis"
+	return "No case should reach here, as everything should be handled in semantic analysis", nil
 
 }
 
-func (eg *ExpressionGenerator) GenerateIntDivision(leftInt int64, rightInt int64) string {
+func (eg *ExpressionGenerator) GenerateIntDivision(leftInt int64, rightInt int64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
+	cg.emitComment(fmt.Sprintf("Division of %d and %d", leftInt, rightInt))
 
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
@@ -270,9 +281,10 @@ func (eg *ExpressionGenerator) GenerateIntDivision(leftInt int64, rightInt int64
 	return "a0"
 }
 
-func (eg *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFloat float64) string {
+func (eg *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFloat float64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
+	cg.emitComment(fmt.Sprintf("Division of %f and %f", leftFloat, rightFloat))
 
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
@@ -294,7 +306,7 @@ func (eg *ExpressionGenerator) GenerateFloatDivision(leftFloat float64, rightFlo
 	return "fa0"
 }
 
-func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression) string {
+func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression) (string, ast.Type) {
 	switch expr.Left.(type) {
 	case *ast.IntegerLiteral:
 		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
@@ -330,10 +342,11 @@ func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression
 	return "No case should reach here, as everything should be handled in semantic analysis"
 }
 
-func (eg *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt int64) string {
+func (eg *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt int64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
-	
+	cg.emitComment(fmt.Sprintf("Multiplication of %d and %d", leftInt, rightInt))
+
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
 
@@ -346,10 +359,11 @@ func (eg *ExpressionGenerator) GenerateIntMultiplication(leftInt int64, rightInt
 	return "a0"
 }
 
-func (eg *ExpressionGenerator) GenerateFloatMultiplication(leftFloat float64, rightFloat float64) string {
+func (eg *ExpressionGenerator) GenerateFloatMultiplication(leftFloat float64, rightFloat float64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
-	
+	cg.emitComment(fmt.Sprintf("Multiplication of %f and %f", leftFloat, rightFloat))
+
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
 
@@ -370,7 +384,7 @@ func (eg *ExpressionGenerator) GenerateFloatMultiplication(leftFloat float64, ri
 	return "fa0"
 }
 
-func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) string {
+func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (string, ast.Type) {
 	switch expr.Left.(type) {
 	case *ast.IntegerLiteral:
 		var leftInt int64 = expr.Left.(*ast.IntegerLiteral).Value
@@ -406,9 +420,10 @@ func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) s
 	return "No case should reach here, as everything should be handled in semantic analysis"
 }
 
-func (eg *ExpressionGenerator) GenerateIntSubtraction(leftInt int64, rightInt int64) string {
+func (eg *ExpressionGenerator) GenerateIntSubtraction(leftInt int64, rightInt int64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
+	cg.emitComment(fmt.Sprintf("Subtraction of %d and %d", leftInt, rightInt))
 
 	leftReg := rp.GetTmpRegister()
 	rightReg := rp.GetTmpRegister()
@@ -420,9 +435,10 @@ func (eg *ExpressionGenerator) GenerateIntSubtraction(leftInt int64, rightInt in
 	return "a0"
 }
 
-func (eg *ExpressionGenerator) GenerateFloatSubtraction(leftFloat float64, rightFloat float64) string {
+func (eg *ExpressionGenerator) GenerateFloatSubtraction(leftFloat float64, rightFloat float64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
+	cg.emitComment(fmt.Sprintf("Subtraction of %f and %f", leftFloat, rightFloat))
 
 	cg.insertData("double_1", ".double", leftFloat)
 	cg.insertData("double_2", ".double", rightFloat)
@@ -445,7 +461,12 @@ func (eg *ExpressionGenerator) GenerateFloatSubtraction(leftFloat float64, right
 
 }
 
-func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) string {
+func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
 
 	/* Procedure:
 	   Load left and right operands into registers
@@ -491,7 +512,7 @@ func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) stri
 	return "No case should reach here, as everything should be handled in semantic analysis"
 }
 
-func (eg *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64) string {
+func (eg *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
@@ -533,9 +554,10 @@ func (eg *ExpressionGenerator) GenerateIntAddition(leftInt int64, rightInt int64
 	return "a0"
 }
 
-func (eg *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFloat float64) string {
+func (eg *ExpressionGenerator) GenerateFloatAddition(leftFloat float64, rightFloat float64) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
+	cg.emitComment(fmt.Sprintf("Addition of %f and %f", leftFloat, rightFloat))
 
 	// Insert float data into the data section
 	// Temporary names, will think of better names later
@@ -568,136 +590,135 @@ func isImmediateInt(value int64) bool {
 	return value >= -2048 && value <= 2047
 }
 
-
-func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) string {
+func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
 
 	resultReg := rp.GetTmpRegister()
 	cg.emit("    slt %s, %s, %s", resultReg, rightReg, leftReg)
 
 	if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
 
-    cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
+	cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
-    tempReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
+	tempReg := rp.GetTmpRegister()
 
-    cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
-    cg.emit("    xori %s, %s, 1", resultReg, tempReg)  // Invert the result
+	cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
+	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
-    rp.ReleaseRegister(tempReg)
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+	rp.ReleaseRegister(tempReg)
 
-    return resultReg
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
-    tempReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
+	tempReg := rp.GetTmpRegister()
 
-    cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
-    cg.emit("    xori %s, %s, 1", resultReg, tempReg)  // Invert the result
+	cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
+	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
 
-   	if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
-    rp.ReleaseRegister(tempReg)
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
+	rp.ReleaseRegister(tempReg)
 
-    return resultReg
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
 
-    cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
-    cg.emit("    seqz %s, %s", resultReg, resultReg)  // Set to 1 if equal to zero
+	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+	cg.emit("    seqz %s, %s", resultReg, resultReg) // Set to 1 if equal to zero
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) string {
-    cg := eg.CodeGen
-    rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
 
-    leftReg := eg.GenerateExpression(expr.Left)
-    rightReg := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left)
+	rightReg, _ := eg.GenerateExpression(expr.Right)
 
-    resultReg := rp.GetTmpRegister()
+	resultReg := rp.GetTmpRegister()
 
-    cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
-    cg.emit("    snez %s, %s", resultReg, resultReg)  // Set to 1 if not equal to zero
+	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+	cg.emit("    snez %s, %s", resultReg, resultReg) // Set to 1 if not equal to zero
 
-    if leftReg != "a0" && leftReg != "fa0" {
-        rp.ReleaseRegister(leftReg)
-    }
-    if rightReg != "a0" && rightReg != "fa0" {
-        rp.ReleaseRegister(rightReg)
-    }
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 
-    return resultReg
+	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
