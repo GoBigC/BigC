@@ -18,7 +18,7 @@
 													unaryExpression (
 														postfixExpression (
 															primaryExpression (
-																constant 10
+																constant 15
 															)))))))))))))
 			;))
 	(
@@ -238,18 +238,7 @@
 																unaryExpression (
 																	postfixExpression (
 																		primaryExpression x
-																	))))
-														(
-															additionExpressionRest (
-																addSubtractOperator +
-															)
-															(
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression (
-																				constant 0
-																			)))))))))))))
+																	)))))))))))
 							])
 						(
 							declarationRemainder ;

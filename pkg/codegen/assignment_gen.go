@@ -70,7 +70,6 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
         }
 	case *ast.ArrayType:
 		var id string = varDecl.Name 
-		fmt.Printf("------ id is %s", id)
 		symbol, found := cg.SymTable.Lookup("main." + id) // try local 
 		if !found {
 			symbol, found = cg.SymTable.Lookup(id) // try global

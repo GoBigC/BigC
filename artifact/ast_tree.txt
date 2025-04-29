@@ -2,7 +2,7 @@ AST Tree:
 └── Program (Line 1, Col 0) with 3 declarations
     ├── VarDeclaration: x of type int
     │   ├── Initializer:
-    │   │   └── IntegerLiteral: 10
+    │   │   └── IntegerLiteral: 15
     ├── VarDeclaration: y of type float
     │   ├── Initializer:
     │   │   └── FloatLiteral: 5.500000

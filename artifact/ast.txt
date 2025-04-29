@@ -2,7 +2,7 @@
 Program (Line 1, Col 0) with 3 declarations
  Declaration 1:
  VarDeclaration (Line 1, Col 0): x of type int with initializer:
-   IntegerLiteral (Line 1, Col 8): 10
+   IntegerLiteral (Line 1, Col 8): 15
  Declaration 2:
  VarDeclaration (Line 2, Col 0): y of type float with initializer:
    FloatLiteral (Line 2, Col 10): 5.500000
@@ -47,11 +47,7 @@ Program (Line 1, Col 0) with 3 declarations
          Right:
          FloatLiteral (Line 10, Col 11): 1.200000
      Item 5:
-     VarDeclaration (Line 12, Col 4): b of type array of int with size BinaryExpression (Line 12, Col 11): Operator '+'
-  Left:
-  Identifier (Line 12, Col 10): x
-  Right:
-  IntegerLiteral (Line 12, Col 12): 0
+     VarDeclaration (Line 12, Col 4): b of type array of int with size Identifier (Line 12, Col 10): x
 
      Item 6:
      ExpressionStatement (Line 72, Col 4):

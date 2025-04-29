@@ -19,7 +19,7 @@ CST Tree:
     │       │                                       └── postfixExpression
     │       │                                           └── primaryExpression
     │       │                                               └── constant
-    │       │                                                   └── 10
+    │       │                                                   └── 15
     │       └── ;
     ├── declaration
     │   ├── type
@@ -225,20 +225,11 @@ CST Tree:
     │           │       │   │               └── equalityExpression
     │           │       │   │                   └── comparisonExpression
     │           │       │   │                       └── additionExpression
-    │           │       │   │                           ├── multiplicationExpression
-    │           │       │   │                           │   └── unaryExpression
-    │           │       │   │                           │       └── postfixExpression
-    │           │       │   │                           │           └── primaryExpression
-    │           │       │   │                           │               └── x
-    │           │       │   │                           └── additionExpressionRest
-    │           │       │   │                               ├── addSubtractOperator
-    │           │       │   │                               │   └── +
-    │           │       │   │                               └── multiplicationExpression
-    │           │       │   │                                   └── unaryExpression
-    │           │       │   │                                       └── postfixExpression
-    │           │       │   │                                           └── primaryExpression
-    │           │       │   │                                               └── constant
-    │           │       │   │                                                   └── 0
+    │           │       │   │                           └── multiplicationExpression
+    │           │       │   │                               └── unaryExpression
+    │           │       │   │                                   └── postfixExpression
+    │           │       │   │                                       └── primaryExpression
+    │           │       │   │                                           └── x
     │           │       │   └── ]
     │           │       └── declarationRemainder
     │           │           └── ;
