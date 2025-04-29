@@ -231,7 +231,7 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 	case "||":
 		return eg.GenerateLogicalOr(expr)
 	default:
-		return "GenerateBinaryExpression - No case should reach here, as everything should be handled in semantic analysis", nil
+		panic("GenerateBinaryExpression - No case should reach here, as everything should be handled in semantic analysis")
 	}
 }
 
@@ -264,7 +264,7 @@ func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (str
 		rp.ReleaseRegister(rightReg)
 	}
 
-	return "GenerateDivision - No case should reach here, as everything should be handled in semantic analysis", nil
+	panic("GenerateDivision - No case should reach here, as everything should be handled in semantic analysis")
 
 }
 
@@ -296,7 +296,7 @@ func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression
 	if rightReg != "a0" && rightReg != "fa0" {
 		rp.ReleaseRegister(rightReg)
 	}
-	return "GenerateMultiplication - No case should reach here, as everything should be handled in semantic analysis", nil
+	panic("GenerateMultiplication - No case should reach here, as everything should be handled in semantic analysis")
 }
 
 func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (string, ast.Type) {
@@ -327,7 +327,7 @@ func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (
 	if rightReg != "a0" && rightReg != "fa0" {
 		rp.ReleaseRegister(rightReg)
 	}
-	return "GenerateSubtraction - No case should reach here, as everything should be handled in semantic analysis", nil
+	panic("GenerateSubtraction - No case should reach here, as everything should be handled in semantic analysis")
 }
 
 func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (string, ast.Type) {
@@ -359,7 +359,7 @@ func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (str
 		rp.ReleaseRegister(rightReg)
 	}
 
-	return "GenerateAddition - No case should reach here, as everything should be handled in semantic analysis", nil
+	panic("GenerateAddition - No case should reach here, as everything should be handled in semantic analysis")
 }
 
 func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) (string, ast.Type) {
