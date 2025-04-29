@@ -24,7 +24,8 @@ AST Tree:
                 │           └── Identifier: addFloat
                 ├── VarDeclaration: subFloat of type float
                 │   ├── Initializer:
-                │   │   └── BinaryExpression: '-'
+                │   │   └── BinaryExpression: '*'
+                │   │   └── BinaryExpression: '*'
                 │   │       ├── Left:
                 │   │       │   ├── FloatLiteral: 10.500000
                 │   │       └── Right:
@@ -37,7 +38,8 @@ AST Tree:
                 │           └── Identifier: subFloat
                 ├── VarDeclaration: mulFloat of type float
                 │   ├── Initializer:
-                │   │   └── BinaryExpression: '*'
+                │   │   └── BinaryExpression: '-'
+                │   │   └── BinaryExpression: '-'
                 │   │       ├── Left:
                 │   │       │   ├── FloatLiteral: 2.000000
                 │   │       └── Right:

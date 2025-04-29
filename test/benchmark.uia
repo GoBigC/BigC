@@ -18,19 +18,22 @@ int main() {
     // int literalInt = 4; 
     // _printInt(literalInt); 
 
-    // int mixedAddInt = x + 12; 
-    // _printInt(mixedAddInt); 
+    // int minusInt = -5;
+    // _printInt(minusInt);
 
-    // int mixMulInt = x * 1; 
-    // _printInt(mixMulInt);
+    int mixedAddInt = x + 12; 
+    _printInt(mixedAddInt); 
 
-    // int mixSubInt = x -1; 
-    // _printInt(mixSubInt); 
+    int mixMulInt = x * 1; 
+    _printInt(mixMulInt);
 
-    // int mixDivInt = x/2; 
-    // _printInt(mixDivInt); 
+    int mixSubInt = x -1; 
+    _printInt(mixSubInt); 
 
-    // _printInt(13); 
+    int mixDivInt = x/2; 
+    _printInt(mixDivInt); 
+
+    _printInt(13); 
 
     // =================FLOAT===================
     float addFloat = 3.14 + 2.5;
@@ -45,6 +48,13 @@ int main() {
     float divFloat = 15.0 / 3.0;
     _printFloat(divFloat);
 
+    // float literalFloat = 6.28;
+    // _printFloat(literalFloat);
+
+    // float minusFloat = -3.14;
+    // _printFloat(minusFloat);
+
+    // float y = 5.5;
     float literalFloat = 6.28;
     _printFloat(literalFloat);
 
