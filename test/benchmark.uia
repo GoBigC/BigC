@@ -4,12 +4,15 @@ float y = 5.5;
 int main() {
     // ================ARRAY====================
     int a[10]; 
+    int z = 4;
 
     a[0] = 1; 
     a[1] = 1; 
     a[2] = 1.2; // should error
 
-    int b[x]; 
+    int b[x+1]; 
+    int c[x+z+1];
+    int d[0];
 
     // ================INT====================
     // int addInt = 1 + 2050;

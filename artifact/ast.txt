@@ -9,21 +9,13 @@ Program (Line 1, Col 0) with 3 declarations
  Declaration 3:
  FunctionDeclaration (Line 4, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 4, Col 11) with 7 items
+   Block (Line 4, Col 11) with 10 items
      Item 1:
      VarDeclaration (Line 6, Col 4): a of type array of int with size IntegerLiteral (Line 6, Col 10): 10
 
      Item 2:
-     ExpressionStatement (Line 8, Col 4):
-       BinaryExpression (Line 8, Col 9): Operator '='
-         Left:
-         ArrayAccessExpression (Line 8, Col 5):
-           Array:
-           Identifier (Line 8, Col 4): a
-           Index:
-           IntegerLiteral (Line 8, Col 6): 0
-         Right:
-         IntegerLiteral (Line 8, Col 11): 1
+     VarDeclaration (Line 7, Col 4): z of type int with initializer:
+       IntegerLiteral (Line 7, Col 12): 4
      Item 3:
      ExpressionStatement (Line 9, Col 4):
        BinaryExpression (Line 9, Col 9): Operator '='
@@ -32,7 +24,7 @@ Program (Line 1, Col 0) with 3 declarations
            Array:
            Identifier (Line 9, Col 4): a
            Index:
-           IntegerLiteral (Line 9, Col 6): 1
+           IntegerLiteral (Line 9, Col 6): 0
          Right:
          IntegerLiteral (Line 9, Col 11): 1
      Item 4:
@@ -43,19 +35,48 @@ Program (Line 1, Col 0) with 3 declarations
            Array:
            Identifier (Line 10, Col 4): a
            Index:
-           IntegerLiteral (Line 10, Col 6): 2
+           IntegerLiteral (Line 10, Col 6): 1
          Right:
-         FloatLiteral (Line 10, Col 11): 1.200000
+         IntegerLiteral (Line 10, Col 11): 1
      Item 5:
-     VarDeclaration (Line 12, Col 4): b of type array of int with size Identifier (Line 12, Col 10): x
-
+     ExpressionStatement (Line 11, Col 4):
+       BinaryExpression (Line 11, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 11, Col 5):
+           Array:
+           Identifier (Line 11, Col 4): a
+           Index:
+           IntegerLiteral (Line 11, Col 6): 2
+         Right:
+         FloatLiteral (Line 11, Col 11): 1.200000
      Item 6:
-     ExpressionStatement (Line 72, Col 4):
-       FunctionCallExpression (Line 72, Col 15) with 1 arguments:
-         Function:
-         Identifier (Line 72, Col 4): _printFloat
-         Argument 1:
-           FloatLiteral (Line 72, Col 16): 3.141590
+     VarDeclaration (Line 13, Col 4): b of type array of int with size BinaryExpression (Line 13, Col 11): Operator '+'
+  Left:
+  Identifier (Line 13, Col 10): x
+  Right:
+  IntegerLiteral (Line 13, Col 12): 1
+
      Item 7:
-     ReturnStatement (Line 108, Col 4):
-       IntegerLiteral (Line 108, Col 11): 0
+     VarDeclaration (Line 14, Col 4): c of type array of int with size BinaryExpression (Line 14, Col 13): Operator '+'
+  Left:
+  BinaryExpression (Line 14, Col 11): Operator '+'
+    Left:
+    Identifier (Line 14, Col 10): x
+    Right:
+    Identifier (Line 14, Col 12): z
+  Right:
+  IntegerLiteral (Line 14, Col 14): 1
+
+     Item 8:
+     VarDeclaration (Line 15, Col 4): d of type array of int with size IntegerLiteral (Line 15, Col 10): 0
+
+     Item 9:
+     ExpressionStatement (Line 75, Col 4):
+       FunctionCallExpression (Line 75, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 75, Col 4): _printFloat
+         Argument 1:
+           FloatLiteral (Line 75, Col 16): 3.141590
+     Item 10:
+     ReturnStatement (Line 111, Col 4):
+       IntegerLiteral (Line 111, Col 11): 0

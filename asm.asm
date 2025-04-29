@@ -1,6 +1,8 @@
 .data
 float_imm_0: .double 3.141590
-b: .space 120
+c: .space 160
+b: .space 128
+z: .dword 4
 a: .space 80
 y: .double 5.500000
 x: .dword 15

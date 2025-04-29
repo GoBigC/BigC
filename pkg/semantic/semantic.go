@@ -231,7 +231,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 			}
 			if size < 1 { 
 				fmt.Printf("array size is %d", size)
-				analyzer.Error(varDeclr.Line, "array size must be a positive constant")
+				analyzer.Error(varDeclr.Line, "array size must be a positive constant integer")
 			}
 		}
 
