@@ -73,7 +73,7 @@ func (cg *CodeGenerator) Generate_printFloat() {
 	cg.emit("_printFloat:")
 	cg.generateBuiltinPrologue()
 
-	cg.emit("	li a7, %d", PRTFLT)
+	cg.emit("	li a7, %d", PRTDBL)
 	cg.emit("	ecall")
 
 	cg.generatePrintNewline()

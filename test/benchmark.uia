@@ -1,21 +1,22 @@
 int x = 10; 
+float y = 5.5;
 
 int main() {
     // ================INT====================
-    int addInt = 1 + 2050;
-    _printInt(addInt);
+    // int addInt = 1 + 2050;
+    // _printInt(addInt);
 
-    int subInt = 5 - 2;
-    _printInt(subInt);
+    // int subInt = 5 - 2;
+    // _printInt(subInt);
 
-    int mulInt = 3 * 4;
-    _printInt(mulInt);
+    // int mulInt = 3 * 4;
+    // _printInt(mulInt);
 
-    int divInt = 8 / 2;
-    _printInt(divInt);
+    // int divInt = 8 / 2;
+    // _printInt(divInt);
 
-    int literalInt = 4; 
-    _printInt(literalInt); 
+    // int literalInt = 4; 
+    // _printInt(literalInt); 
 
     // int mixedAddInt = x + 12; 
     // _printInt(mixedAddInt); 
@@ -32,22 +33,20 @@ int main() {
     // _printInt(13); 
 
     // =================FLOAT===================
-    // float addFloat = 3.14 + 2.5;
-    // _printFloat(addFloat);
+    float addFloat = 3.14 + 2.5;
+    _printFloat(addFloat);
 
-    // float subFloat = 10.5 - 4.2;
-    // _printFloat(subFloat);
+    float subFloat = 10.5 - 4.2;
+    _printFloat(subFloat);
 
-    // float mulFloat = 2.0 * 3.5;
-    // _printFloat(mulFloat);
+    float mulFloat = 2.0 * 3.5;
+    _printFloat(mulFloat);
 
-    // float divFloat = 15.0 / 3.0;
-    // _printFloat(divFloat);
+    float divFloat = 15.0 / 3.0;
+    _printFloat(divFloat);
 
-    // float literalFloat = 6.28;
-    // _printFloat(literalFloat);
-
-    // float y = 5.5;
+    float literalFloat = 6.28;
+    _printFloat(literalFloat);
 
     // float mixedAddFloat = y + 2.3;
     // _printFloat(mixedAddFloat);
@@ -61,7 +60,7 @@ int main() {
     // float mixDivFloat = y / 2.2;
     // _printFloat(mixDivFloat);
 
-    // _printFloat(3.14159);
+    _printFloat(3.14159);
 
     // =================CHAR===================
     // char literalChar = 'A';
