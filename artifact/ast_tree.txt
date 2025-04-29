@@ -1,32 +1,50 @@
 AST Tree:
-└── Program (Line 1, Col 0) with 3 declarations
-    ├── Function: printInt returns int with 1 parameters
-    │   ├── Parameters:
-    │   │   └── x of type int
-    │   └── Body:
-    │       └── Block with 2 items
-    │           ├── ExpressionStatement
-    │           │   └── FunctionCall with 1 arguments
-    │           │       ├── Function:
-    │           │       │   ├── Identifier: _printInt
-    │           │       └── Arguments:
-    │           │           └── Identifier: x
-    │           └── ReturnStatement
-    │               └── IntegerLiteral: 0
-    ├── Function: printFloat returns void with 1 parameters
-    │   ├── Parameters:
-    │   │   └── x of type float
-    │   └── Body:
-    │       └── Block with 1 items
-    │           └── ExpressionStatement
-    │               └── FunctionCall with 1 arguments
-    │                   ├── Function:
-    │                   │   ├── Identifier: _printFloat
-    │                   └── Arguments:
-    │                       └── Identifier: x
+└── Program (Line 1, Col 0) with 2 declarations
+    ├── VarDeclaration: x of type int
+    │   ├── Initializer:
+    │   │   └── IntegerLiteral: 10
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 3 items
+            └── Block with 11 items
+                ├── VarDeclaration: addInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 1
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 2050
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: addInt
+                ├── VarDeclaration: subInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '-'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 5
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 2
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: subInt
+                ├── VarDeclaration: mulInt of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '*'
+                │   │       ├── Left:
+                │   │       │   ├── IntegerLiteral: 3
+                │   │       └── Right:
+                │   │           └── IntegerLiteral: 4
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: mulInt
                 ├── VarDeclaration: divInt of type int
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '/'
@@ -37,12 +55,17 @@ AST Tree:
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:
-                │       │   ├── Identifier: printInt
+                │       │   ├── Identifier: _printInt
                 │       └── Arguments:
                 │           └── Identifier: divInt
+                ├── VarDeclaration: literalInt of type int
+                │   ├── Initializer:
+                │   │   └── IntegerLiteral: 4
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: literalInt
                 └── ReturnStatement
-                    └── BinaryExpression: '+'
-                        ├── Left:
-                        │   ├── IntegerLiteral: 0
-                        └── Right:
-                            └── IntegerLiteral: 0
+                    └── IntegerLiteral: 0

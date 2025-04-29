@@ -68,7 +68,7 @@ func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
 	case *ast.FunctionDeclaration:
 		funcName := d.Name
 		if funcName != "main" {
-			analyzer.Error(d.Line, "cannot declare function only main is allowed")
+			analyzer.Error(d.Line, "cannot declare function, only main is allowed")
 		} else {
 			if sym, ok := analyzer.SymTable.Lookup(funcName); ok {
 				analyzer.Error(d.Line, fmt.Sprintf("function %s already declared at line %d", sym.Name, sym.Scope.ValidFirstLine))

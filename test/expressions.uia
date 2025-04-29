@@ -1,18 +1,9 @@
-int printInt(int x) {
-    _printInt(x); 
-    return 0; 
-}
-
-void printFloat(float x) {
-    _printFloat(x);
-}
-
 int main() {
     // int addInt = 1 + 2050;
-    // printInt(addInt);
+    // _printInt(addInt);
 
-    // float addFloat = 4.2 + 6.9;
-    // printFloat(addFloat);
+    float addFloat = 4.2 + 6.9;
+    _printFloat(addFloat);
 
     // int subInt = 5 - 2;
     // printInt(subInt);

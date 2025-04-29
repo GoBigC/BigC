@@ -167,7 +167,6 @@ type CodeGenerator struct {
 	AsmOut   *strings.Builder   // assembly string output
 
 	// program state tracking
-	CurrentFunction string
 	Labels          int
 	Registers       *RegisterPool
 	StackSize       int
@@ -177,7 +176,6 @@ type CodeGenerator struct {
 	ExpressionGen *ExpressionGenerator
 	AssignmentGen *AssignmentGenerator
 	BranchingGen  *BranchingGenerator
-	FunctionGen   *FunctionGenerator
 	LoopingGen    *LoopingGenerator
 }
 
@@ -194,7 +192,6 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg.ExpressionGen = NewExpressionGenerator(cg)
 	cg.AssignmentGen = NewAssignmentGenerator(cg)
 	cg.BranchingGen  = NewBranchingGenerator(cg)
-	cg.FunctionGen 	 = NewFunctionGenerator(cg)
 	cg.LoopingGen 	 = NewLoopingGenerator(cg)
 
 	return cg
@@ -281,15 +278,26 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 
 func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Generate()
 	cg.emit(".data")
-	// cg.insertData()
 
 	cg.emit(".text")
 	cg.emit("j main") // first function is main
 	cg.GenerateAllBuiltinFunctions()
+	cg.emit("main:")
 
 	for _, decl := range cg.Program.Declarations {
-		cg.GenerateDeclaration(decl)
+		if funcDecl, ok := decl.(*ast.FunctionDeclaration); ok {
+			if funcDecl.Name == "main" {
+				for _, stmt := range funcDecl.Body.Items {
+					cg.GenerateStatement(stmt)
+				}
+			} 
+		} else {
+			cg.GenerateDeclaration(decl)
+		}
 	}
+
+	cg.emit("	li a0, 0")
+	cg.emit("	j _exit")
 
 	err := os.MkdirAll(filepath.Dir(outFile), 0777)
 	if err != nil {
@@ -305,12 +313,39 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 
 func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
-	case *ast.FunctionDeclaration:
-		cg.FunctionGen.GenerateFunctionDeclaration(*d)
 	case *ast.VarDeclaration:
 		cg.AssignmentGen.GenerateVarDeclaration(*d)
 	// add more cases as we generate
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
 	}
+}
+
+func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
+    switch stmt := item.(type) {
+    case *ast.ExpressionStatement:
+        cg.ExpressionGen.GenerateExpression(stmt.Expr)
+    case *ast.ReturnStatement:
+        if stmt.Value != nil {
+            reg := cg.ExpressionGen.GenerateExpression(stmt.Value)
+            if reg != "a0" {
+                cg.emit("    mv a0, %s", reg)
+                if reg != "a0" && reg != "fa0" {
+                    cg.Registers.ReleaseRegister(reg)
+                }
+            }
+        }
+    case *ast.IfStatement:
+        cg.BranchingGen.GenerateIfStatement(*stmt)
+    case *ast.WhileStatement:
+        cg.LoopingGen.GenerateWhileStatement(*stmt)
+    case *ast.VarDeclaration:
+        cg.AssignmentGen.GenerateVarDeclaration(*stmt)
+    case *ast.Block:
+        for _, blockItem := range stmt.Items {
+            cg.GenerateStatement(blockItem)
+        }
+    default:
+        panic(fmt.Sprintf("unknown statement type: %T", stmt))
+    }
 }

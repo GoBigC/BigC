@@ -1,0 +1,101 @@
+int x = 10; 
+
+int main() {
+    // ================INT====================
+    int addInt = 1 + 2050;
+    _printInt(addInt);
+
+    int subInt = 5 - 2;
+    _printInt(subInt);
+
+    int mulInt = 3 * 4;
+    _printInt(mulInt);
+
+    int divInt = 8 / 2;
+    _printInt(divInt);
+
+    int literalInt = 4; 
+    _printInt(literalInt); 
+
+    // int mixedAddInt = x + 12; 
+    // _printInt(mixedAddInt); 
+
+    // int mixMulInt = x * 1; 
+    // _printInt(mixMulInt);
+
+    // int mixSubInt = x -1; 
+    // _printInt(mixSubInt); 
+
+    // int mixDivInt = x/2; 
+    // _printInt(mixDivInt); 
+
+    // _printInt(13); 
+
+    // =================FLOAT===================
+    // float addFloat = 3.14 + 2.5;
+    // _printFloat(addFloat);
+
+    // float subFloat = 10.5 - 4.2;
+    // _printFloat(subFloat);
+
+    // float mulFloat = 2.0 * 3.5;
+    // _printFloat(mulFloat);
+
+    // float divFloat = 15.0 / 3.0;
+    // _printFloat(divFloat);
+
+    // float literalFloat = 6.28;
+    // _printFloat(literalFloat);
+
+    // float y = 5.5;
+
+    // float mixedAddFloat = y + 2.3;
+    // _printFloat(mixedAddFloat);
+
+    // float mixMulFloat = y * 2.0;
+    // _printFloat(mixMulFloat);
+
+    // float mixSubFloat = y - 1.1;
+    // _printFloat(mixSubFloat);
+
+    // float mixDivFloat = y / 2.2;
+    // _printFloat(mixDivFloat);
+
+    // _printFloat(3.14159);
+
+    // =================CHAR===================
+    // char literalChar = 'A';
+    // _printChar(literalChar);
+
+    // _printChar('B');
+    
+    // =================BOOL===================
+    // bool trueValue = true;
+    // _printBool(trueValue);
+
+    // bool falseValue = false;
+    // _printBool(falseValue);
+
+    // bool andOperation = true && false;
+    // _printBool(andOperation);
+
+    // bool orOperation = true || false;
+    // _printBool(orOperation);
+
+    // bool notOperation = !trueValue;
+    // _printBool(notOperation);
+
+    // bool comparisonLT = (5 < 10);
+    // _printBool(comparisonLT);
+
+    // bool comparisonGT = (20 > 15);
+    // _printBool(comparisonGT);
+
+    // bool comparisonEQ = (7 == 7);
+    // _printBool(comparisonEQ);
+
+    // bool comparisonNEQ = (8 != 9);
+    // _printBool(comparisonNEQ);
+    
+    return 0; 
+}

@@ -1,4 +1,10 @@
 .data
+literalInt: .dword 4
+divInt: .dword 0
+mulInt: .dword 0
+subInt: .dword 0
+addInt: .dword 0
+x: .dword 10
 .text
 j main
 _exit:
@@ -59,37 +65,47 @@ _printString:
 	ld s0, 0(sp)
 	addi sp, sp, 16
 	ret
-
-# ----- begin hardcode function -----
-main: 
-    li a0, 99      # Value to print
-    li a7, 1       # Print integer
-    ecall
-    
-    li a0, 10      # Newline
-    li a7, 11      # Print character
-    ecall
-	# Function prologue
-    addi sp, sp, -16
-    sd ra, 8(sp)
-    sd s0, 0(sp)
-    addi s0, sp, 16
-    
-    # Load 42 into a0
-    li a0, 42
-    # Call _printInt
+main:
+	li t0, 2050
+	addi a0, t0, 1
+	la t1, addInt
+	sd a0, 0(t1)
+    la t1, addInt
+    ld t2, 0(t1)
+    mv a0, t2
     jal _printInt
-    
-    # Load 6.9 into fa0
-    li t0, 0x40dc0000  # IEEE 754 representation of 6.9 (approximation)
-    fmv.w.x fa0, t0
-    # Call _printFloat
-    jal _printFloat
-    
-    # Function epilogue
-    ld ra, 8(sp)
-    ld s0, 0(sp)
-    addi sp, sp, 16
-
-# ----- end hardcode function -----
-j _exit
+	li t1, 5
+	li t2, 2
+	sub a0, t1, t2
+	la t3, subInt
+	sd a0, 0(t3)
+    la t3, subInt
+    ld t4, 0(t3)
+    mv a0, t4
+    jal _printInt
+	li t3, 3
+	li t4, 4
+	mul a0, t3, t4
+	la t5, mulInt
+	sd a0, 0(t5)
+    la t5, mulInt
+    ld t6, 0(t5)
+    mv a0, t6
+    jal _printInt
+	li t5, 8
+	li t6, 2
+	div a0, t5, t6
+	la a2, divInt
+	sd a0, 0(a2)
+    la a2, divInt
+    ld a3, 0(a2)
+    mv a0, a3
+    jal _printInt
+    la a2, literalInt
+    ld a3, 0(a2)
+    mv a0, a3
+    jal _printInt
+    li a2, 0
+    mv a0, a2
+	li a0, 0
+	j _exit
