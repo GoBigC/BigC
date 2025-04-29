@@ -8,7 +8,7 @@ AST Tree:
     │   │   └── FloatLiteral: 5.500000
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 10 items
+            └── Block with 9 items
                 ├── VarDeclaration: a of type array of int with size 10
                 ├── VarDeclaration: z of type int
                 │   ├── Initializer:
@@ -44,8 +44,7 @@ AST Tree:
                 │       └── Right:
                 │           └── FloatLiteral: 1.200000
                 ├── VarDeclaration: b of type array of int with size [expression]
-                ├── VarDeclaration: c of type array of int with size [expression]
-                ├── VarDeclaration: d of type array of int with size 0
+                ├── VarDeclaration: c of type array of float with size [expression]
                 ├── ExpressionStatement
                 │   └── FunctionCall with 1 arguments
                 │       ├── Function:

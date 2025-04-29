@@ -267,7 +267,7 @@ CST Tree:
     │           ├── blockItem
     │           │   └── declaration
     │           │       ├── type
-    │           │       │   └── int
+    │           │       │   └── float
     │           │       ├── c
     │           │       ├── arrayNotation
     │           │       │   ├── [
@@ -300,29 +300,6 @@ CST Tree:
     │           │       │   │                                           └── primaryExpression
     │           │       │   │                                               └── constant
     │           │       │   │                                                   └── 1
-    │           │       │   └── ]
-    │           │       └── declarationRemainder
-    │           │           └── ;
-    │           ├── blockItem
-    │           │   └── declaration
-    │           │       ├── type
-    │           │       │   └── int
-    │           │       ├── d
-    │           │       ├── arrayNotation
-    │           │       │   ├── [
-    │           │       │   ├── expression
-    │           │       │   │   └── assignmentExpression
-    │           │       │   │       └── logicalOrExpression
-    │           │       │   │           └── logicalAndExpression
-    │           │       │   │               └── equalityExpression
-    │           │       │   │                   └── comparisonExpression
-    │           │       │   │                       └── additionExpression
-    │           │       │   │                           └── multiplicationExpression
-    │           │       │   │                               └── unaryExpression
-    │           │       │   │                                   └── postfixExpression
-    │           │       │   │                                       └── primaryExpression
-    │           │       │   │                                           └── constant
-    │           │       │   │                                               └── 0
     │           │       │   └── ]
     │           │       └── declarationRemainder
     │           │           └── ;

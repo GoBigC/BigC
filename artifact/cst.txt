@@ -280,7 +280,7 @@
 				(
 					blockItem (
 						declaration (
-							type int
+							type float
 						)
 						c
 						(
@@ -318,31 +318,6 @@
 																			primaryExpression (
 																				constant 1
 																			)))))))))))))
-							])
-						(
-							declarationRemainder ;
-						)))
-				(
-					blockItem (
-						declaration (
-							type int
-						)
-						d
-						(
-							arrayNotation [ (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression (
-																			constant 0
-																		))))))))))))
 							])
 						(
 							declarationRemainder ;

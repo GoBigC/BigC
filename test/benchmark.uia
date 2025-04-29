@@ -8,12 +8,30 @@ int main() {
 
     a[0] = 1; 
     a[1] = 1; 
-    a[2] = 1.2; // should error
+    // a[2] = 1.2; // should error
+    // int d[0]; // should error
+
+    int n = a[0] + a[1]; 
+    _printInt(n);
 
     int b[x+1]; 
-    int c[x+z+1];
-    int d[0];
+    float c[x+z+1];
+    c[0] = 3.1412; 
+    c[1] = 6.699; 
+    _printFloat(c[1]); 
+    _printFloat(c[0]);
 
+    float prices[3];
+    prices[0] = 10.5;
+    prices[1] = 20.75;
+    prices[2] = 15.25;
+    
+    _printFloat(prices[0]);  // expect: 10.5
+    _printFloat(prices[1]);  // expext: 20.75
+    
+    float total = prices[0] + prices[1] + prices[2];
+    _printFloat(total);  // expect: 46.5
+ 
     // ================INT====================
     // int addInt = 1 + 2050;
     // _printInt(addInt);

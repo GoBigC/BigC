@@ -9,7 +9,7 @@ Program (Line 1, Col 0) with 3 declarations
  Declaration 3:
  FunctionDeclaration (Line 4, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 4, Col 11) with 10 items
+   Block (Line 4, Col 11) with 9 items
      Item 1:
      VarDeclaration (Line 6, Col 4): a of type array of int with size IntegerLiteral (Line 6, Col 10): 10
 
@@ -57,26 +57,23 @@ Program (Line 1, Col 0) with 3 declarations
   IntegerLiteral (Line 13, Col 12): 1
 
      Item 7:
-     VarDeclaration (Line 14, Col 4): c of type array of int with size BinaryExpression (Line 14, Col 13): Operator '+'
+     VarDeclaration (Line 14, Col 4): c of type array of float with size BinaryExpression (Line 14, Col 15): Operator '+'
   Left:
-  BinaryExpression (Line 14, Col 11): Operator '+'
+  BinaryExpression (Line 14, Col 13): Operator '+'
     Left:
-    Identifier (Line 14, Col 10): x
+    Identifier (Line 14, Col 12): x
     Right:
-    Identifier (Line 14, Col 12): z
+    Identifier (Line 14, Col 14): z
   Right:
-  IntegerLiteral (Line 14, Col 14): 1
+  IntegerLiteral (Line 14, Col 16): 1
 
      Item 8:
-     VarDeclaration (Line 15, Col 4): d of type array of int with size IntegerLiteral (Line 15, Col 10): 0
-
-     Item 9:
      ExpressionStatement (Line 75, Col 4):
        FunctionCallExpression (Line 75, Col 15) with 1 arguments:
          Function:
          Identifier (Line 75, Col 4): _printFloat
          Argument 1:
            FloatLiteral (Line 75, Col 16): 3.141590
-     Item 10:
+     Item 9:
      ReturnStatement (Line 111, Col 4):
        IntegerLiteral (Line 111, Col 11): 0
