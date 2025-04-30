@@ -1,0 +1,10 @@
+int a = 1;
+int b = 2;
+
+void main() {
+    if (a > b) {
+        _printInt(a);
+    } else {
+        _printInt(b);
+    }
+}
