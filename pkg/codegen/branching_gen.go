@@ -24,12 +24,8 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 
 	if stmt.Condition != nil {
 
-		condExpr, ok := stmt.Condition.(*ast.BinaryExpression)
-		if !ok {
-			panic("Condition is not accepted!!!")
-		}
 		var condReg string
-		condReg, _ = cg.ExpressionGen.GenerateExpression(condExpr)
+		condReg, _ = cg.ExpressionGen.GenerateExpression(stmt.Condition)
 
 		elseLabel := bg.NewLabel()
 		endLabel := bg.NewLabel()
