@@ -3,70 +3,70 @@ float y = 5.5;
 
 int main() {
     // ================INT====================
-    // int addInt = 1 + 2050;
-    // _printInt(addInt); // Expected: 2051
+    int addInt = 1 + 2050;
+    _printInt(addInt); // Expected: 2051
 
-    // int subInt = 5 - 2;
-    // _printInt(subInt); // Expected: 3
+    int subInt = 5 - 2;
+    _printInt(subInt); // Expected: 3
 
-    // int mulInt = 3 * 4;
-    // _printInt(mulInt); // Expected: 12
+    int mulInt = 3 * 4;
+    _printInt(mulInt); // Expected: 12
 
-    // int divInt = 8 / 2;
-    // _printInt(divInt); // Expected: 4
+    int divInt = 8 / 2;
+    _printInt(divInt); // Expected: 4
 
-    // int literalInt = 4; 
-    // _printInt(literalInt); // Expected: 4
+    int literalInt = 4; 
+    _printInt(literalInt); // Expected: 4
 
-    // int minusInt = -5;
-    // _printInt(minusInt); // Expected: -5
+    int minusInt = -5;
+    _printInt(minusInt); // Expected: -5
 
-    // int mixedAddInt = x + 12; 
-    // _printInt(mixedAddInt); // Expected: 22
+    int mixedAddInt = x + 12; 
+    _printInt(mixedAddInt); // Expected: 22
 
-    // int mixMulInt = x * 1; 
-    // _printInt(mixMulInt); // Expected: 10
+    int mixMulInt = x * 1; 
+    _printInt(mixMulInt); // Expected: 10
 
-    // int mixSubInt = x -1; 
-    // _printInt(mixSubInt);  // Expected: 9
+    int mixSubInt = x -1; 
+    _printInt(mixSubInt);  // Expected: 9
 
-    // int mixDivInt = x/2; 
-    // _printInt(mixDivInt);  // Expected: 5
+    int mixDivInt = x/2; 
+    _printInt(mixDivInt);  // Expected: 5
 
-    // _printInt(13); // Expected: 13
+    _printInt(13); // Expected: 13
 
     // =================FLOAT===================
-    // float addFloat = 3.14 + 2.5;
-    // _printFloat(addFloat); // Expected: 5.64
+    float addFloat = 3.14 + 2.5;
+    _printFloat(addFloat); // Expected: 5.64
 
-    // float subFloat = 10.5 - 4.2;
-    // _printFloat(subFloat); // Expected: 6.3
+    float subFloat = 10.5 - 4.2;
+    _printFloat(subFloat); // Expected: 6.3
 
-    // float mulFloat = 2.0 * 3.5;
-    // _printFloat(mulFloat); // Expected: 7.0
+    float mulFloat = 2.0 * 3.5;
+    _printFloat(mulFloat); // Expected: 7.0
 
-    // float divFloat = 15.0 / 3.0;
-    // _printFloat(divFloat); // Expected: 5.0
+    float divFloat = 15.0 / 3.0;
+    _printFloat(divFloat); // Expected: 5.0
 
-    // float literalFloat = 6.28;
-    // _printFloat(literalFloat); // Expected: 6.28
+    float literalFloat = 6.28;
+    _printFloat(literalFloat); // Expected: 6.28
 
-    // float minusFloat = -3.14;
-    // _printFloat(minusFloat); // Expected: -3.14
+    float minusFloat = -3.14;
+    _printFloat(minusFloat); // Expected: -3.14
 
-    // float mixedAddFloat = y + 2.3;
-    // _printFloat(mixedAddFloat); // Expected: 7.8
+    float mixedAddFloat = y + 2.3;
+    _printFloat(mixedAddFloat); // Expected: 7.8
 
-    // float mixMulFloat = y * 2.0;
-    // _printFloat(mixMulFloat); // Expected: 11.0
+    float mixMulFloat = y * 2.0;
+    _printFloat(mixMulFloat); // Expected: 11.0
 
-    // float mixSubFloat = y - 1.1;
-    // _printFloat(mixSubFloat); // Expected: 4.4
+    float mixSubFloat = y - 1.1;
+    _printFloat(mixSubFloat); // Expected: 4.4
 
-    // float mixDivFloat = y / 2.2;
-    // _printFloat(mixDivFloat); // Expected: 2.5
+    float mixDivFloat = y / 2.2;
+    _printFloat(mixDivFloat); // Expected: 2.5
 
-    // _printFloat(3.14159); // Expected: 3.14159
+    _printFloat(3.14159); // Expected: 3.14159
 
     // =================CHAR===================
     char literalChar = 'A';
@@ -75,32 +75,32 @@ int main() {
     _printChar('B');
     
     // =================BOOL===================
-    // bool trueValue = true;
-    // _printBool(trueValue); // Expected: 1
+    bool trueValue = true;
+    _printBool(trueValue); // Expected: 1
 
-    // bool falseValue = false;
-    // _printBool(falseValue); // Expected: 0
+    bool falseValue = false;
+    _printBool(falseValue); // Expected: 0
 
-    // bool andOperation = true && false;
-    // _printBool(andOperation); // Expected: 0
+    bool andOperation = true && false;
+    _printBool(andOperation); // Expected: 0
 
-    // bool orOperation = true || false;
-    // _printBool(orOperation); // Expected: 1
+    bool orOperation = true || false;
+    _printBool(orOperation); // Expected: 1
 
-    // bool notOperation = !trueValue;
-    // _printBool(notOperation); // Expected: 0
+    bool notOperation = !trueValue;
+    _printBool(notOperation); // Expected: 0
 
-    // bool comparisonLT = (5 < 10);
-    // _printBool(comparisonLT); // Expected: 1
+    bool comparisonLT = (5 < 10);
+    _printBool(comparisonLT); // Expected: 1
 
-    // bool comparisonGT = (20 > 15);
-    // _printBool(comparisonGT); // Expected: 1
+    bool comparisonGT = (20 > 15);
+    _printBool(comparisonGT); // Expected: 1
 
-    // bool comparisonEQ = (7 == 7);
-    // _printBool(comparisonEQ); // Expected: 1
+    bool comparisonEQ = (7 == 7);
+    _printBool(comparisonEQ); // Expected: 1
 
-    // bool comparisonNEQ = (8 != 9);
-    // _printBool(comparisonNEQ); // Expected: 1
+    bool comparisonNEQ = (8 != 9);
+    _printBool(comparisonNEQ); // Expected: 1
     
     return 0; 
 }
