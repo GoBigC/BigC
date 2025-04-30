@@ -66,16 +66,13 @@ func (bg *BranchingGenerator) GenerateBlock(block *ast.Block) {
 
 func (bg *BranchingGenerator) GenerateBlockItem(item ast.BlockItem) {
 	switch stmt := item.(type) {
-	// case *ast.ExpressionStatement:
-	// 	bg.GenerateExpressionStatement(stmt)
 	case *ast.VarDeclaration:
 		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(*stmt)
 	case *ast.ExpressionStatement:
 		bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr)
 	// Add more statement types as needed
 	default:
-
-		bg.CodeGen.emitComment("Unsupported statement type: %T", item)
+		panic(fmt.Sprintf("unknown statement type: %T", stmt))
 	}
 }
 

@@ -167,10 +167,10 @@ type CodeGenerator struct {
 	AsmOut   *strings.Builder   // assembly string output
 
 	// program state tracking
-	Labels          int
-	Registers       *RegisterPool
-	StackSize       int
-	VarStackOffset  map[string]int
+	Labels         int
+	Registers      *RegisterPool
+	StackSize      int
+	VarStackOffset map[string]int
 
 	//
 	ExpressionGen *ExpressionGenerator
@@ -191,8 +191,8 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
 	cg.AssignmentGen = NewAssignmentGenerator(cg)
-	cg.BranchingGen  = NewBranchingGenerator(cg)
-	cg.LoopingGen 	 = NewLoopingGenerator(cg)
+	cg.BranchingGen = NewBranchingGenerator(cg)
+	cg.LoopingGen = NewLoopingGenerator(cg)
 
 	return cg
 }
@@ -290,7 +290,7 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 				for _, stmt := range funcDecl.Body.Items {
 					cg.GenerateStatement(stmt)
 				}
-			} 
+			}
 		} else {
 			cg.GenerateDeclaration(decl)
 		}
@@ -322,30 +322,30 @@ func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 }
 
 func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
-    switch stmt := item.(type) {
-    case *ast.ExpressionStatement:
-        cg.ExpressionGen.GenerateExpression(stmt.Expr)
-    case *ast.ReturnStatement:
-        if stmt.Value != nil {
-            reg, _ := cg.ExpressionGen.GenerateExpression(stmt.Value)
-            if reg != "a0" {
-                cg.emit("    mv a0, %s", reg)
-                if reg != "a0" && reg != "fa0" {
-                    cg.Registers.ReleaseRegister(reg)
-                }
-            }
-        }
-    case *ast.IfStatement:
-        cg.BranchingGen.GenerateIfStatement(*stmt)
-    case *ast.WhileStatement:
-        cg.LoopingGen.GenerateWhileStatement(*stmt)
-    case *ast.VarDeclaration:
-        cg.AssignmentGen.GenerateVarDeclaration(*stmt)
-    case *ast.Block:
-        for _, blockItem := range stmt.Items {
-            cg.GenerateStatement(blockItem)
-        }
-    default:
-        panic(fmt.Sprintf("unknown statement type: %T", stmt))
-    }
+	switch stmt := item.(type) {
+	case *ast.ExpressionStatement:
+		cg.ExpressionGen.GenerateExpression(stmt.Expr)
+	case *ast.ReturnStatement:
+		if stmt.Value != nil {
+			reg, _ := cg.ExpressionGen.GenerateExpression(stmt.Value)
+			if reg != "a0" {
+				cg.emit("    mv a0, %s", reg)
+				if reg != "a0" && reg != "fa0" {
+					cg.Registers.ReleaseRegister(reg)
+				}
+			}
+		}
+	case *ast.IfStatement:
+		cg.BranchingGen.GenerateIfStatement(stmt)
+	case *ast.WhileStatement:
+		cg.LoopingGen.GenerateWhileStatement(*stmt)
+	case *ast.VarDeclaration:
+		cg.AssignmentGen.GenerateVarDeclaration(*stmt)
+	case *ast.Block:
+		for _, blockItem := range stmt.Items {
+			cg.GenerateStatement(blockItem)
+		}
+	default:
+		panic(fmt.Sprintf("unknown statement type: %T", stmt))
+	}
 }
