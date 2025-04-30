@@ -20,41 +20,52 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 	cg := bg.CodeGen
 
 	cg.emitComment("=== Begin if statement ===")
+	cg.emitComment("Condition:")
 
-	var condReg = cg.Registers.GetTmpRegister()
-
-	elseLabel := bg.NewLabel()
-	endLabel := bg.NewLabel()
-
-	cg.emit("beq %s, zero, %s", condReg, elseLabel)
-
-	// Generate code for the then block
-	cg.emitComment("Then block:")
-	if stmt.ThenBlock != nil {
-		bg.GenerateBlock(stmt.ThenBlock)
-	}
-
-	// Handle else block
-	if stmt.ElseBlock != nil {
-		cg.emit("j %s", endLabel) // Jump to the end after the else block
-		cg.emit("%s:", elseLabel) // Else label
-		if elseBlock, ok := stmt.ElseBlock.(*ast.Block); ok {
-			bg.GenerateBlock(elseBlock)
-		} else {
-			cg.emitComment("Else block is null")
-		}
-	} else {
-		cg.emit("%s:", elseLabel)
-	}
-
-	cg.emit("%s:", endLabel)
-
-	// Release the register used for condition
 	if stmt.Condition != nil {
-		cg.Registers.ReleaseRegister(condReg)
-	}
 
-	cg.emitComment("End if statement")
+		condExpr, ok := stmt.Condition.(*ast.BinaryExpression)
+		if !ok {
+			panic("Condition is not accepted!!!")
+		}
+		var condReg string
+		condReg, _ = cg.ExpressionGen.GenerateExpression(condExpr)
+
+		elseLabel := bg.NewLabel()
+		endLabel := bg.NewLabel()
+
+		cg.emit("beqz %s, %s", condReg, elseLabel)
+
+		// Generate code for the then block
+		cg.emitComment("Then block:")
+		if stmt.ThenBlock != nil {
+			bg.GenerateBlock(stmt.ThenBlock)
+		}
+
+		// Handle else block
+		if stmt.ElseBlock != nil {
+			cg.emit("j %s", endLabel) // Jump to the end after the else block
+			cg.emit("%s:", elseLabel) // Else label
+			if elseBlock, ok := stmt.ElseBlock.(*ast.Block); ok {
+				bg.GenerateBlock(elseBlock)
+			} else {
+				cg.emitComment("Else block is null")
+			}
+		} else {
+			cg.emit("%s:", elseLabel)
+		}
+
+		cg.emit("%s:", endLabel)
+
+		// Release the register used for condition
+		if stmt.Condition != nil {
+			cg.Registers.ReleaseRegister(condReg)
+		}
+
+		cg.emitComment("End if statement")
+	} else {
+		panic("Condition is null!!!")
+	}
 }
 
 func (bg *BranchingGenerator) GenerateBlock(block *ast.Block) {

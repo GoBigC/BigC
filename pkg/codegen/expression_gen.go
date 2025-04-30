@@ -794,6 +794,9 @@ func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (s
 func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
+func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
 
 	leftReg, _ := eg.GenerateExpression(expr.Left)
 	rightReg, _ := eg.GenerateExpression(expr.Right)
