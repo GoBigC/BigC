@@ -252,19 +252,15 @@ func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (str
 	case "int":
 		resultReg = rp.GetTmpRegister()
 		cg.emit("	div %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "int"}
 	case "float":
 		resultReg = rp.GetFloatTmpRegister()
 		cg.emit("	fdiv.d %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
 
 	panic("GenerateDivision - No case should reach here, as everything should be handled in semantic analysis")
 
@@ -285,19 +281,15 @@ func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression
 	case "int":
 		resultReg = rp.GetTmpRegister()
 		cg.emit("	mul %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "int"}
 	case "float":
 		resultReg = rp.GetFloatTmpRegister()
 		cg.emit("	fmul.d %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
 	panic("GenerateMultiplication - No case should reach here, as everything should be handled in semantic analysis")
 }
 
@@ -316,19 +308,16 @@ func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (
 	case "int":
 		resultReg = rp.GetTmpRegister()
 		cg.emit("	sub %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "int"}
 	case "float":
 		resultReg = rp.GetFloatTmpRegister()
 		cg.emit("	fsub.d %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+
 	panic("GenerateSubtraction - No case should reach here, as everything should be handled in semantic analysis")
 }
 
@@ -347,19 +336,15 @@ func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (str
 	case "int":
 		resultReg = rp.GetTmpRegister()
 		cg.emit("	add %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "int"}
 	case "float":
 		resultReg = rp.GetFloatTmpRegister()
 		cg.emit("	fadd.d %s, %s, %s", resultReg, leftReg, rightReg)
+		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
 
 	panic("GenerateAddition - No case should reach here, as everything should be handled in semantic analysis")
 }
@@ -374,12 +359,7 @@ func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) (
 	resultReg := rp.GetTmpRegister()
 	cg.emit("    slt %s, %s, %s", resultReg, rightReg, leftReg)
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
@@ -395,12 +375,7 @@ func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) (str
 
 	cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
@@ -418,12 +393,7 @@ func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpres
 	cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
 	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 	rp.ReleaseRegister(tempReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
@@ -442,12 +412,7 @@ func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpressio
 	cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
 	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 	rp.ReleaseRegister(tempReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
@@ -465,12 +430,7 @@ func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) (str
 	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
 	cg.emit("    seqz %s, %s", resultReg, resultReg) // Set to 1 if equal to zero
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
@@ -487,12 +447,7 @@ func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (s
 	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
 	cg.emit("    snez %s, %s", resultReg, resultReg) // Set to 1 if not equal to zero
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
@@ -508,12 +463,7 @@ func (eg *ExpressionGenerator) GenerateLogicalOr(expr *ast.BinaryExpression) (st
 
 	cg.emit("    or %s, %s, %s", resultReg, leftReg, rightReg)
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
@@ -529,12 +479,7 @@ func (eg *ExpressionGenerator) GenerateLogicalAnd(expr *ast.BinaryExpression) (s
 
 	cg.emit("    and %s, %s, %s", resultReg, leftReg, rightReg)
 
-	if leftReg != "a0" && leftReg != "fa0" {
-		rp.ReleaseRegister(leftReg)
-	}
-	if rightReg != "a0" && rightReg != "fa0" {
-		rp.ReleaseRegister(rightReg)
-	}
+	releaseRegAfterUse(*rp, leftReg, rightReg)
 
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
@@ -555,4 +500,13 @@ func determineResultType(left, right ast.Type) ast.Type {
 		return &ast.PrimitiveType{Name: "int"}
 	}
 	return nil
+}
+
+func releaseRegAfterUse(rp RegisterPool, leftReg, rightReg string) {
+	if leftReg != "a0" && leftReg != "fa0" {
+		rp.ReleaseRegister(leftReg)
+	}
+	if rightReg != "a0" && rightReg != "fa0" {
+		rp.ReleaseRegister(rightReg)
+	}
 }
