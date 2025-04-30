@@ -87,7 +87,9 @@ func (eg *ExpressionGenerator) GenerateBoolLiteral(expr *ast.BoolLiteral) (strin
 }
 
 func (eg *ExpressionGenerator) GenerateCharLiteral(expr *ast.CharLiteral) (string, ast.Type) {
-	return "unimplemented", &ast.PrimitiveType{Name: "char"}
+	reg := eg.CodeGen.Registers.GetTmpRegister()
+	eg.CodeGen.emit("    li %s, %d", reg, expr.Value)
+	return reg, &ast.PrimitiveType{Name: "char"}
 }
 
 func (eg *ExpressionGenerator) GenerateIntegerLiteral(expr *ast.IntegerLiteral) (string, ast.Type) {
