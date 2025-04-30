@@ -14,25 +14,33 @@ AST Tree:
                 │   ├── Initializer:
                 │   │   └── IntegerLiteral: 4
                 ├── ExpressionStatement
-                │   └── BinaryExpression: '='
-                │       ├── Left:
-                │       │   ├── ArrayAccess
-                │       │   │   ├── Array:
-                │       │   │   │   ├── Identifier: a
-                │       │   │   └── Index:
-                │       │   │       └── IntegerLiteral: 0
-                │       └── Right:
-                │           └── IntegerLiteral: 1
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── Identifier: addFloat
+                ├── VarDeclaration: subFloat of type float
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '*'
+                │   │   └── BinaryExpression: '*'
+                │   │       ├── Left:
+                │   │       │   ├── FloatLiteral: 10.500000
+                │   │       └── Right:
+                │   │           └── FloatLiteral: 4.200000
                 ├── ExpressionStatement
-                │   └── BinaryExpression: '='
-                │       ├── Left:
-                │       │   ├── ArrayAccess
-                │       │   │   ├── Array:
-                │       │   │   │   ├── Identifier: a
-                │       │   │   └── Index:
-                │       │   │       └── IntegerLiteral: 1
-                │       └── Right:
-                │           └── IntegerLiteral: 1
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── Identifier: subFloat
+                ├── VarDeclaration: mulFloat of type float
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '-'
+                │   │   └── BinaryExpression: '-'
+                │   │       ├── Left:
+                │   │       │   ├── FloatLiteral: 2.000000
+                │   │       └── Right:
+                │   │           └── FloatLiteral: 3.500000
                 ├── ExpressionStatement
                 │   └── BinaryExpression: '='
                 │       ├── Left:

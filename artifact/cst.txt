@@ -58,32 +58,7 @@
 						declaration (
 							type int
 						)
-						a
-						(
-							arrayNotation [ (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression (
-																			constant 10
-																		))))))))))))
-							])
-						(
-							declarationRemainder ;
-						)))
-				(
-					blockItem (
-						declaration (
-							type int
-						)
-						z
+						mixedAddInt
 						(
 							declarationRemainder (
 								variableInitializer = (
@@ -97,9 +72,84 @@
 																multiplicationExpression (
 																	unaryExpression (
 																		postfixExpression (
-																			primaryExpression (
-																				constant 4
-																			)))))))))))))
+																			primaryExpression x
+																		))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator +
+																)
+																(
+																	multiplicationExpression (
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 12
+																				))))))))))))))
+							;)))
+				(
+					blockItem (
+						statement (
+							nonIfStatement (
+								expression (
+									assignmentExpression (
+										logicalOrExpression (
+											logicalAndExpression (
+												equalityExpression (
+													comparisonExpression (
+														additionExpression (
+															multiplicationExpression (
+																unaryExpression (
+																	postfixExpression (
+																		primaryExpression _printFloat
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression mixedAddInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type int
+						)
+						mixMulInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression x
+																		)))
+																(
+																	multiplicationExpressionRest (
+																		multDivModOperator *
+																	)
+																	(
+																		unaryExpression (
+																			postfixExpression (
+																				primaryExpression (
+																					constant 1
+																				))))))))))))))
 							;)))
 				(
 					blockItem (
@@ -118,29 +168,48 @@
 																		primaryExpression a
 																	)
 																	(
-																		arrayAccess [ (
-																			expression (
-																				assignmentExpression (
-																					logicalOrExpression (
-																						logicalAndExpression (
-																							equalityExpression (
-																								comparisonExpression (
-																									additionExpression (
-																										multiplicationExpression (
-																											unaryExpression (
-																												postfixExpression (
-																													primaryExpression (
-																														constant 0
-																													))))))))))))
-																		])))))))))
-									(
-										assignmentRest = (
-											assignmentExpression (
-												logicalOrExpression (
-													logicalAndExpression (
-														equalityExpression (
-															comparisonExpression (
-																additionExpression (
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression mixMulInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type float
+						)
+						mixSubInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression x
+																		))))
+															(
+																additionExpressionRest (
+																	addSubtractOperator -
+																)
+																(
 																	multiplicationExpression (
 																		unaryExpression (
 																			postfixExpression (
@@ -165,34 +234,52 @@
 																		primaryExpression a
 																	)
 																	(
-																		arrayAccess [ (
-																			expression (
-																				assignmentExpression (
-																					logicalOrExpression (
-																						logicalAndExpression (
-																							equalityExpression (
-																								comparisonExpression (
-																									additionExpression (
-																										multiplicationExpression (
-																											unaryExpression (
-																												postfixExpression (
-																													primaryExpression (
-																														constant 1
-																													))))))))))))
-																		])))))))))
-									(
-										assignmentRest = (
-											assignmentExpression (
-												logicalOrExpression (
-													logicalAndExpression (
-														equalityExpression (
-															comparisonExpression (
-																additionExpression (
-																	multiplicationExpression (
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression mixSubInt
+																													)))))))))))
+																			))))))))))))
+							;)))
+				(
+					blockItem (
+						declaration (
+							type float
+						)
+						mixDivInt
+						(
+							declarationRemainder (
+								variableInitializer = (
+									expression (
+										assignmentExpression (
+											logicalOrExpression (
+												logicalAndExpression (
+													equalityExpression (
+														comparisonExpression (
+															additionExpression (
+																multiplicationExpression (
+																	unaryExpression (
+																		postfixExpression (
+																			primaryExpression x
+																		)))
+																(
+																	multiplicationExpressionRest (
+																		multDivModOperator /
+																	)
+																	(
 																		unaryExpression (
 																			postfixExpression (
 																				primaryExpression (
-																					constant 1
+																					constant 3.0
 																				))))))))))))))
 							;)))
 				(
@@ -212,35 +299,21 @@
 																		primaryExpression a
 																	)
 																	(
-																		arrayAccess [ (
-																			expression (
-																				assignmentExpression (
-																					logicalOrExpression (
-																						logicalAndExpression (
-																							equalityExpression (
-																								comparisonExpression (
-																									additionExpression (
-																										multiplicationExpression (
-																											unaryExpression (
-																												postfixExpression (
-																													primaryExpression (
-																														constant 2
-																													))))))))))))
-																		])))))))))
-									(
-										assignmentRest = (
-											assignmentExpression (
-												logicalOrExpression (
-													logicalAndExpression (
-														equalityExpression (
-															comparisonExpression (
-																additionExpression (
-																	multiplicationExpression (
-																		unaryExpression (
-																			postfixExpression (
-																				primaryExpression (
-																					constant 1.2
-																				))))))))))))))
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression mixDivInt
+																													)))))))))))
+																			))))))))))))
 							;)))
 				(
 					blockItem (
@@ -260,68 +333,26 @@
 															multiplicationExpression (
 																unaryExpression (
 																	postfixExpression (
-																		primaryExpression x
-																	))))
-														(
-															additionExpressionRest (
-																addSubtractOperator +
-															)
-															(
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression (
-																				constant 1
-																			)))))))))))))
-							])
-						(
-							declarationRemainder ;
-						)))
-				(
-					blockItem (
-						declaration (
-							type float
-						)
-						c
-						(
-							arrayNotation [ (
-								expression (
-									assignmentExpression (
-										logicalOrExpression (
-											logicalAndExpression (
-												equalityExpression (
-													comparisonExpression (
-														additionExpression (
-															multiplicationExpression (
-																unaryExpression (
-																	postfixExpression (
-																		primaryExpression x
-																	))))
-														(
-															additionExpressionRest (
-																addSubtractOperator +
-															)
-															(
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression z
-																		)))))
-														(
-															additionExpressionRest (
-																addSubtractOperator +
-															)
-															(
-																multiplicationExpression (
-																	unaryExpression (
-																		postfixExpression (
-																			primaryExpression (
-																				constant 1
-																			)))))))))))))
-							])
-						(
-							declarationRemainder ;
-						)))
+																		primaryExpression _printFloat
+																	)
+																	(
+																		functionCallArgs (
+																			(
+																				argList (
+																					assignmentExpression (
+																						logicalOrExpression (
+																							logicalAndExpression (
+																								equalityExpression (
+																									comparisonExpression (
+																										additionExpression (
+																											multiplicationExpression (
+																												unaryExpression (
+																													postfixExpression (
+																														primaryExpression (
+																															constant 13
+																														))))))))))))
+																			))))))))))))
+							;)))
 				(
 					blockItem (
 						statement (
