@@ -19,32 +19,32 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
 	cg := ag.CodeGen
 
 	switch t := varDecl.Type.(type) {
-	case *ast.PrimitiveType: 
+	case *ast.PrimitiveType:
 		if varDecl.Initializer != nil {
 			if lit, ok := varDecl.Initializer.(*ast.IntegerLiteral); ok {
 				// int literal
 				cg.insertData(varDecl.Name, ".dword", lit.Value)
 			} else if lit, ok := varDecl.Initializer.(*ast.FloatLiteral); ok {
-				// float literal 
+				// float literal
 				cg.insertData(varDecl.Name, ".double", lit.Value)
 			} else if lit, ok := varDecl.Initializer.(*ast.BoolLiteral); ok {
 				// bool literal --> int
-				value := 0 
+				value := 0
 				if lit.Value {
 					value = 1
 				}
 				cg.insertData(varDecl.Name, ".dword", value)
 			} else if lit, ok := varDecl.Initializer.(*ast.CharLiteral); ok {
-				// char literal --> int ascii code 
+				// char literal --> int ascii code
 				charAsciiCode := getAscii(lit)
 				cg.insertData(varDecl.Name, ".dword", charAsciiCode)
 			} else { // expression
-				resultRegister := cg.ExpressionGen.GenerateExpression(varDecl.Initializer)
+				resultRegister, _ := cg.ExpressionGen.GenerateExpression(varDecl.Initializer)
 				addressRegister := cg.Registers.GetTmpRegister()
 
 				cg.emit("	la %s, %s", addressRegister, varDecl.Name)
-				
-				if isFloatType(varDecl.Type) { 
+
+				if isFloatType(varDecl.Type) {
 					cg.emit("	fsd %s, 0(%s)", resultRegister, addressRegister)
 				} else {
 					cg.emit("	sd %s, 0(%s)", resultRegister, addressRegister)
@@ -52,22 +52,22 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
 
 				cg.Registers.ReleaseRegister(addressRegister)
 				if resultRegister != "a0" && resultRegister != "fa0" {
-                    cg.Registers.ReleaseRegister(resultRegister)
-                }
+					cg.Registers.ReleaseRegister(resultRegister)
+				}
 
 				if isFloatType(varDecl.Type) {
-                    cg.insertData(varDecl.Name, ".double", 0.0)
-                } else {
-                    cg.insertData(varDecl.Name, ".dword", 0)
-                }
+					cg.insertData(varDecl.Name, ".double", 0.0)
+				} else {
+					cg.insertData(varDecl.Name, ".dword", 0)
+				}
 			}
 		} else {
-            if t.Name == "float" {
-                ag.CodeGen.insertData(varDecl.Name, ".double", 0.0)
-            } else {
-                ag.CodeGen.insertData(varDecl.Name, ".dword", 0)
-            }
-        }
+			if t.Name == "float" {
+				ag.CodeGen.insertData(varDecl.Name, ".double", 0.0)
+			} else {
+				ag.CodeGen.insertData(varDecl.Name, ".dword", 0)
+			}
+		}
 	case *ast.ArrayType:
 		arraySize := getArraySize(varDecl.Type)
 		if arraySize > 0 {
@@ -75,7 +75,7 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
 		} else {
 			panic(fmt.Sprintf("Invalid array size at line %d", varDecl.Line))
 		}
-	default: 
+	default:
 		panic(fmt.Sprintf("Unsupported type for variable declaration: %T", t))
 	}
 }
@@ -92,12 +92,12 @@ func isFloatType(typeExpr ast.Type) bool {
 }
 
 func getArraySize(typeExpr ast.Type) int64 {
-    if arrayType, ok := typeExpr.(*ast.ArrayType); ok {
-        if sizeExpr, ok := arrayType.Size.(*ast.IntegerLiteral); ok {
-            return sizeExpr.Value
-        }
-        // other expressions not supported yet
-        return -1
-    }
-    return 0 // not an array
+	if arrayType, ok := typeExpr.(*ast.ArrayType); ok {
+		if sizeExpr, ok := arrayType.Size.(*ast.IntegerLiteral); ok {
+			return sizeExpr.Value
+		}
+		// other expressions not supported yet
+		return -1
+	}
+	return 0 // not an array
 }
