@@ -564,7 +564,7 @@ func (analyzer *SemanticAnalyzer) evaluateArraySize(expr ast.Expression) (int64,
 				return 0, false
 			}
 			return leftVal/rightVal, true
-		default:
+		default: // TODO: this function is evaluating all kinds of constant operations not just array types --> bad, we want it to only target array size expression
             analyzer.Error(e.Line, fmt.Sprintf("operator %s not supported in constant expressions", e.Operator))
             return 0, false
 		}
