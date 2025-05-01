@@ -27,14 +27,10 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 		var condReg string
 
 		switch cond := stmt.Condition.(type) {
-		case *ast.BinaryExpression:
+		case *ast.BinaryExpression, *ast.UnaryExpression:
 			condReg, _ = cg.ExpressionGen.GenerateExpression(cond)
-
-		case *ast.UnaryExpression:
-			condReg, _ = cg.ExpressionGen.GenerateExpression(cond)
-
 		default:
-			panic("Condition is not accepted: only binary or unary expressions are allowed")
+			panic("Unsupported condition: only binary or unary expressions are allowed")
 		}
 
 		elseLabel := bg.NewLabel()
