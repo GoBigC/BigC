@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -211,23 +212,28 @@ func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
 // Highly inefficient, copies and creates a new string every time
 // We need it to work first, then we can optimize it later
 func (cg *CodeGenerator) insertData(label string, dataType string, value any) error {
-	// Get the current content of the builder
 	currentContent := cg.AsmOut.String()
-	if strings.Contains(currentContent, label+":") {
-		return nil // Label already exists, skip insertion
+	
+	// use regexp to match more accurately than .Contains() 
+	pattern := fmt.Sprintf(`(?m)^%s:[\s]`, regexp.QuoteMeta(label))
+	alreadyExists, err := regexp.MatchString(pattern, currentContent)
+	if err != nil {
+		fmt.Printf("WARNING: Error checking for existing label %s: %v\n", label, err)
+	}
+	
+	if alreadyExists {
+		fmt.Printf("DEBUG: Skipping insertion of %s, already exists\n", label)
+		return nil 
 	}
 
-	// Find the position of ".data\n"
 	dataMarker := ".data\n"
 	pos := strings.Index(currentContent, dataMarker)
 	if pos == -1 {
 		return fmt.Errorf("marker %q not found", dataMarker)
 	}
 
-	// Calculate insertion point (after ".data\n")
 	insertPos := pos + len(dataMarker)
 
-	// Format the new label (e.g., "    label_name: .float 1.0\n")
 	var newLabel string
 	switch v := value.(type) {
 	case int, int64, int32, int16, int8:
@@ -241,7 +247,6 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 			newLabel = fmt.Sprintf("%s: %s %s\n", label, dataType, v)
 		}
 	case []byte:
-		// Handle byte arrays
 		var bytes strings.Builder
 		for i, b := range v {
 			if i > 0 {
@@ -257,9 +262,11 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 		}
 		newLabel = fmt.Sprintf("%s: %s %d\n", label, dataType, intValue)
 	default:
-		// For other types, just use the default string representation
 		newLabel = fmt.Sprintf("%s: %s %v\n", label, dataType, v)
 	}
+	
+	fmt.Printf("DEBUG: Inserting %s: %s into .data section\n", label, dataType)
+	
 	// Create a new strings.Builder to hold the updated content
 	var newBuilder strings.Builder
 	// Write content before insertion point

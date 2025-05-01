@@ -2,14 +2,14 @@
 Program (Line 1, Col 0) with 3 declarations
  Declaration 1:
  VarDeclaration (Line 1, Col 0): x of type int with initializer:
-   IntegerLiteral (Line 1, Col 8): 10
+   IntegerLiteral (Line 1, Col 8): 15
  Declaration 2:
  VarDeclaration (Line 2, Col 0): y of type float with initializer:
    FloatLiteral (Line 2, Col 10): 5.500000
  Declaration 3:
  FunctionDeclaration (Line 4, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 4, Col 11) with 64 items
+   Block (Line 4, Col 11) with 98 items
      Item 1:
      VarDeclaration (Line 6, Col 4): addInt of type int with initializer:
        BinaryExpression (Line 6, Col 19): Operator '+'
@@ -423,5 +423,330 @@ Program (Line 1, Col 0) with 3 declarations
          Argument 1:
            Identifier (Line 103, Col 15): comparisonNEQ
      Item 64:
-     ReturnStatement (Line 105, Col 4):
-       IntegerLiteral (Line 105, Col 11): 0
+     VarDeclaration (Line 106, Col 4): a of type array of int with size Identifier (Line 106, Col 10): x
+
+     Item 65:
+     ExpressionStatement (Line 107, Col 4):
+       BinaryExpression (Line 107, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 107, Col 5):
+           Array:
+           Identifier (Line 107, Col 4): a
+           Index:
+           IntegerLiteral (Line 107, Col 6): 0
+         Right:
+         IntegerLiteral (Line 107, Col 11): 69
+     Item 66:
+     ExpressionStatement (Line 108, Col 4):
+       FunctionCallExpression (Line 108, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 108, Col 4): _printInt
+         Argument 1:
+           ArrayAccessExpression (Line 108, Col 15):
+             Array:
+             Identifier (Line 108, Col 14): a
+             Index:
+             IntegerLiteral (Line 108, Col 16): 0
+     Item 67:
+     VarDeclaration (Line 117, Col 4): z of type int with initializer:
+       IntegerLiteral (Line 117, Col 12): 4
+     Item 68:
+     VarDeclaration (Line 118, Col 4): k of type int with initializer:
+       BinaryExpression (Line 118, Col 13): Operator '-'
+         Left:
+         Identifier (Line 118, Col 12): x
+         Right:
+         Identifier (Line 118, Col 14): z
+     Item 69:
+     ExpressionStatement (Line 119, Col 4):
+       BinaryExpression (Line 119, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 119, Col 5):
+           Array:
+           Identifier (Line 119, Col 4): a
+           Index:
+           Identifier (Line 119, Col 6): k
+         Right:
+         IntegerLiteral (Line 119, Col 11): 420
+     Item 70:
+     VarDeclaration (Line 120, Col 4): n of type int with initializer:
+       ArrayAccessExpression (Line 120, Col 13):
+         Array:
+         Identifier (Line 120, Col 12): a
+         Index:
+         Identifier (Line 120, Col 14): k
+     Item 71:
+     ExpressionStatement (Line 121, Col 4):
+       FunctionCallExpression (Line 121, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 121, Col 4): _printInt
+         Argument 1:
+           Identifier (Line 121, Col 14): n
+     Item 72:
+     ExpressionStatement (Line 124, Col 4):
+       BinaryExpression (Line 124, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 124, Col 5):
+           Array:
+           Identifier (Line 124, Col 4): a
+           Index:
+           Identifier (Line 124, Col 6): k
+         Right:
+         IntegerLiteral (Line 124, Col 11): 425
+     Item 73:
+     ExpressionStatement (Line 125, Col 4):
+       FunctionCallExpression (Line 125, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 125, Col 4): _printInt
+         Argument 1:
+           ArrayAccessExpression (Line 125, Col 15):
+             Array:
+             Identifier (Line 125, Col 14): a
+             Index:
+             Identifier (Line 125, Col 16): k
+     Item 74:
+     ExpressionStatement (Line 126, Col 4):
+       BinaryExpression (Line 126, Col 6): Operator '='
+         Left:
+         Identifier (Line 126, Col 4): n
+         Right:
+         ArrayAccessExpression (Line 126, Col 9):
+           Array:
+           Identifier (Line 126, Col 8): a
+           Index:
+           Identifier (Line 126, Col 10): k
+     Item 75:
+     ExpressionStatement (Line 127, Col 4):
+       FunctionCallExpression (Line 127, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 127, Col 4): _printInt
+         Argument 1:
+           Identifier (Line 127, Col 14): n
+     Item 76:
+     VarDeclaration (Line 129, Col 4): n1 of type int
+     Item 77:
+     ExpressionStatement (Line 130, Col 4):
+       BinaryExpression (Line 130, Col 7): Operator '='
+         Left:
+         Identifier (Line 130, Col 4): n1
+         Right:
+         ArrayAccessExpression (Line 130, Col 10):
+           Array:
+           Identifier (Line 130, Col 9): a
+           Index:
+           Identifier (Line 130, Col 11): k
+     Item 78:
+     ExpressionStatement (Line 131, Col 4):
+       FunctionCallExpression (Line 131, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 131, Col 4): _printInt
+         Argument 1:
+           Identifier (Line 131, Col 14): n1
+     Item 79:
+     ExpressionStatement (Line 133, Col 4):
+       BinaryExpression (Line 133, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 133, Col 5):
+           Array:
+           Identifier (Line 133, Col 4): a
+           Index:
+           IntegerLiteral (Line 133, Col 6): 0
+         Right:
+         IntegerLiteral (Line 133, Col 11): 1
+     Item 80:
+     ExpressionStatement (Line 134, Col 4):
+       FunctionCallExpression (Line 134, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 134, Col 4): _printInt
+         Argument 1:
+           ArrayAccessExpression (Line 134, Col 15):
+             Array:
+             Identifier (Line 134, Col 14): a
+             Index:
+             IntegerLiteral (Line 134, Col 16): 0
+     Item 81:
+     ExpressionStatement (Line 135, Col 4):
+       BinaryExpression (Line 135, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 135, Col 5):
+           Array:
+           Identifier (Line 135, Col 4): a
+           Index:
+           IntegerLiteral (Line 135, Col 6): 1
+         Right:
+         IntegerLiteral (Line 135, Col 11): 1
+     Item 82:
+     VarDeclaration (Line 139, Col 4): ff of type int with initializer:
+       BinaryExpression (Line 139, Col 18): Operator '+'
+         Left:
+         ArrayAccessExpression (Line 139, Col 14):
+           Array:
+           Identifier (Line 139, Col 13): a
+           Index:
+           IntegerLiteral (Line 139, Col 15): 0
+         Right:
+         ArrayAccessExpression (Line 139, Col 21):
+           Array:
+           Identifier (Line 139, Col 20): a
+           Index:
+           IntegerLiteral (Line 139, Col 22): 1
+     Item 83:
+     ExpressionStatement (Line 140, Col 4):
+       FunctionCallExpression (Line 140, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 140, Col 4): _printInt
+         Argument 1:
+           Identifier (Line 140, Col 14): n
+     Item 84:
+     VarDeclaration (Line 142, Col 4): b of type array of int with size BinaryExpression (Line 142, Col 11): Operator '+'
+  Left:
+  Identifier (Line 142, Col 10): x
+  Right:
+  IntegerLiteral (Line 142, Col 12): 1
+
+     Item 85:
+     VarDeclaration (Line 143, Col 4): c of type array of float with size BinaryExpression (Line 143, Col 15): Operator '+'
+  Left:
+  BinaryExpression (Line 143, Col 13): Operator '+'
+    Left:
+    Identifier (Line 143, Col 12): x
+    Right:
+    Identifier (Line 143, Col 14): z
+  Right:
+  IntegerLiteral (Line 143, Col 16): 1
+
+     Item 86:
+     ExpressionStatement (Line 144, Col 4):
+       BinaryExpression (Line 144, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 144, Col 5):
+           Array:
+           Identifier (Line 144, Col 4): c
+           Index:
+           IntegerLiteral (Line 144, Col 6): 0
+         Right:
+         FloatLiteral (Line 144, Col 11): 3.141200
+     Item 87:
+     ExpressionStatement (Line 145, Col 4):
+       BinaryExpression (Line 145, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 145, Col 5):
+           Array:
+           Identifier (Line 145, Col 4): c
+           Index:
+           IntegerLiteral (Line 145, Col 6): 1
+         Right:
+         FloatLiteral (Line 145, Col 11): 6.699000
+     Item 88:
+     ExpressionStatement (Line 146, Col 4):
+       FunctionCallExpression (Line 146, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 146, Col 4): _printFloat
+         Argument 1:
+           ArrayAccessExpression (Line 146, Col 17):
+             Array:
+             Identifier (Line 146, Col 16): c
+             Index:
+             IntegerLiteral (Line 146, Col 18): 1
+     Item 89:
+     ExpressionStatement (Line 147, Col 4):
+       FunctionCallExpression (Line 147, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 147, Col 4): _printFloat
+         Argument 1:
+           ArrayAccessExpression (Line 147, Col 17):
+             Array:
+             Identifier (Line 147, Col 16): c
+             Index:
+             IntegerLiteral (Line 147, Col 18): 0
+     Item 90:
+     VarDeclaration (Line 149, Col 4): prices of type array of float with size IntegerLiteral (Line 149, Col 17): 3
+
+     Item 91:
+     ExpressionStatement (Line 150, Col 4):
+       BinaryExpression (Line 150, Col 14): Operator '='
+         Left:
+         ArrayAccessExpression (Line 150, Col 10):
+           Array:
+           Identifier (Line 150, Col 4): prices
+           Index:
+           IntegerLiteral (Line 150, Col 11): 0
+         Right:
+         FloatLiteral (Line 150, Col 16): 10.500000
+     Item 92:
+     ExpressionStatement (Line 151, Col 4):
+       BinaryExpression (Line 151, Col 14): Operator '='
+         Left:
+         ArrayAccessExpression (Line 151, Col 10):
+           Array:
+           Identifier (Line 151, Col 4): prices
+           Index:
+           IntegerLiteral (Line 151, Col 11): 1
+         Right:
+         FloatLiteral (Line 151, Col 16): 20.750000
+     Item 93:
+     ExpressionStatement (Line 152, Col 4):
+       BinaryExpression (Line 152, Col 14): Operator '='
+         Left:
+         ArrayAccessExpression (Line 152, Col 10):
+           Array:
+           Identifier (Line 152, Col 4): prices
+           Index:
+           IntegerLiteral (Line 152, Col 11): 2
+         Right:
+         FloatLiteral (Line 152, Col 16): 15.250000
+     Item 94:
+     ExpressionStatement (Line 154, Col 4):
+       FunctionCallExpression (Line 154, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 154, Col 4): _printFloat
+         Argument 1:
+           ArrayAccessExpression (Line 154, Col 22):
+             Array:
+             Identifier (Line 154, Col 16): prices
+             Index:
+             IntegerLiteral (Line 154, Col 23): 0
+     Item 95:
+     ExpressionStatement (Line 155, Col 4):
+       FunctionCallExpression (Line 155, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 155, Col 4): _printFloat
+         Argument 1:
+           ArrayAccessExpression (Line 155, Col 22):
+             Array:
+             Identifier (Line 155, Col 16): prices
+             Index:
+             IntegerLiteral (Line 155, Col 23): 1
+     Item 96:
+     VarDeclaration (Line 157, Col 4): total of type float with initializer:
+       BinaryExpression (Line 157, Col 40): Operator '+'
+         Left:
+         BinaryExpression (Line 157, Col 28): Operator '+'
+           Left:
+           ArrayAccessExpression (Line 157, Col 24):
+             Array:
+             Identifier (Line 157, Col 18): prices
+             Index:
+             IntegerLiteral (Line 157, Col 25): 0
+           Right:
+           ArrayAccessExpression (Line 157, Col 36):
+             Array:
+             Identifier (Line 157, Col 30): prices
+             Index:
+             IntegerLiteral (Line 157, Col 37): 1
+         Right:
+         ArrayAccessExpression (Line 157, Col 48):
+           Array:
+           Identifier (Line 157, Col 42): prices
+           Index:
+           IntegerLiteral (Line 157, Col 49): 2
+     Item 97:
+     ExpressionStatement (Line 158, Col 4):
+       FunctionCallExpression (Line 158, Col 15) with 1 arguments:
+         Function:
+         Identifier (Line 158, Col 4): _printFloat
+         Argument 1:
+           Identifier (Line 158, Col 16): total
+     Item 98:
+     ReturnStatement (Line 160, Col 4):
+       IntegerLiteral (Line 160, Col 11): 0

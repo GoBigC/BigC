@@ -91,19 +91,19 @@ func (symTable *SymbolTable) PrintTable() {
     fmt.Println()
 }
 
-// typeString converts an ast.Type to a string for printing.
-func typeString(astType ast.Type) string {
-    if p, ok := astType.(*ast.PrimitiveType); ok {
-        return p.Name
-    }
-    if a, ok := astType.(*ast.ArrayType); ok {
-        size := -1
-        if lit, ok := a.Size.(*ast.IntegerLiteral); ok {
-            size = int(lit.Value)
-        }
-        return fmt.Sprintf("%s[%d]", typeString(a.ElementType), size)
-    }
-    return "unknown"
+func typeString(t ast.Type) string {
+	if p, ok := t.(*ast.PrimitiveType); ok {
+		return p.Name
+	}
+	if a, ok := t.(*ast.ArrayType); ok {
+		// size := "?"
+		// if lit, ok := a.Size.(*ast.IntegerLiteral); ok {
+		// 	size = fmt.Sprintf("%d", lit.Value)
+		// }
+		// return fmt.Sprintf("%s[%s]", typeString(a.ElementType), size) 
+		return fmt.Sprintf("%s[]", typeString(a.ElementType)) 
+	}
+	return "unknown"
 }
 
 func (symTable *SymbolTable) RegisterBuiltinFunctions(){

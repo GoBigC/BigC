@@ -2,13 +2,13 @@ AST Tree:
 └── Program (Line 1, Col 0) with 3 declarations
     ├── VarDeclaration: x of type int
     │   ├── Initializer:
-    │   │   └── IntegerLiteral: 10
+    │   │   └── IntegerLiteral: 15
     ├── VarDeclaration: y of type float
     │   ├── Initializer:
     │   │   └── FloatLiteral: 5.500000
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 64 items
+            └── Block with 98 items
                 ├── VarDeclaration: addInt of type int
                 │   ├── Initializer:
                 │   │   └── BinaryExpression: '+'
@@ -388,5 +388,285 @@ AST Tree:
                 │       │   ├── Identifier: _printBool
                 │       └── Arguments:
                 │           └── Identifier: comparisonNEQ
+                ├── VarDeclaration: a of type array of int with size [expression]
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 0
+                │       └── Right:
+                │           └── IntegerLiteral: 69
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: a
+                │               └── Index:
+                │                   └── IntegerLiteral: 0
+                ├── VarDeclaration: z of type int
+                │   ├── Initializer:
+                │   │   └── IntegerLiteral: 4
+                ├── VarDeclaration: k of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '-'
+                │   │       ├── Left:
+                │   │       │   ├── Identifier: x
+                │   │       └── Right:
+                │   │           └── Identifier: z
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── Identifier: k
+                │       └── Right:
+                │           └── IntegerLiteral: 420
+                ├── VarDeclaration: n of type int
+                │   ├── Initializer:
+                │   │   └── ArrayAccess
+                │   │       ├── Array:
+                │   │       │   ├── Identifier: a
+                │   │       └── Index:
+                │   │           └── Identifier: k
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: n
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── Identifier: k
+                │       └── Right:
+                │           └── IntegerLiteral: 425
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: a
+                │               └── Index:
+                │                   └── Identifier: k
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── Identifier: n
+                │       └── Right:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: a
+                │               └── Index:
+                │                   └── Identifier: k
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: n
+                ├── VarDeclaration: n1 of type int
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── Identifier: n1
+                │       └── Right:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: a
+                │               └── Index:
+                │                   └── Identifier: k
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: n1
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 0
+                │       └── Right:
+                │           └── IntegerLiteral: 1
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: a
+                │               └── Index:
+                │                   └── IntegerLiteral: 0
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 1
+                │       └── Right:
+                │           └── IntegerLiteral: 1
+                ├── VarDeclaration: ff of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── ArrayAccess
+                │   │       │   │   ├── Array:
+                │   │       │   │   │   ├── Identifier: a
+                │   │       │   │   └── Index:
+                │   │       │   │       └── IntegerLiteral: 0
+                │   │       └── Right:
+                │   │           └── ArrayAccess
+                │   │               ├── Array:
+                │   │               │   ├── Identifier: a
+                │   │               └── Index:
+                │   │                   └── IntegerLiteral: 1
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: n
+                ├── VarDeclaration: b of type array of int with size [expression]
+                ├── VarDeclaration: c of type array of float with size [expression]
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: c
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 0
+                │       └── Right:
+                │           └── FloatLiteral: 3.141200
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: c
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 1
+                │       └── Right:
+                │           └── FloatLiteral: 6.699000
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: c
+                │               └── Index:
+                │                   └── IntegerLiteral: 1
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: c
+                │               └── Index:
+                │                   └── IntegerLiteral: 0
+                ├── VarDeclaration: prices of type array of float with size 3
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: prices
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 0
+                │       └── Right:
+                │           └── FloatLiteral: 10.500000
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: prices
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 1
+                │       └── Right:
+                │           └── FloatLiteral: 20.750000
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: prices
+                │       │   │   └── Index:
+                │       │   │       └── IntegerLiteral: 2
+                │       └── Right:
+                │           └── FloatLiteral: 15.250000
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: prices
+                │               └── Index:
+                │                   └── IntegerLiteral: 0
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: prices
+                │               └── Index:
+                │                   └── IntegerLiteral: 1
+                ├── VarDeclaration: total of type float
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '+'
+                │   │       ├── Left:
+                │   │       │   ├── BinaryExpression: '+'
+                │   │       │   │   ├── Left:
+                │   │       │   │   │   ├── ArrayAccess
+                │   │       │   │   │   │   ├── Array:
+                │   │       │   │   │   │   │   ├── Identifier: prices
+                │   │       │   │   │   │   └── Index:
+                │   │       │   │   │   │       └── IntegerLiteral: 0
+                │   │       │   │   └── Right:
+                │   │       │   │       └── ArrayAccess
+                │   │       │   │           ├── Array:
+                │   │       │   │           │   ├── Identifier: prices
+                │   │       │   │           └── Index:
+                │   │       │   │               └── IntegerLiteral: 1
+                │   │       └── Right:
+                │   │           └── ArrayAccess
+                │   │               ├── Array:
+                │   │               │   ├── Identifier: prices
+                │   │               └── Index:
+                │   │                   └── IntegerLiteral: 2
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printFloat
+                │       └── Arguments:
+                │           └── Identifier: total
                 └── ReturnStatement
                     └── IntegerLiteral: 0
