@@ -238,7 +238,8 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 
 	// 3. pointer arithmetic: a[i] = a + i*8
 	elemAddrRegister := rp.GetTmpRegister()
-	cg.emit("	add %s, %s, %s", elemAddrRegister, offsetValueRegister, baseAddrRegister)
+	// cg.emit("	add %s, %s, %s", elemAddrRegister, offsetValueRegister, baseAddrRegister)
+	cg.emit("	add %s, %s, %s", elemAddrRegister, baseAddrRegister, offsetValueRegister)
 
 	if baseAddrRegister != "a0" && baseAddrRegister != "fa0" {
 		rp.ReleaseRegister(baseAddrRegister)
@@ -296,10 +297,12 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 
 func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) (string, ast.Type) {
 	if expr.Operator == "=" {
+		cg := eg.CodeGen
 		if arrayAccess, ok := expr.Left.(*ast.ArrayAccessExpression); ok {
-			eg.CodeGen.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right)
+			cg.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right)
 			return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
 		}
+		return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
 	}
 	
 	switch expr.Operator {

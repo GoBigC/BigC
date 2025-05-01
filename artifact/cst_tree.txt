@@ -165,6 +165,294 @@ CST Tree:
     │           │           │                                                                                           └── ]
     │           │           └── ;
     │           ├── blockItem
+    │           │   └── declaration
+    │           │       ├── type
+    │           │       │   └── int
+    │           │       ├── z
+    │           │       └── declarationRemainder
+    │           │           ├── variableInitializer
+    │           │           │   ├── =
+    │           │           │   └── expression
+    │           │           │       └── assignmentExpression
+    │           │           │           └── logicalOrExpression
+    │           │           │               └── logicalAndExpression
+    │           │           │                   └── equalityExpression
+    │           │           │                       └── comparisonExpression
+    │           │           │                           └── additionExpression
+    │           │           │                               └── multiplicationExpression
+    │           │           │                                   └── unaryExpression
+    │           │           │                                       └── postfixExpression
+    │           │           │                                           └── primaryExpression
+    │           │           │                                               └── constant
+    │           │           │                                                   └── 4
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── declaration
+    │           │       ├── type
+    │           │       │   └── int
+    │           │       ├── k
+    │           │       └── declarationRemainder
+    │           │           ├── variableInitializer
+    │           │           │   ├── =
+    │           │           │   └── expression
+    │           │           │       └── assignmentExpression
+    │           │           │           └── logicalOrExpression
+    │           │           │               └── logicalAndExpression
+    │           │           │                   └── equalityExpression
+    │           │           │                       └── comparisonExpression
+    │           │           │                           └── additionExpression
+    │           │           │                               ├── multiplicationExpression
+    │           │           │                               │   └── unaryExpression
+    │           │           │                               │       └── postfixExpression
+    │           │           │                               │           └── primaryExpression
+    │           │           │                               │               └── x
+    │           │           │                               └── additionExpressionRest
+    │           │           │                                   ├── addSubtractOperator
+    │           │           │                                   │   └── -
+    │           │           │                                   └── multiplicationExpression
+    │           │           │                                       └── unaryExpression
+    │           │           │                                           └── postfixExpression
+    │           │           │                                               └── primaryExpression
+    │           │           │                                                   └── z
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       ├── logicalOrExpression
+    │           │           │       │   └── logicalAndExpression
+    │           │           │       │       └── equalityExpression
+    │           │           │       │           └── comparisonExpression
+    │           │           │       │               └── additionExpression
+    │           │           │       │                   └── multiplicationExpression
+    │           │           │       │                       └── unaryExpression
+    │           │           │       │                           └── postfixExpression
+    │           │           │       │                               ├── primaryExpression
+    │           │           │       │                               │   └── a
+    │           │           │       │                               └── arrayAccess
+    │           │           │       │                                   ├── [
+    │           │           │       │                                   ├── expression
+    │           │           │       │                                   │   └── assignmentExpression
+    │           │           │       │                                   │       └── logicalOrExpression
+    │           │           │       │                                   │           └── logicalAndExpression
+    │           │           │       │                                   │               └── equalityExpression
+    │           │           │       │                                   │                   └── comparisonExpression
+    │           │           │       │                                   │                       └── additionExpression
+    │           │           │       │                                   │                           └── multiplicationExpression
+    │           │           │       │                                   │                               └── unaryExpression
+    │           │           │       │                                   │                                   └── postfixExpression
+    │           │           │       │                                   │                                       └── primaryExpression
+    │           │           │       │                                   │                                           └── k
+    │           │           │       │                                   └── ]
+    │           │           │       └── assignmentRest
+    │           │           │           ├── =
+    │           │           │           └── assignmentExpression
+    │           │           │               └── logicalOrExpression
+    │           │           │                   └── logicalAndExpression
+    │           │           │                       └── equalityExpression
+    │           │           │                           └── comparisonExpression
+    │           │           │                               └── additionExpression
+    │           │           │                                   └── multiplicationExpression
+    │           │           │                                       └── unaryExpression
+    │           │           │                                           └── postfixExpression
+    │           │           │                                               └── primaryExpression
+    │           │           │                                                   └── constant
+    │           │           │                                                       └── 420
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── declaration
+    │           │       ├── type
+    │           │       │   └── int
+    │           │       ├── n
+    │           │       └── declarationRemainder
+    │           │           ├── variableInitializer
+    │           │           │   ├── =
+    │           │           │   └── expression
+    │           │           │       └── assignmentExpression
+    │           │           │           └── logicalOrExpression
+    │           │           │               └── logicalAndExpression
+    │           │           │                   └── equalityExpression
+    │           │           │                       └── comparisonExpression
+    │           │           │                           └── additionExpression
+    │           │           │                               └── multiplicationExpression
+    │           │           │                                   └── unaryExpression
+    │           │           │                                       └── postfixExpression
+    │           │           │                                           ├── primaryExpression
+    │           │           │                                           │   └── a
+    │           │           │                                           └── arrayAccess
+    │           │           │                                               ├── [
+    │           │           │                                               ├── expression
+    │           │           │                                               │   └── assignmentExpression
+    │           │           │                                               │       └── logicalOrExpression
+    │           │           │                                               │           └── logicalAndExpression
+    │           │           │                                               │               └── equalityExpression
+    │           │           │                                               │                   └── comparisonExpression
+    │           │           │                                               │                       └── additionExpression
+    │           │           │                                               │                           └── multiplicationExpression
+    │           │           │                                               │                               └── unaryExpression
+    │           │           │                                               │                                   └── postfixExpression
+    │           │           │                                               │                                       └── primaryExpression
+    │           │           │                                               │                                           └── k
+    │           │           │                                               └── ]
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       └── logicalOrExpression
+    │           │           │           └── logicalAndExpression
+    │           │           │               └── equalityExpression
+    │           │           │                   └── comparisonExpression
+    │           │           │                       └── additionExpression
+    │           │           │                           └── multiplicationExpression
+    │           │           │                               └── unaryExpression
+    │           │           │                                   └── postfixExpression
+    │           │           │                                       ├── primaryExpression
+    │           │           │                                       │   └── _printInt
+    │           │           │                                       └── functionCallArgs
+    │           │           │                                           └── 
+    │           │           │                                               └── argList
+    │           │           │                                                   └── assignmentExpression
+    │           │           │                                                       └── logicalOrExpression
+    │           │           │                                                           └── logicalAndExpression
+    │           │           │                                                               └── equalityExpression
+    │           │           │                                                                   └── comparisonExpression
+    │           │           │                                                                       └── additionExpression
+    │           │           │                                                                           └── multiplicationExpression
+    │           │           │                                                                               └── unaryExpression
+    │           │           │                                                                                   └── postfixExpression
+    │           │           │                                                                                       └── primaryExpression
+    │           │           │                                                                                           └── n
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       ├── logicalOrExpression
+    │           │           │       │   └── logicalAndExpression
+    │           │           │       │       └── equalityExpression
+    │           │           │       │           └── comparisonExpression
+    │           │           │       │               └── additionExpression
+    │           │           │       │                   └── multiplicationExpression
+    │           │           │       │                       └── unaryExpression
+    │           │           │       │                           └── postfixExpression
+    │           │           │       │                               ├── primaryExpression
+    │           │           │       │                               │   └── a
+    │           │           │       │                               └── arrayAccess
+    │           │           │       │                                   ├── [
+    │           │           │       │                                   ├── expression
+    │           │           │       │                                   │   └── assignmentExpression
+    │           │           │       │                                   │       └── logicalOrExpression
+    │           │           │       │                                   │           └── logicalAndExpression
+    │           │           │       │                                   │               └── equalityExpression
+    │           │           │       │                                   │                   └── comparisonExpression
+    │           │           │       │                                   │                       └── additionExpression
+    │           │           │       │                                   │                           └── multiplicationExpression
+    │           │           │       │                                   │                               └── unaryExpression
+    │           │           │       │                                   │                                   └── postfixExpression
+    │           │           │       │                                   │                                       └── primaryExpression
+    │           │           │       │                                   │                                           └── k
+    │           │           │       │                                   └── ]
+    │           │           │       └── assignmentRest
+    │           │           │           ├── =
+    │           │           │           └── assignmentExpression
+    │           │           │               └── logicalOrExpression
+    │           │           │                   └── logicalAndExpression
+    │           │           │                       └── equalityExpression
+    │           │           │                           └── comparisonExpression
+    │           │           │                               └── additionExpression
+    │           │           │                                   └── multiplicationExpression
+    │           │           │                                       └── unaryExpression
+    │           │           │                                           └── postfixExpression
+    │           │           │                                               └── primaryExpression
+    │           │           │                                                   └── constant
+    │           │           │                                                       └── 425
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── declaration
+    │           │       ├── type
+    │           │       │   └── int
+    │           │       ├── n1
+    │           │       └── declarationRemainder
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       ├── logicalOrExpression
+    │           │           │       │   └── logicalAndExpression
+    │           │           │       │       └── equalityExpression
+    │           │           │       │           └── comparisonExpression
+    │           │           │       │               └── additionExpression
+    │           │           │       │                   └── multiplicationExpression
+    │           │           │       │                       └── unaryExpression
+    │           │           │       │                           └── postfixExpression
+    │           │           │       │                               └── primaryExpression
+    │           │           │       │                                   └── n1
+    │           │           │       └── assignmentRest
+    │           │           │           ├── =
+    │           │           │           └── assignmentExpression
+    │           │           │               └── logicalOrExpression
+    │           │           │                   └── logicalAndExpression
+    │           │           │                       └── equalityExpression
+    │           │           │                           └── comparisonExpression
+    │           │           │                               └── additionExpression
+    │           │           │                                   └── multiplicationExpression
+    │           │           │                                       └── unaryExpression
+    │           │           │                                           └── postfixExpression
+    │           │           │                                               ├── primaryExpression
+    │           │           │                                               │   └── a
+    │           │           │                                               └── arrayAccess
+    │           │           │                                                   ├── [
+    │           │           │                                                   ├── expression
+    │           │           │                                                   │   └── assignmentExpression
+    │           │           │                                                   │       └── logicalOrExpression
+    │           │           │                                                   │           └── logicalAndExpression
+    │           │           │                                                   │               └── equalityExpression
+    │           │           │                                                   │                   └── comparisonExpression
+    │           │           │                                                   │                       └── additionExpression
+    │           │           │                                                   │                           └── multiplicationExpression
+    │           │           │                                                   │                               └── unaryExpression
+    │           │           │                                                   │                                   └── postfixExpression
+    │           │           │                                                   │                                       └── primaryExpression
+    │           │           │                                                   │                                           └── k
+    │           │           │                                                   └── ]
+    │           │           └── ;
+    │           ├── blockItem
+    │           │   └── statement
+    │           │       └── nonIfStatement
+    │           │           ├── expression
+    │           │           │   └── assignmentExpression
+    │           │           │       └── logicalOrExpression
+    │           │           │           └── logicalAndExpression
+    │           │           │               └── equalityExpression
+    │           │           │                   └── comparisonExpression
+    │           │           │                       └── additionExpression
+    │           │           │                           └── multiplicationExpression
+    │           │           │                               └── unaryExpression
+    │           │           │                                   └── postfixExpression
+    │           │           │                                       ├── primaryExpression
+    │           │           │                                       │   └── _printInt
+    │           │           │                                       └── functionCallArgs
+    │           │           │                                           └── 
+    │           │           │                                               └── argList
+    │           │           │                                                   └── assignmentExpression
+    │           │           │                                                       └── logicalOrExpression
+    │           │           │                                                           └── logicalAndExpression
+    │           │           │                                                               └── equalityExpression
+    │           │           │                                                                   └── comparisonExpression
+    │           │           │                                                                       └── additionExpression
+    │           │           │                                                                           └── multiplicationExpression
+    │           │           │                                                                               └── unaryExpression
+    │           │           │                                                                                   └── postfixExpression
+    │           │           │                                                                                       └── primaryExpression
+    │           │           │                                                                                           └── n
+    │           │           └── ;
+    │           ├── blockItem
     │           │   └── statement
     │           │       └── nonIfStatement
     │           │           └── returnStatement

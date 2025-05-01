@@ -39,6 +39,16 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
 				charAsciiCode := getAscii(lit)
 				cg.insertData(varDecl.Name, ".dword", charAsciiCode)
 			} else { // expression
+				fmt.Printf("variable %s initializer is %s\n", varDecl.Name, varDecl.Initializer)
+				// First, add the variable to .data section
+				if isFloatType(varDecl.Type) {
+					fmt.Printf("inserting float\n")
+					cg.insertData(varDecl.Name, ".double", 0.0)
+				} else {
+					fmt.Printf("inserting others: %s\n", varDecl.Name)
+					cg.insertData(varDecl.Name, ".dword", 0)
+				}
+
 				resultRegister, _ := cg.ExpressionGen.GenerateExpression(varDecl.Initializer)
 				addressRegister := cg.Registers.GetTmpRegister()
 
@@ -101,8 +111,8 @@ func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessE
 	eg := cg.ExpressionGen
     rp := cg.Registers
 
-	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(arrExpr.Array, arrExpr.Index)
 	valueRegister, _ := eg.GenerateExpression(value)
+	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(arrExpr.Array, arrExpr.Index)
 
 	isFloat := false
     if primType, ok := elemType.(*ast.PrimitiveType); ok {

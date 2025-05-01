@@ -8,7 +8,7 @@ AST Tree:
     │   │   └── FloatLiteral: 5.500000
     └── Function: main returns int with 0 parameters
         └── Body:
-            └── Block with 4 items
+            └── Block with 13 items
                 ├── VarDeclaration: a of type array of int with size [expression]
                 ├── ExpressionStatement
                 │   └── BinaryExpression: '='
@@ -30,5 +30,65 @@ AST Tree:
                 │               │   ├── Identifier: a
                 │               └── Index:
                 │                   └── IntegerLiteral: 0
+                ├── VarDeclaration: z of type int
+                │   ├── Initializer:
+                │   │   └── IntegerLiteral: 4
+                ├── VarDeclaration: k of type int
+                │   ├── Initializer:
+                │   │   └── BinaryExpression: '-'
+                │   │       ├── Left:
+                │   │       │   ├── Identifier: x
+                │   │       └── Right:
+                │   │           └── Identifier: z
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── Identifier: k
+                │       └── Right:
+                │           └── IntegerLiteral: 420
+                ├── VarDeclaration: n of type int
+                │   ├── Initializer:
+                │   │   └── ArrayAccess
+                │   │       ├── Array:
+                │   │       │   ├── Identifier: a
+                │   │       └── Index:
+                │   │           └── Identifier: k
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: n
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── ArrayAccess
+                │       │   │   ├── Array:
+                │       │   │   │   ├── Identifier: a
+                │       │   │   └── Index:
+                │       │   │       └── Identifier: k
+                │       └── Right:
+                │           └── IntegerLiteral: 425
+                ├── VarDeclaration: n1 of type int
+                ├── ExpressionStatement
+                │   └── BinaryExpression: '='
+                │       ├── Left:
+                │       │   ├── Identifier: n1
+                │       └── Right:
+                │           └── ArrayAccess
+                │               ├── Array:
+                │               │   ├── Identifier: a
+                │               └── Index:
+                │                   └── Identifier: k
+                ├── ExpressionStatement
+                │   └── FunctionCall with 1 arguments
+                │       ├── Function:
+                │       │   ├── Identifier: _printInt
+                │       └── Arguments:
+                │           └── Identifier: n
                 └── ReturnStatement
                     └── IntegerLiteral: 0

@@ -9,32 +9,98 @@ Program (Line 1, Col 0) with 3 declarations
  Declaration 3:
  FunctionDeclaration (Line 4, Col 0): main returns int with 0 parameters
    Body:
-   Block (Line 4, Col 11) with 4 items
+   Block (Line 4, Col 11) with 13 items
      Item 1:
-     VarDeclaration (Line 6, Col 4): a of type array of int with size Identifier (Line 6, Col 10): x
+     VarDeclaration (Line 106, Col 4): a of type array of int with size Identifier (Line 106, Col 10): x
 
      Item 2:
-     ExpressionStatement (Line 7, Col 4):
-       BinaryExpression (Line 7, Col 9): Operator '='
+     ExpressionStatement (Line 107, Col 4):
+       BinaryExpression (Line 107, Col 9): Operator '='
          Left:
-         ArrayAccessExpression (Line 7, Col 5):
+         ArrayAccessExpression (Line 107, Col 5):
            Array:
-           Identifier (Line 7, Col 4): a
+           Identifier (Line 107, Col 4): a
            Index:
-           IntegerLiteral (Line 7, Col 6): 0
+           IntegerLiteral (Line 107, Col 6): 0
          Right:
-         IntegerLiteral (Line 7, Col 11): 69
+         IntegerLiteral (Line 107, Col 11): 69
      Item 3:
-     ExpressionStatement (Line 8, Col 4):
-       FunctionCallExpression (Line 8, Col 13) with 1 arguments:
+     ExpressionStatement (Line 108, Col 4):
+       FunctionCallExpression (Line 108, Col 13) with 1 arguments:
          Function:
-         Identifier (Line 8, Col 4): _printInt
+         Identifier (Line 108, Col 4): _printInt
          Argument 1:
-           ArrayAccessExpression (Line 8, Col 15):
+           ArrayAccessExpression (Line 108, Col 15):
              Array:
-             Identifier (Line 8, Col 14): a
+             Identifier (Line 108, Col 14): a
              Index:
-             IntegerLiteral (Line 8, Col 16): 0
+             IntegerLiteral (Line 108, Col 16): 0
      Item 4:
-     ReturnStatement (Line 139, Col 4):
-       IntegerLiteral (Line 139, Col 11): 0
+     VarDeclaration (Line 117, Col 4): z of type int with initializer:
+       IntegerLiteral (Line 117, Col 12): 4
+     Item 5:
+     VarDeclaration (Line 118, Col 4): k of type int with initializer:
+       BinaryExpression (Line 118, Col 13): Operator '-'
+         Left:
+         Identifier (Line 118, Col 12): x
+         Right:
+         Identifier (Line 118, Col 14): z
+     Item 6:
+     ExpressionStatement (Line 119, Col 4):
+       BinaryExpression (Line 119, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 119, Col 5):
+           Array:
+           Identifier (Line 119, Col 4): a
+           Index:
+           Identifier (Line 119, Col 6): k
+         Right:
+         IntegerLiteral (Line 119, Col 11): 420
+     Item 7:
+     VarDeclaration (Line 120, Col 4): n of type int with initializer:
+       ArrayAccessExpression (Line 120, Col 13):
+         Array:
+         Identifier (Line 120, Col 12): a
+         Index:
+         Identifier (Line 120, Col 14): k
+     Item 8:
+     ExpressionStatement (Line 121, Col 4):
+       FunctionCallExpression (Line 121, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 121, Col 4): _printInt
+         Argument 1:
+           Identifier (Line 121, Col 14): n
+     Item 9:
+     ExpressionStatement (Line 124, Col 4):
+       BinaryExpression (Line 124, Col 9): Operator '='
+         Left:
+         ArrayAccessExpression (Line 124, Col 5):
+           Array:
+           Identifier (Line 124, Col 4): a
+           Index:
+           Identifier (Line 124, Col 6): k
+         Right:
+         IntegerLiteral (Line 124, Col 11): 425
+     Item 10:
+     VarDeclaration (Line 125, Col 4): n1 of type int
+     Item 11:
+     ExpressionStatement (Line 126, Col 4):
+       BinaryExpression (Line 126, Col 7): Operator '='
+         Left:
+         Identifier (Line 126, Col 4): n1
+         Right:
+         ArrayAccessExpression (Line 126, Col 10):
+           Array:
+           Identifier (Line 126, Col 9): a
+           Index:
+           Identifier (Line 126, Col 11): k
+     Item 12:
+     ExpressionStatement (Line 127, Col 4):
+       FunctionCallExpression (Line 127, Col 13) with 1 arguments:
+         Function:
+         Identifier (Line 127, Col 4): _printInt
+         Argument 1:
+           Identifier (Line 127, Col 14): n
+     Item 13:
+     ReturnStatement (Line 156, Col 4):
+       IntegerLiteral (Line 156, Col 11): 0
