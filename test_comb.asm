@@ -1,6 +1,7 @@
 .data
-b: .dword 2
-a: .dword 1
+a: .space 120
+y: .double 5.500000
+x: .dword 15
 .text
 j main
 _exit:
@@ -62,28 +63,22 @@ _printString:
 	addi sp, sp, 16
 	ret
 main:
-# === Begin if statement ===
-# Condition:
-    la t0, a
-    ld t1, 0(t0)
-    la t0, b
-    ld t2, 0(t0)
-    slt t0, t2, t1
-beqz t0, L0
-# Then block:
-# Statement #1
-    la t1, a
-    ld t2, 0(t1)
-    mv a0, t2
+	la t0, a
+    li t1, 0
+	li t2, 8
+	mul t2, t1, t2
+	add t3, t2, t0
+    li t0, 69
+	sd t0, 0(t3)
+	la t0, a
+    li t1, 0
+	li t2, 8
+	mul t2, t1, t2
+	add t3, t2, t0
+	ld t0, 0(t3)
+    mv a0, t0
     jal _printInt
-j L1
-L0:
-# Statement #1
-    la t1, b
-    ld t2, 0(t1)
-    mv a0, t2
-    jal _printInt
-L1:
-# End if statement
+    li t0, 0
+    mv a0, t0
 	li a0, 0
 	j _exit

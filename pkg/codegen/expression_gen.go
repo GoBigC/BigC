@@ -159,9 +159,97 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 	return "a0", nil
 }
 
+/*
+Have: 
+	a: .space N <-- correctly allocating N consecutive bytes in memory, stores
+					address of first element in a
+Have to do next to access a[i]: 
+	1. Load base address of array a
+	2. Calculate offset: i*elem_size
+	3. Pointer arithmetic: Add offset to base --> get the location of the i-th element
+	4. Load value from / Write value to that calculated address 
+*/
+
 func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) (string, ast.Type) {
-	panic("unimplemented")
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(e.Array, e.Index)
+
+	// 4. load value from element address 
+	var resultRegister string 
+	isFloat := false
+    if primType, ok := elemType.(*ast.PrimitiveType); ok {
+        isFloat = primType.Name == "float"
+    }
+
+	if isFloat {
+		resultRegister = rp.GetFloatTmpRegister()
+		cg.emit("	fld %s, 0(%s)", resultRegister, elemAddrRegister)
+	} else {
+		resultRegister = rp.GetTmpRegister()
+		cg.emit("	ld %s, 0(%s)", resultRegister, elemAddrRegister)
+	}
+
+	if elemAddrRegister != "a0" && elemAddrRegister != "fa0" {
+		rp.ReleaseRegister(elemAddrRegister)
+	}
+	if indexRegister != "a0" && indexRegister != "fa0" {
+		rp.ReleaseRegister(indexRegister)
+	}
+
+	return resultRegister, elemType
 }
+
+func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expression, indexExpr ast.Expression) (string, string, ast.Type) {
+	cg := eg.CodeGen
+	rp := cg.Registers
+
+	var arrayName string
+	var elemType ast.Type 
+
+	if id, ok := arrExpr.(*ast.Identifier); ok {
+		// this is to extract 'a' from 'a[i]' 
+		arrayName = id.Name 
+	}
+
+	symbol, found := cg.SymTable.Lookup("main." + arrayName) // find local first
+	if !found {
+		symbol, found = cg.SymTable.Lookup(arrayName) // try global
+	}
+
+	if found {
+		if arrayType, ok := symbol.Type.(*ast.ArrayType); ok {
+			elemType = arrayType.ElementType
+		}
+	} else {
+		panic("Dont know what to do with array expression--maybe too complex?")
+	}
+
+	// 1. get array base reg
+	baseAddrRegister := rp.GetTmpRegister()
+	cg.emit("	la %s, %s", baseAddrRegister, arrayName)
+
+	// 2. get index value --> calculate offset bytes by mul 8 
+	indexRegister, _ := eg.GenerateExpression(indexExpr)
+	offsetValueRegister := rp.GetTmpRegister()
+	cg.emit("	li %s, 8", offsetValueRegister)
+	cg.emit("	mul %s, %s, %s", offsetValueRegister, indexRegister, offsetValueRegister)
+
+	// 3. pointer arithmetic: a[i] = a + i*8
+	elemAddrRegister := rp.GetTmpRegister()
+	cg.emit("	add %s, %s, %s", elemAddrRegister, offsetValueRegister, baseAddrRegister)
+
+	if baseAddrRegister != "a0" && baseAddrRegister != "fa0" {
+		rp.ReleaseRegister(baseAddrRegister)
+	}
+	if offsetValueRegister != "a0" && offsetValueRegister != "fa0" {
+		rp.ReleaseRegister(offsetValueRegister)
+	}
+	
+	return elemAddrRegister, indexRegister, elemType
+}
+
 
 func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (string, ast.Type) {
 	cg := eg.CodeGen
@@ -207,6 +295,13 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 }
 
 func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) (string, ast.Type) {
+	if expr.Operator == "=" {
+		if arrayAccess, ok := expr.Left.(*ast.ArrayAccessExpression); ok {
+			eg.CodeGen.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right)
+			return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
+		}
+	}
+	
 	switch expr.Operator {
 	case "+":
 		return eg.GenerateAddition(expr)

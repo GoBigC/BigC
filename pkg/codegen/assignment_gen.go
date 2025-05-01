@@ -95,3 +95,33 @@ func isFloatType(typeExpr ast.Type) bool {
 	}
 	return false
 }
+
+func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessExpression, value ast.Expression) {
+	cg := ag.CodeGen
+	eg := cg.ExpressionGen
+    rp := cg.Registers
+
+	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(arrExpr.Array, arrExpr.Index)
+	valueRegister, _ := eg.GenerateExpression(value)
+
+	isFloat := false
+    if primType, ok := elemType.(*ast.PrimitiveType); ok {
+        isFloat = primType.Name == "float"
+    }
+
+	if isFloat {
+		cg.emit("	fsd %s, 0(%s)", valueRegister, elemAddrRegister)
+	} else {
+		cg.emit("	sd %s, 0(%s)", valueRegister, elemAddrRegister)
+	}
+
+	if elemAddrRegister != "a0" && elemAddrRegister != "fa0" {
+		rp.ReleaseRegister(elemAddrRegister)
+	}
+    if indexRegister != "a0" && indexRegister != "fa0" {
+        rp.ReleaseRegister(indexRegister)
+    }
+    if valueRegister != "a0" && valueRegister != "fa0" {
+        rp.ReleaseRegister(valueRegister)
+    }
+}
