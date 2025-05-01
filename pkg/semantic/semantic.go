@@ -121,7 +121,7 @@ func (analyzer *SemanticAnalyzer) analyzeDeclaration(declr ast.Declaration) {
 			if !typesMatch(d.Type, initType) {
 				analyzer.Error(d.Line, fmt.Sprintf("type mismatch in initializer: expected %s, got %s", typeString(d.Type), typeString(initType)))
 			}
-			if val, ok := analyzer.evaluateConstantExpression(d.Initializer); ok {
+			if val, ok := analyzer.evaluateConstantExpression(d.Initializer); ok { 
 				sym := analyzer.SymTable.Symbols[name]
 				sym.Value = val
 				analyzer.SymTable.Symbols[name] = sym
@@ -199,7 +199,7 @@ func (analyzer *SemanticAnalyzer) checkExpression(expr ast.Expression) ast.Type 
 	return nil
 }
 
-// --- SemanticAnalyzerntic Checks ---
+// --- SemanticAnalyzer Checks ---
 func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclaration, blockEndLine int) {
 	name := varDeclr.Name
 	lastLine := math.MaxInt // Global default
@@ -247,7 +247,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 			if !typesMatch(varDeclr.Type, initType) {
 				analyzer.Error(varDeclr.Line, fmt.Sprintf("type mismatch in initializer: expected %s, got %s", typeString(varDeclr.Type), typeString(initType)))
 			}
-			if val, ok := analyzer.evaluateArraySize(varDeclr.Initializer); ok {
+			if val, ok := analyzer.evaluateConstantExpression(varDeclr.Initializer); ok { // TODO
 				sym.Value = val
 			}
 		}
@@ -509,11 +509,6 @@ func typeString(t ast.Type) string {
 		return p.Name
 	}
 	if a, ok := t.(*ast.ArrayType); ok {
-		// size := "?"
-		// if lit, ok := a.Size.(*ast.IntegerLiteral); ok {
-		// 	size = fmt.Sprintf("%d", lit.Value)
-		// }
-		// return fmt.Sprintf("%s[%s]", typeString(a.ElementType), size) 
 		return fmt.Sprintf("%s[]", typeString(a.ElementType)) 
 	}
 	return "unknown"

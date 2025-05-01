@@ -43,6 +43,10 @@ divInt: .dword 0
 mulInt: .dword 0
 subInt: .dword 0
 addInt: .dword 0
+c: .space 160
+b: .space 128
+z: .dword 4
+a: .space 80
 y: .double 5.500000
 x: .dword 15
 .text
