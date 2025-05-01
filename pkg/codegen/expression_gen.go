@@ -299,10 +299,16 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 	if expr.Operator == "=" {
 		cg := eg.CodeGen
 		if arrayAccess, ok := expr.Left.(*ast.ArrayAccessExpression); ok {
+			// case a[i] = expr
 			cg.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right)
 			return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
-		}
-		return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
+		} else if id, ok := expr.Left.(*ast.Identifier); ok {
+            // case: x = expr
+            cg.AssignmentGen.GenerateVariableAssignment(id, expr.Right)
+            return "a0", &ast.PrimitiveType{Name: "void"} // assignment doesn't return value
+        }
+		panic(fmt.Sprintf("Unsupported assignment target: %T", expr.Left))
+		// return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
 	}
 	
 	switch expr.Operator {

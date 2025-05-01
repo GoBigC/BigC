@@ -135,3 +135,25 @@ func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessE
         rp.ReleaseRegister(valueRegister)
     }
 }
+
+func (ag *AssignmentGenerator) GenerateVariableAssignment(id *ast.Identifier, value ast.Expression) {
+    cg := ag.CodeGen
+    eg := cg.ExpressionGen
+    rp := cg.Registers
+    
+    resultReg, resultType := eg.GenerateExpression(value)
+    
+    addressReg := rp.GetTmpRegister()
+    cg.emit("    la %s, %s", addressReg, id.Name)
+    
+    if primType, ok := resultType.(*ast.PrimitiveType); ok && primType.Name == "float" {
+        cg.emit("    fsd %s, 0(%s)", resultReg, addressReg)
+    } else {
+        cg.emit("    sd %s, 0(%s)", resultReg, addressReg)
+    }
+    
+    rp.ReleaseRegister(addressReg)
+    if resultReg != "a0" && resultReg != "fa0" {
+        rp.ReleaseRegister(resultReg)
+    }
+}
