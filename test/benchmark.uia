@@ -1,5 +1,7 @@
 int x = 15; 
 float y = 5.5;
+int y = 2;
+int z = 1;
 
 int main() {
     // ================INT====================
@@ -158,4 +160,75 @@ int main() {
     _printFloat(total);  // expect: 46.5
     
     return 0; 
+
+    // =================IF-STATEMENT===================
+
+    // Test Case 1: Simple if, no else
+    if (x > 0) {
+        _printInt(x);
+    }
+
+    // Test Case 2: if with else as block
+    if (x > 0) {
+        _printInt(x);
+    } else {
+        _printInt(-x);
+    }
+
+    // Test Case 3: if with else as if (else if)
+    if (x > 0) {
+        _printInt(x);
+    } else if (x == 0) {
+        _printInt(0);
+    }
+
+    // Test Case 4: full if-else if-else
+    if (x > 0) {
+        _printInt(x);
+    } else if (x == 0) {
+        _printInt(0);
+    } else {
+        _printInt(-x);
+    }
+
+    // Test Case 5: Nested if
+    if (x > 0) {
+        if (y > 0) {
+            _printInt(1);
+        } else {
+            _printInt(2);
+        }
+    }
+
+    // Test Case 6: if with complex logical expression
+    if ((x > 0 && y < 0) || z == 10) {
+        _printInt(1);
+    }
+
+    // Test Case 7: if with empty block
+    if (x > 0) {
+    }
+
+    // Test Case 8: if with non-print statement
+    if (x > 0) {
+        y = y + 1;
+    }
+
+    // Test Case 9: else with empty block
+    if (x > 0) {
+        y = 1;
+    } else {
+    }
+
+    // Test Case 10: long else if chain
+    if (x == 1) {
+        _printInt(1);
+    } else if (x == 2) {
+        _printInt(2);
+    } else if (x == 3) {
+        _printInt(3);
+    } else {
+        _printInt(0);
+    }
+
 }
