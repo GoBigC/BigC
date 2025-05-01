@@ -35,7 +35,7 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 		// Generate code for the then block
 		cg.emitComment("Then block:")
 		if stmt.ThenBlock != nil {
-			bg.GenerateBlock(stmt.ThenBlock)
+			cg.BlockGen.GenerateBlock(stmt.ThenBlock)
 		}
 
 		// Handle else block
@@ -43,7 +43,7 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 			cg.emit("j %s", endLabel) // Jump to the end after the else block
 			cg.emit("%s:", elseLabel) // Else label
 			if elseBlock, ok := stmt.ElseBlock.(*ast.Block); ok {
-				bg.GenerateBlock(elseBlock)
+				cg.BlockGen.GenerateBlock(elseBlock)
 			} else {
 				cg.emitComment("Else block is null")
 			}
@@ -61,25 +61,6 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 		cg.emitComment("End if statement")
 	} else {
 		panic("Condition is null!!!")
-	}
-}
-
-func (bg *BranchingGenerator) GenerateBlock(block *ast.Block) {
-	for i, item := range block.Items {
-		bg.CodeGen.emitComment("Statement #%d", i+1)
-		bg.GenerateBlockItem(item)
-	}
-}
-
-func (bg *BranchingGenerator) GenerateBlockItem(item ast.BlockItem) {
-	switch stmt := item.(type) {
-	case *ast.VarDeclaration:
-		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(*stmt)
-	case *ast.ExpressionStatement:
-		bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr)
-	// Add more statement types as needed
-	default:
-		panic(fmt.Sprintf("unknown statement type: %T", stmt))
 	}
 }
 
