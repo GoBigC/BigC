@@ -581,11 +581,23 @@ func (analyzer *SemanticAnalyzer) evaluateArraySize(expr ast.Expression) (int64,
 		analyzer.Error(e.Line, fmt.Sprintf("identifier %s is not a compile-time constant", e.Name))
     	return 0, false
 	default: 
-		// i cant get e.Line so 69420 it is :) 
-		analyzer.Error(69420, "cannot evaluate constant expression (69420 is placeholder int only)")
+		analyzer.Error(getExprLine(expr), "cannot evaluate constant expression (69420 is placeholder int only)")
 		return 0, true
 	}
 	// return 0, false 
+}
+
+func getExprLine(expr ast.Expression) int {
+	switch e := expr.(type) {
+	case *ast.BinaryExpression: 
+		return e.Line
+	case *ast.IntegerLiteral: 
+		return e.Line
+	case *ast.Identifier: 
+		return e.Line
+	default: 
+		return 69420
+	}
 }
 
 func isArray(t ast.Type) bool {
