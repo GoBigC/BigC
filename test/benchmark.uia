@@ -2,7 +2,7 @@ int x = 15;
 float y = 5.5;
 int y = 2;
 int z = 1;
-
+bool a = false;
 int main() {
     // ================INT====================
     int addInt = 1 + 2050;
@@ -229,6 +229,13 @@ int main() {
         _printInt(3);
     } else {
         _printInt(0);
+    }
+
+    // Test Case 11: if with unary operator
+    if (!a) {
+        _printInt(1);
+    } else {
+        _printInt(2);
     }
 
 }
