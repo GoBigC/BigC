@@ -81,11 +81,18 @@ func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
 		if analyzer.currentFunction != "" {
 			name = fmt.Sprintf("%s.%s", analyzer.currentFunction, d.Name)
 		}
-		analyzer.SymTable.Define(name, table.Symbol{
-			Name:      d.Name,
-			Type:      d.Type,
-			Scope:     table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine},
-		})
+
+		sym, ok := analyzer.SymTable.Lookup(name)
+		if ok {
+			analyzer.Error(d.Line, fmt.Sprintf("variable %s already declared at line %d", sym.Name, sym.Scope.ValidFirstLine))
+		} else {
+
+			analyzer.SymTable.Define(name, table.Symbol{
+				Name:  d.Name,
+				Type:  d.Type,
+				Scope: table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine},
+			})
+		}
 	case *ast.FunctionDeclaration:
 		funcName := d.Name
 		if funcName != "main" {
