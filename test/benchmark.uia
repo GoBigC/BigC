@@ -1,8 +1,8 @@
 int x = 15; 
 float y = 5.5;
-int y = 2;
 int z = 1;
-bool a = false;
+int t = 2;
+bool m = false;
 int main() {
     // ================INT====================
     // int addInt = 1 + 2050;
@@ -158,99 +158,173 @@ int main() {
     
     // float total = prices[0] + prices[1] + prices[2];
     // _printFloat(total);  // expect: 46.5
+
+    // char charArray[5];
+    // charArray[0] = 'H';
+    // _printChar(charArray[0]); // Expected: H
+    // charArray[1] = 'e';
+    // _printChar(charArray[1]); // Expected: e
+    // charArray[2] = 'l';
+    // _printChar(charArray[2]); // Expected: l
+    // charArray[3] = 'l';
+    // _printChar(charArray[3]); // Expected: l
+    // charArray[4] = 'o';
+    // _printChar(charArray[4]); // Expected: o
     
 
     // =================IF-STATEMENT===================
 
-    _printFloat(1.1);
-    // Test Case 1: Simple if, no else
-    if (x > 0) {
-        _printInt(x);
-    }
+    // _printFloat(1.1);
+    // // Test Case 1: Simple if, no else
+    // if (x > 0) {
+    //     _printInt(x);
+    // }
 
-    _printFloat(2.2);
-    // Test Case 2: if with else as block
-    if (x < 0) {
-        _printInt(x);
-    } else {
-        _printInt(-x);
-    }
+    // _printFloat(2.2);
+    // // Test Case 2: if with else as block
+    // if (x < 0) {
+    //     _printInt(x);
+    // } else {
+    //     _printInt(-x);
+    // }
 
-    _printFloat(3.3);
-    // Test Case 3: if with else as if (else if)
-    if (x < 0) {
-        _printInt(x);
-    } else if (x > 0) {
-        _printInt(0);
-    }
+    // _printFloat(3.3);
+    // // Test Case 3: if with else as if (else if)
+    // if (x < 0) {
+    //     _printInt(x);
+    // } else if (x > 0) {
+    //     _printInt(0);
+    // }
 
-    _printFloat(4.4);
-    // Test Case 4: full if-else if-else
-    if (x < 0) {
-        _printInt(x);
-    } else if (x == 0) {
-        _printInt(0);
-    } else {
-        _printInt(-x);
-    }
+    // _printFloat(4.4);
+    // // Test Case 4: full if-else if-else
+    // if (x < 0) {
+    //     _printInt(x);
+    // } else if (x == 0) {
+    //     _printInt(0);
+    // } else {
+    //     _printInt(-x);
+    // }
 
-    _printFloat(5.5);
-    // Test Case 5: Nested if
-    if (x > 0) {
-        if (y > 0) {
-            _printInt(1);
-        } else {
-            _printInt(2);
+    // _printFloat(5.5);
+    // // Test Case 5: Nested if
+    // if (x > 0) {
+    //     if (t > 0) {
+    //         _printInt(1);
+    //     } else {
+    //         _printInt(2);
+    //     }
+    // }
+
+    // _printFloat(6.6);
+    // // Test Case 6: if with complex logical expression
+    // if ((x > 0 && t < 0) || z == 1) {
+    //     _printInt(1);
+    // }
+
+    // _printFloat(7.7);   
+    // // Test Case 7: if with empty block
+    // if (x > 0) {
+    // }
+
+    // _printFloat(8.8);
+    // // Test Case 8: if with non-print statement
+    // if (x > 0) {
+    //     t = t + 1;
+    // }
+
+    // _printInt(t); 
+
+    // _printFloat(9.9);
+    // // Test Case 9: else with empty block
+    // if (x > 0) {
+    //     t = 1;
+    // } else {
+    // }
+
+    // _printFloat(10.10);
+    // // Test Case 10: long else if chain
+    // if (x == 1) {
+    //     _printInt(1);
+    // } else if (x == 2) {
+    //     _printInt(2);
+    // } else if (x == 3) {
+    //     _printInt(3);
+    // } else {
+    //     _printInt(0);
+    // }
+
+    // _printFloat(11.11);
+    // // Test Case 11: if with unary operator
+    // if (!m) {
+    //     _printInt(1);
+    // } else {
+    //     _printInt(2);
+    // }
+
+    // _printInt(69420); 
+
+    // =================WHILE-LOOP===================\
+    // // Test Case 1: Simple while loop
+    // int i = 0;
+    // while (i < 10) {
+    //     _printInt(i);
+    //     i = i + 1;
+    // }
+
+    // // Test Case 2: more complex while loop with other statements
+    // int j = 0;
+    // while (j < 5) {
+    //     _printInt(j);
+    //     j = j + 1;
+    //     if (j == 3) {
+    //         _printInt(100);
+    //     } else if (j == 4) {
+    //         _printInt(200);
+    //     } else {
+    //         _printChar('A');
+    //     }
+    // }
+
+    // // Test Case 3: while loop with char array access
+    // int sid = 0;
+    // int stringLength = 5;
+    // char charArrayWhile[stringLength];
+    // charArrayWhile[0] = 'H';
+    // charArrayWhile[1] = 'e';
+    // charArrayWhile[2] = 'l';
+    // charArrayWhile[3] = 'l';
+    // charArrayWhile[4] = 'o';
+    // while (sid < stringLength) {
+    //     _printChar(charArrayWhile[sid]);
+    //     sid = sid + 1;
+    // }
+
+    // // Test Case 4: while loop with array access
+    // int arrLength = 5;
+    // int intArray[arrLength];
+    // intArray[0] = 6;
+    // intArray[1] = 9;
+    // intArray[2] = 4;
+    // intArray[3] = 2;
+    // intArray[4] = 0;
+    // int index = 0;
+    // while (index < arrLength) {
+    //     _printInt(intArray[index]);
+    //     index = index + 1;
+    // }
+
+    // Test Case 5: nested while loop
+    int test5Index = 0;
+    while (test5Index < 5) {
+        int innerIndex = 0;
+        while (innerIndex < 2) {
+            _printInt(test5Index);
+            innerIndex = innerIndex + 1;
         }
+        test5Index = test5Index + 1;
     }
 
-    _printFloat(6.6);
-    // Test Case 6: if with complex logical expression
-    if ((x > 0 && y < 0) || z == 1) {
-        _printInt(1);
-    }
-
-    _printFloat(7.7);   
-    // Test Case 7: if with empty block
-    if (x > 0) {
-    }
-
-    _printFloat(8.8);
-    // Test Case 8: if with non-print statement
-    if (x > 0) {
-        y = y + 1;
-    }
-
-    _printInt(y); 
-
-    _printFloat(9.9);
-    // Test Case 9: else with empty block
-    if (x > 0) {
-        y = 1;
-    } else {
-    }
-
-    _printFloat(10.10);
-    // Test Case 10: long else if chain
-    if (x == 1) {
-        _printInt(1);
-    } else if (x == 2) {
-        _printInt(2);
-    } else if (x == 3) {
-        _printInt(3);
-    } else {
-        _printInt(0);
-    }
-
-    _printFloat(11.11);
-    // Test Case 11: if with unary operator
-    if (!a) {
-        _printInt(1);
-    } else {
-        _printInt(2);
-    }
-
-    _printInt(69420); 
     return 0; 
 
 }
