@@ -48,10 +48,13 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 		if stmt.ElseBlock != nil {
 			cg.emit("j %s", endLabel) // Jump to the end after the else block
 			cg.emit("%s:", elseLabel) // Else label
-			if elseBlock, ok := stmt.ElseBlock.(*ast.Block); ok {
+			switch elseBlock := stmt.ElseBlock.(type) {
+			case *ast.Block:
 				cg.BlockGen.GenerateBlock(elseBlock)
-			} else {
-				cg.emitComment("Else block is null")
+			case *ast.IfStatement:
+				bg.GenerateIfStatement(elseBlock)
+			default:
+				cg.emitComment("Unsupported else block type")
 			}
 		} else {
 			cg.emit("%s:", elseLabel)
