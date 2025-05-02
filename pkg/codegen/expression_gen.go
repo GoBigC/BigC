@@ -160,14 +160,14 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 }
 
 /*
-Have: 
+Have:
 	a: .space N <-- correctly allocating N consecutive bytes in memory, stores
 					address of first element in a
-Have to do next to access a[i]: 
+Have to do next to access a[i]:
 	1. Load base address of array a
 	2. Calculate offset: i*elem_size
 	3. Pointer arithmetic: Add offset to base --> get the location of the i-th element
-	4. Load value from / Write value to that calculated address 
+	4. Load value from / Write value to that calculated address
 */
 
 func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) (string, ast.Type) {
@@ -176,12 +176,12 @@ func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessE
 
 	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(e.Array, e.Index)
 
-	// 4. load value from element address 
-	var resultRegister string 
+	// 4. load value from element address
+	var resultRegister string
 	isFloat := false
-    if primType, ok := elemType.(*ast.PrimitiveType); ok {
-        isFloat = primType.Name == "float"
-    }
+	if primType, ok := elemType.(*ast.PrimitiveType); ok {
+		isFloat = primType.Name == "float"
+	}
 
 	if isFloat {
 		resultRegister = rp.GetFloatTmpRegister()
@@ -206,11 +206,11 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	rp := cg.Registers
 
 	var arrayName string
-	var elemType ast.Type 
+	var elemType ast.Type
 
 	if id, ok := arrExpr.(*ast.Identifier); ok {
-		// this is to extract 'a' from 'a[i]' 
-		arrayName = id.Name 
+		// this is to extract 'a' from 'a[i]'
+		arrayName = id.Name
 	}
 
 	symbol, found := cg.SymTable.Lookup("main." + arrayName) // find local first
@@ -230,10 +230,15 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	baseAddrRegister := rp.GetTmpRegister()
 	cg.emit("	la %s, %s", baseAddrRegister, arrayName)
 
-	// 2. get index value --> calculate offset bytes by mul 8 
+	// 2. get index value --> calculate offset bytes by mul 8
 	indexRegister, _ := eg.GenerateExpression(indexExpr)
 	offsetValueRegister := rp.GetTmpRegister()
-	cg.emit("	li %s, 8", offsetValueRegister)
+	switch elemType.(*ast.PrimitiveType).Name {
+	case "char":
+		cg.emit("	li %s, 4", offsetValueRegister)
+	default:
+		cg.emit("	li %s, 8", offsetValueRegister)
+	}
 	cg.emit("	mul %s, %s, %s", offsetValueRegister, indexRegister, offsetValueRegister)
 
 	// 3. pointer arithmetic: a[i] = a + i*8
@@ -247,10 +252,9 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	if offsetValueRegister != "a0" && offsetValueRegister != "fa0" {
 		rp.ReleaseRegister(offsetValueRegister)
 	}
-	
+
 	return elemAddrRegister, indexRegister, elemType
 }
-
 
 func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (string, ast.Type) {
 	cg := eg.CodeGen
@@ -303,14 +307,14 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 			cg.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right)
 			return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
 		} else if id, ok := expr.Left.(*ast.Identifier); ok {
-            // case: x = expr
-            cg.AssignmentGen.GenerateVariableAssignment(id, expr.Right)
-            return "a0", &ast.PrimitiveType{Name: "void"} // assignment doesn't return value
-        }
+			// case: x = expr
+			cg.AssignmentGen.GenerateVariableAssignment(id, expr.Right)
+			return "a0", &ast.PrimitiveType{Name: "void"} // assignment doesn't return value
+		}
 		panic(fmt.Sprintf("Unsupported assignment target: %T", expr.Left))
 		// return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
 	}
-	
+
 	switch expr.Operator {
 	case "+":
 		return eg.GenerateAddition(expr)
@@ -364,7 +368,6 @@ func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (str
 		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
-
 
 	panic("GenerateDivision - No case should reach here, as everything should be handled in semantic analysis")
 
@@ -421,7 +424,6 @@ func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
 
-
 	panic("GenerateSubtraction - No case should reach here, as everything should be handled in semantic analysis")
 }
 
@@ -448,7 +450,6 @@ func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (str
 		releaseRegAfterUse(*rp, leftReg, rightReg)
 		return resultReg, &ast.PrimitiveType{Name: "float"}
 	}
-
 
 	panic("GenerateAddition - No case should reach here, as everything should be handled in semantic analysis")
 }
