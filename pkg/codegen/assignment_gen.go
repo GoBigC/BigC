@@ -86,11 +86,12 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaratio
 		}
 
 		if found && symbol.ArraySize > 0 {
-			if t.ElementType.(*ast.PrimitiveType).Name == "char" {
-				cg.insertData(varDecl.Name, ".space", 4*symbol.ArraySize) // char is using runes, which are int34
-			} else {
-				cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize) // everything else is 8 bytes
-			}
+			// if t.ElementType.(*ast.PrimitiveType).Name == "char" {
+			// 	cg.insertData(varDecl.Name, ".space", 4*symbol.ArraySize) // char is using runes, which are int34
+			// } else {
+			// 	cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize) // everything else is 8 bytes
+			// }
+			cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize) // everything else is 8 bytes
 		} else {
 			panic(fmt.Sprintf("Invalid array size at line %d", varDecl.Line))
 		}

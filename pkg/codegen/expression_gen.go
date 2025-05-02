@@ -233,12 +233,15 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	// 2. get index value --> calculate offset bytes by mul 8
 	indexRegister, _ := eg.GenerateExpression(indexExpr)
 	offsetValueRegister := rp.GetTmpRegister()
-	switch elemType.(*ast.PrimitiveType).Name {
-	case "char":
-		cg.emit("	li %s, 4", offsetValueRegister)
-	default:
-		cg.emit("	li %s, 8", offsetValueRegister)
-	}
+
+	// switch elemType.(*ast.PrimitiveType).Name {
+	// case "char":
+	// 	cg.emit("	li %s, 4", offsetValueRegister)
+	// default:
+	// 	cg.emit("	li %s, 8", offsetValueRegister)
+	// }
+
+	cg.emit("	li %s, 8", offsetValueRegister)
 	cg.emit("	mul %s, %s, %s", offsetValueRegister, indexRegister, offsetValueRegister)
 
 	// 3. pointer arithmetic: a[i] = a + i*8
