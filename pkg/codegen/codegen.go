@@ -178,6 +178,7 @@ type CodeGenerator struct {
 	AssignmentGen *AssignmentGenerator
 	BranchingGen  *BranchingGenerator
 	LoopingGen    *LoopingGenerator
+	BlockGen      *BlockGenerator
 }
 
 func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGenerator {
@@ -194,6 +195,7 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	cg.AssignmentGen = NewAssignmentGenerator(cg)
 	cg.BranchingGen = NewBranchingGenerator(cg)
 	cg.LoopingGen = NewLoopingGenerator(cg)
+	cg.BlockGen = NewBlockGenerator(cg)
 
 	return cg
 }
@@ -213,17 +215,17 @@ func (cg *CodeGenerator) emitComment(format string, args ...interface{}) {
 // We need it to work first, then we can optimize it later
 func (cg *CodeGenerator) insertData(label string, dataType string, value any) error {
 	currentContent := cg.AsmOut.String()
-	
-	// use regexp to match more accurately than .Contains() 
+
+	// use regexp to match more accurately than .Contains()
 	pattern := fmt.Sprintf(`(?m)^%s:[\s]`, regexp.QuoteMeta(label))
 	alreadyExists, err := regexp.MatchString(pattern, currentContent)
 	if err != nil {
 		fmt.Printf("WARNING: Error checking for existing label %s: %v\n", label, err)
 	}
-	
+
 	if alreadyExists {
 		fmt.Printf("DEBUG: Skipping insertion of %s, already exists\n", label)
-		return nil 
+		return nil
 	}
 
 	dataMarker := ".data\n"
@@ -264,9 +266,9 @@ func (cg *CodeGenerator) insertData(label string, dataType string, value any) er
 	default:
 		newLabel = fmt.Sprintf("%s: %s %v\n", label, dataType, v)
 	}
-	
+
 	fmt.Printf("DEBUG: Inserting %s: %s into .data section\n", label, dataType)
-	
+
 	// Create a new strings.Builder to hold the updated content
 	var newBuilder strings.Builder
 	// Write content before insertion point
