@@ -20,7 +20,6 @@ func (bg *BlockGenerator) GenerateBlock(block *ast.Block) {
 		bg.CodeGen.emitComment("Empty block")
 		return
 	}
-
 	for i, item := range block.Items {
 		bg.CodeGen.emitComment("Statement #%d", i+1)
 		bg.GenerateBlockItem(item)
@@ -32,7 +31,7 @@ func (bg *BlockGenerator) GenerateBlockItem(item ast.BlockItem) {
 	case *ast.VarDeclaration:
 		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(stmt)
 	case *ast.ExpressionStatement:
-		bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr)
+		_, _ = bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr)
 	case *ast.IfStatement:
 		bg.CodeGen.BranchingGen.GenerateIfStatement(stmt)
 	case *ast.WhileStatement:

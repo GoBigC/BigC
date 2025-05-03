@@ -200,6 +200,25 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	return cg
 }
 
+func (cg *CodeGenerator) AllocateStack(symbolName string, size int) int {
+	cg.StackSize += size
+	offset := -cg.StackSize
+	cg.VarStackOffset[symbolName] = offset
+	return offset
+}
+
+func (cg *CodeGenerator) ResetStack() {
+	cg.VarStackOffset = make(map[string]int)
+	cg.StackSize = 0
+}
+
+func (cg *CodeGenerator) GetStackOffset(symbolName string) int {
+	if offset, ok := cg.VarStackOffset[symbolName]; ok {
+		return offset
+	}
+	return 0 // Indicates global or error
+}
+
 func (cg *CodeGenerator) emit(format string, args ...interface{}) {
 	instruction := fmt.Sprintf(format, args...)
 	cg.AsmOut.WriteString(instruction + "\n")

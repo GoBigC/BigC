@@ -45,31 +45,43 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) (string,
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	addressRegister := rp.GetTmpRegister()
-	cg.emit("    la %s, %s", addressRegister, expr.Name)
+	var name string = expr.Name
+	symbol, found := cg.SymTable.Lookup("main." + name) // try local
 
-	isFloatVar := false
-	symbol, found := cg.SymTable.Lookup(expr.Name)
 	if !found {
-		symbol, found = cg.SymTable.Lookup("main." + expr.Name)
+		symbol, _ = cg.SymTable.Lookup(name) // try global
 	}
 
-	if found {
-		if primitiveType, ok := symbol.Type.(*ast.PrimitiveType); ok {
-			isFloatVar = primitiveType.Name == "float"
+	isFloatVar := isFloatType(symbol.Type)
+	isLocal := symbol.Scope.ValidFirstLine > 1 // Locals declared inside main
+
+	if isLocal {
+		// Load from stack
+		offset := cg.GetStackOffset(name)
+		if isFloatVar {
+			valueRegister := rp.GetFloatTmpRegister()
+			cg.emit("    fld %s, %d(sp)", valueRegister, offset)
+			return valueRegister, symbol.Type
+		} else {
+			valueRegister := rp.GetTmpRegister()
+			cg.emit("    ld %s, %d(sp)", valueRegister, offset)
+			return valueRegister, symbol.Type
 		}
-	}
-
-	if isFloatVar {
-		valueRegister := rp.GetFloatTmpRegister()
-		cg.emit("    fld %s, 0(%s)", valueRegister, addressRegister)
-		rp.ReleaseRegister(addressRegister)
-		return valueRegister, symbol.Type
 	} else {
-		valueRegister := rp.GetTmpRegister()
-		cg.emit("    ld %s, 0(%s)", valueRegister, addressRegister)
-		rp.ReleaseRegister(addressRegister)
-		return valueRegister, symbol.Type
+		// Load from .data
+		addressRegister := rp.GetTmpRegister()
+		cg.emit("    la %s, %s", addressRegister, name)
+		if isFloatVar {
+			valueRegister := rp.GetFloatTmpRegister()
+			cg.emit("    fld %s, 0(%s)", valueRegister, addressRegister)
+			rp.ReleaseRegister(addressRegister)
+			return valueRegister, symbol.Type
+		} else {
+			valueRegister := rp.GetTmpRegister()
+			cg.emit("    ld %s, 0(%s)", valueRegister, addressRegister)
+			rp.ReleaseRegister(addressRegister)
+			return valueRegister, symbol.Type
+		}
 	}
 }
 
@@ -208,47 +220,53 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	var arrayName string
 	var elemType ast.Type
 
+	// Extract array name from identifier
 	if id, ok := arrExpr.(*ast.Identifier); ok {
-		// this is to extract 'a' from 'a[i]'
 		arrayName = id.Name
-	}
-
-	symbol, found := cg.SymTable.Lookup("main." + arrayName) // find local first
-	if !found {
-		symbol, found = cg.SymTable.Lookup(arrayName) // try global
-	}
-
-	if found {
-		if arrayType, ok := symbol.Type.(*ast.ArrayType); ok {
-			elemType = arrayType.ElementType
-		}
 	} else {
-		panic("Dont know what to do with array expression--maybe too complex?")
+		panic("Array expression must be an identifier")
 	}
 
-	// 1. get array base reg
-	baseAddrRegister := rp.GetTmpRegister()
-	cg.emit("	la %s, %s", baseAddrRegister, arrayName)
+	// Look up symbol
+	symbol, found := cg.SymTable.Lookup("main." + arrayName)
+	if !found {
+		symbol, _ = cg.SymTable.Lookup(arrayName)
+	}
 
-	// 2. get index value --> calculate offset bytes by mul 8
+	// Verify array type and get element type
+	if arrayType, ok := symbol.Type.(*ast.ArrayType); ok {
+		elemType = arrayType.ElementType
+	} else {
+		panic(fmt.Sprintf("Symbol %s is not an array type", arrayName))
+	}
+
+	// Determine if local or global
+	isLocal := symbol.Scope.ValidFirstLine > 1 // Locals declared inside main
+	baseAddrRegister := rp.GetTmpRegister()
+
+	if isLocal {
+		// Local array: Compute base address from stack offset
+		offset := cg.GetStackOffset(arrayName)
+		cg.emit("    addi %s, sp, %d", baseAddrRegister, offset)
+	} else {
+		// Global array: Load base address from .data
+		cg.emit("    la %s, %s", baseAddrRegister, arrayName)
+	}
+
+	// Generate index expression
 	indexRegister, _ := eg.GenerateExpression(indexExpr)
 	offsetValueRegister := rp.GetTmpRegister()
 
-	// switch elemType.(*ast.PrimitiveType).Name {
-	// case "char":
-	// 	cg.emit("	li %s, 4", offsetValueRegister)
-	// default:
-	// 	cg.emit("	li %s, 8", offsetValueRegister)
-	// }
+	// Calculate offset (index * element_size)
+	elementSize := 8 // 8 bytes for int, float, bool, char
+	cg.emit("    li %s, %d", offsetValueRegister, elementSize)
+	cg.emit("    mul %s, %s, %s", offsetValueRegister, indexRegister, offsetValueRegister)
 
-	cg.emit("	li %s, 8", offsetValueRegister)
-	cg.emit("	mul %s, %s, %s", offsetValueRegister, indexRegister, offsetValueRegister)
-
-	// 3. pointer arithmetic: a[i] = a + i*8
+	// Compute element address: base + offset
 	elemAddrRegister := rp.GetTmpRegister()
-	// cg.emit("	add %s, %s, %s", elemAddrRegister, offsetValueRegister, baseAddrRegister)
-	cg.emit("	add %s, %s, %s", elemAddrRegister, baseAddrRegister, offsetValueRegister)
+	cg.emit("    add %s, %s, %s", elemAddrRegister, baseAddrRegister, offsetValueRegister)
 
+	// Release temporary registers
 	if baseAddrRegister != "a0" && baseAddrRegister != "fa0" {
 		rp.ReleaseRegister(baseAddrRegister)
 	}
