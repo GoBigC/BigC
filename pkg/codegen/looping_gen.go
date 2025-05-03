@@ -42,7 +42,7 @@ func (lg *LoopingGenerator) GenerateWhileStatement(stmt *ast.WhileStatement) {
 	cg.BlockGen.GenerateBlock(stmt.Body)
 
 	// Jump back to start
-	cg.emitComment("=== Jump back to start ===")
+	cg.emitComment("=== Jump back to" + startLabel + "===")
 	cg.emit("    j %s", startLabel)
 
 	cg.emitComment("=== End of while statement ===")
