@@ -323,7 +323,7 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
 	switch d := decl.(type) {
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration(*d)
+		cg.AssignmentGen.GenerateVarDeclaration(d)
 	// add more cases as we generate
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
@@ -347,9 +347,9 @@ func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
 	case *ast.IfStatement:
 		cg.BranchingGen.GenerateIfStatement(stmt)
 	case *ast.WhileStatement:
-		cg.LoopingGen.GenerateWhileStatement(*stmt)
+		cg.LoopingGen.GenerateWhileStatement(stmt)
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration(*stmt)
+		cg.AssignmentGen.GenerateVarDeclaration(stmt)
 	case *ast.Block:
 		for _, blockItem := range stmt.Items {
 			cg.GenerateStatement(blockItem)

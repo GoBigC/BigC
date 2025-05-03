@@ -30,13 +30,13 @@ func (bg *BlockGenerator) GenerateBlock(block *ast.Block) {
 func (bg *BlockGenerator) GenerateBlockItem(item ast.BlockItem) {
 	switch stmt := item.(type) {
 	case *ast.VarDeclaration:
-		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(*stmt)
+		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(stmt)
 	case *ast.ExpressionStatement:
 		bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr)
 	case *ast.IfStatement:
 		bg.CodeGen.BranchingGen.GenerateIfStatement(stmt)
-	// case *ast.WhileStatement:
-	// 	bg.CodeGen.LoopingGen.GenerateWhileStatement(stmt)
+	case *ast.WhileStatement:
+		bg.CodeGen.LoopingGen.GenerateWhileStatement(stmt)
 	case *ast.ReturnStatement:
 		bg.CodeGen.emitComment("Return statement")
 	case *ast.Block:

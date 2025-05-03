@@ -15,7 +15,7 @@ func NewAssignmentGenerator(cg *CodeGenerator) *AssignmentGenerator {
 	}
 }
 
-func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration) {
+func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaration) {
 	cg := ag.CodeGen
 
 	switch t := varDecl.Type.(type) {
@@ -79,14 +79,19 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl ast.VarDeclaration
 			}
 		}
 	case *ast.ArrayType:
-		var id string = varDecl.Name 
-		symbol, found := cg.SymTable.Lookup("main." + id) // try local 
+		var id string = varDecl.Name
+		symbol, found := cg.SymTable.Lookup("main." + id) // try local
 		if !found {
 			symbol, found = cg.SymTable.Lookup(id) // try global
 		}
 
-		if found && symbol.ArraySize > 0{
-			cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize)
+		if found && symbol.ArraySize > 0 {
+			// if t.ElementType.(*ast.PrimitiveType).Name == "char" {
+			// 	cg.insertData(varDecl.Name, ".space", 4*symbol.ArraySize) // char is using runes, which are int34
+			// } else {
+			// 	cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize) // everything else is 8 bytes
+			// }
+			cg.insertData(varDecl.Name, ".space", 8*symbol.ArraySize) // everything else is 8 bytes
 		} else {
 			panic(fmt.Sprintf("Invalid array size at line %d", varDecl.Line))
 		}
@@ -109,15 +114,15 @@ func isFloatType(typeExpr ast.Type) bool {
 func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessExpression, value ast.Expression) {
 	cg := ag.CodeGen
 	eg := cg.ExpressionGen
-    rp := cg.Registers
+	rp := cg.Registers
 
 	valueRegister, _ := eg.GenerateExpression(value)
 	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(arrExpr.Array, arrExpr.Index)
 
 	isFloat := false
-    if primType, ok := elemType.(*ast.PrimitiveType); ok {
-        isFloat = primType.Name == "float"
-    }
+	if primType, ok := elemType.(*ast.PrimitiveType); ok {
+		isFloat = primType.Name == "float"
+	}
 
 	if isFloat {
 		cg.emit("	fsd %s, 0(%s)", valueRegister, elemAddrRegister)
@@ -128,32 +133,32 @@ func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessE
 	if elemAddrRegister != "a0" && elemAddrRegister != "fa0" {
 		rp.ReleaseRegister(elemAddrRegister)
 	}
-    if indexRegister != "a0" && indexRegister != "fa0" {
-        rp.ReleaseRegister(indexRegister)
-    }
-    if valueRegister != "a0" && valueRegister != "fa0" {
-        rp.ReleaseRegister(valueRegister)
-    }
+	if indexRegister != "a0" && indexRegister != "fa0" {
+		rp.ReleaseRegister(indexRegister)
+	}
+	if valueRegister != "a0" && valueRegister != "fa0" {
+		rp.ReleaseRegister(valueRegister)
+	}
 }
 
 func (ag *AssignmentGenerator) GenerateVariableAssignment(id *ast.Identifier, value ast.Expression) {
-    cg := ag.CodeGen
-    eg := cg.ExpressionGen
-    rp := cg.Registers
-    
-    resultReg, resultType := eg.GenerateExpression(value)
-    
-    addressReg := rp.GetTmpRegister()
-    cg.emit("    la %s, %s", addressReg, id.Name)
-    
-    if primType, ok := resultType.(*ast.PrimitiveType); ok && primType.Name == "float" {
-        cg.emit("    fsd %s, 0(%s)", resultReg, addressReg)
-    } else {
-        cg.emit("    sd %s, 0(%s)", resultReg, addressReg)
-    }
-    
-    rp.ReleaseRegister(addressReg)
-    if resultReg != "a0" && resultReg != "fa0" {
-        rp.ReleaseRegister(resultReg)
-    }
+	cg := ag.CodeGen
+	eg := cg.ExpressionGen
+	rp := cg.Registers
+
+	resultReg, resultType := eg.GenerateExpression(value)
+
+	addressReg := rp.GetTmpRegister()
+	cg.emit("    la %s, %s", addressReg, id.Name)
+
+	if primType, ok := resultType.(*ast.PrimitiveType); ok && primType.Name == "float" {
+		cg.emit("    fsd %s, 0(%s)", resultReg, addressReg)
+	} else {
+		cg.emit("    sd %s, 0(%s)", resultReg, addressReg)
+	}
+
+	rp.ReleaseRegister(addressReg)
+	if resultReg != "a0" && resultReg != "fa0" {
+		rp.ReleaseRegister(resultReg)
+	}
 }
