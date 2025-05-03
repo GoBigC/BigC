@@ -1,318 +1,320 @@
-int x = 15; 
+int x = 10; 
 float y = 5.5;
 int z = 1;
 int t = 2;
 bool m = false;
 int main() {
     // ================INT====================
-    // int addInt = 1 + 2050;
-    // _printInt(addInt); // Expected: 2051
+    int addInt = 1 + 2050;
+    _printInt(addInt); // Expected: 2051
 
-    // int subInt = 5 - 2;
-    // _printInt(subInt); // Expected: 3
+    int subInt = 5 - 2;
+    _printInt(subInt); // Expected: 3
 
-    // int mulInt = 3 * 4;
-    // _printInt(mulInt); // Expected: 12
+    int mulInt = 3 * 4;
+    _printInt(mulInt); // Expected: 12
 
-    // int divInt = 8 / 2;
-    // _printInt(divInt); // Expected: 4
+    int divInt = 8 / 2;
+    _printInt(divInt); // Expected: 4
 
-    // int literalInt = 4; 
-    // _printInt(literalInt); // Expected: 4
+    int literalInt = 4; 
+    _printInt(literalInt); // Expected: 4
 
-    // int minusInt = -5;
-    // _printInt(minusInt); // Expected: -5
+    int minusInt = -5;
+    _printInt(minusInt); // Expected: -5
 
-    // int mixedAddInt = x + 12; 
-    // _printInt(mixedAddInt); // Expected: 22
+    int mixedAddInt = x + 12; 
+    _printInt(mixedAddInt); // Expected: 22
 
-    // int mixMulInt = x * 1; 
-    // _printInt(mixMulInt); // Expected: 10
+    int mixMulInt = x * 1; 
+    _printInt(mixMulInt); // Expected: 10
 
-    // int mixSubInt = x -1; 
-    // _printInt(mixSubInt);  // Expected: 9
+    int mixSubInt = x -1; 
+    _printInt(mixSubInt);  // Expected: 9
 
-    // int mixDivInt = x/2; 
-    // _printInt(mixDivInt);  // Expected: 5
+    int mixDivInt = x/2; 
+    _printInt(mixDivInt);  // Expected: 5
 
-    // _printInt(13); // Expected: 13
+    _printInt(13); // Expected: 13
 
     // =================FLOAT===================
-    // float addFloat = 3.14 + 2.5;
-    // _printFloat(addFloat); // Expected: 5.64
+    float addFloat = 3.14 + 2.5;
+    _printFloat(addFloat); // Expected: 5.64
 
-    // float subFloat = 10.5 - 4.2;
-    // _printFloat(subFloat); // Expected: 6.3
+    float subFloat = 10.5 - 4.2;
+    _printFloat(subFloat); // Expected: 6.3
 
-    // float mulFloat = 2.0 * 3.5;
-    // _printFloat(mulFloat); // Expected: 7.0
+    float mulFloat = 2.0 * 3.5;
+    _printFloat(mulFloat); // Expected: 7.0
 
-    // float divFloat = 15.0 / 3.0;
-    // _printFloat(divFloat); // Expected: 5.0
+    float divFloat = 15.0 / 3.0;
+    _printFloat(divFloat); // Expected: 5.0
 
-    // float literalFloat = 6.28;
-    // _printFloat(literalFloat); // Expected: 6.28
+    float literalFloat = 6.28;
+    _printFloat(literalFloat); // Expected: 6.28
 
-    // float minusFloat = -3.14;
-    // _printFloat(minusFloat); // Expected: -3.14
+    float minusFloat = -3.14;
+    _printFloat(minusFloat); // Expected: -3.14
 
-    // float mixedAddFloat = y + 2.3;
-    // _printFloat(mixedAddFloat); // Expected: 7.8
+    _printFloat(y); // Expected: 5.5
 
-    // float mixMulFloat = y * 2.0;
-    // _printFloat(mixMulFloat); // Expected: 11.0
+    float mixedAddFloat = y + 2.3;
+    _printFloat(mixedAddFloat); // Expected: 7.8
 
-    // float mixSubFloat = y - 1.1;
-    // _printFloat(mixSubFloat); // Expected: 4.4
+    float mixMulFloat = y * 2.0;
+    _printFloat(mixMulFloat); // Expected: 11.0
 
-    // float mixDivFloat = y / 2.2;
-    // _printFloat(mixDivFloat); // Expected: 2.5
+    float mixSubFloat = y - 1.1;
+    _printFloat(mixSubFloat); // Expected: 4.4
 
-    // _printFloat(3.14159); // Expected: 3.14159
+    float mixDivFloat = y / 2.2;
+    _printFloat(mixDivFloat); // Expected: 2.5
+
+    _printFloat(3.14159); // Expected: 3.14159
 
     // =================CHAR===================
-    // char literalChar = 'A';
-    // _printChar(literalChar);
+    char literalChar = 'A';
+    _printChar(literalChar);
 
-    // _printChar('B');
+    _printChar('B');
     
     // =================BOOL===================
-    // bool trueValue = true;
-    // _printBool(trueValue); // Expected: 1
+    bool trueValue = true;
+    _printBool(trueValue); // Expected: 1
 
-    // bool falseValue = false;
-    // _printBool(falseValue); // Expected: 0
+    bool falseValue = false;
+    _printBool(falseValue); // Expected: 0
 
-    // bool andOperation = true && false;
-    // _printBool(andOperation); // Expected: 0
+    bool andOperation = true && false;
+    _printBool(andOperation); // Expected: 0
 
-    // bool orOperation = true || false;
-    // _printBool(orOperation); // Expected: 1
+    bool orOperation = true || false;
+    _printBool(orOperation); // Expected: 1
 
-    // bool notOperation = !trueValue;
-    // _printBool(notOperation); // Expected: 0
+    bool notOperation = !trueValue;
+    _printBool(notOperation); // Expected: 0
 
-    // bool comparisonLT = (5 < 10);
-    // _printBool(comparisonLT); // Expected: 1
+    bool comparisonLT = (5 < 10);
+    _printBool(comparisonLT); // Expected: 1
 
-    // bool comparisonGT = (20 > 15);
-    // _printBool(comparisonGT); // Expected: 1
+    bool comparisonGT = (20 > 15);
+    _printBool(comparisonGT); // Expected: 1
 
-    // bool comparisonEQ = (7 == 7);
-    // _printBool(comparisonEQ); // Expected: 1
+    bool comparisonEQ = (7 == 7);
+    _printBool(comparisonEQ); // Expected: 1
 
-    // bool comparisonNEQ = (8 != 9);
-    // _printBool(comparisonNEQ); // Expected: 1
+    bool comparisonNEQ = (8 != 9);
+    _printBool(comparisonNEQ); // Expected: 1
 
     // ================ARRAY====================
-    // int a[x]; 
-    // a[0] = 69; 
-    // _printInt(a[0]);
+    int a[x]; 
+    a[0] = 69; 
+    _printInt(a[0]);
 
-    // // this is not going to work --> workaround at (I)
-    // // int z = 4;
-    // // a[x-z] = 420; // 42.0 thi sao? 
-    // // int n = a[x-z]; 
-    // // _printInt(n);
-
-    // // (I)
+    // this is not going to work --> workaround at (I)
     // int z = 4;
-    // int k = x-z; 
-    // a[k] = 420; 
-    // int n = a[k];  
+    // a[x-z] = 420; // 42.0 thi sao? 
+    // int n = a[x-z]; 
     // _printInt(n);
 
-    // // (I)
-    // a[k] = 425; 
-    // _printInt(a[k]);     
-    // n = a[k];   
-    // _printInt(n);
+    // (I)
+    int z = 4;
+    int k = x-z; 
+    a[k] = 420; 
+    int n = a[k];  
+    _printInt(n);
 
-    // int n1; 
-    // n1 = a[k];
-    // _printInt(n1);
+    // (I)
+    a[k] = 425; 
+    _printInt(a[k]);     
+    n = a[k];   
+    _printInt(n);
 
-    // a[0] = 1; 
-    // _printInt(a[0]);
-    // a[1] = 1; 
-    // // a[2] = 1.2; // should error
-    // // int d[0]; // should error
+    int n1; 
+    n1 = a[k];
+    _printInt(n1);
 
-    // int ff = a[0] + a[1]; 
-    // _printInt(n);
+    a[0] = 1; 
+    _printInt(a[0]);
+    a[1] = 1; 
+    // a[2] = 1.2; // should error
+    // int d[0]; // should error
 
-    // int b[x+1]; 
-    // float c[x+z+1];
-    // c[0] = 3.1412; 
-    // c[1] = 6.699; 
-    // _printFloat(c[1]); 
-    // _printFloat(c[0]);
+    int ff = a[0] + a[1]; 
+    _printInt(n);
 
-    // float prices[3];
-    // prices[0] = 10.5;
-    // prices[1] = 20.75;
-    // prices[2] = 15.25;
+    int b[x+1]; 
+    float c[x+z+1];
+    c[0] = 3.1412; 
+    c[1] = 6.699; 
+    _printFloat(c[1]); 
+    _printFloat(c[0]);
+
+    float prices[3];
+    prices[0] = 10.5;
+    prices[1] = 20.75;
+    prices[2] = 15.25;
     
-    // _printFloat(prices[0]);  // expect: 10.5
-    // _printFloat(prices[1]);  // expext: 20.75
+    _printFloat(prices[0]);  // expect: 10.5
+    _printFloat(prices[1]);  // expext: 20.75
     
-    // float total = prices[0] + prices[1] + prices[2];
-    // _printFloat(total);  // expect: 46.5
+    float total = prices[0] + prices[1] + prices[2];
+    _printFloat(total);  // expect: 46.5
 
-    // char charArray[5];
-    // charArray[0] = 'H';
-    // _printChar(charArray[0]); // Expected: H
-    // charArray[1] = 'e';
-    // _printChar(charArray[1]); // Expected: e
-    // charArray[2] = 'l';
-    // _printChar(charArray[2]); // Expected: l
-    // charArray[3] = 'l';
-    // _printChar(charArray[3]); // Expected: l
-    // charArray[4] = 'o';
-    // _printChar(charArray[4]); // Expected: o
+    char charArray[5];
+    charArray[0] = 'H';
+    _printChar(charArray[0]); // Expected: H
+    charArray[1] = 'e';
+    _printChar(charArray[1]); // Expected: e
+    charArray[2] = 'l';
+    _printChar(charArray[2]); // Expected: l
+    charArray[3] = 'l';
+    _printChar(charArray[3]); // Expected: l
+    charArray[4] = 'o';
+    _printChar(charArray[4]); // Expected: o
     
 
     // =================IF-STATEMENT===================
 
-    // _printFloat(1.1);
-    // // Test Case 1: Simple if, no else
-    // if (x > 0) {
-    //     _printInt(x);
-    // }
+    _printFloat(1.1);
+    // Test Case 1: Simple if, no else
+    if (x > 0) {
+        _printInt(x);
+    }
 
-    // _printFloat(2.2);
-    // // Test Case 2: if with else as block
-    // if (x < 0) {
-    //     _printInt(x);
-    // } else {
-    //     _printInt(-x);
-    // }
+    _printFloat(2.2);
+    // Test Case 2: if with else as block
+    if (x < 0) {
+        _printInt(x);
+    } else {
+        _printInt(-x);
+    }
 
-    // _printFloat(3.3);
-    // // Test Case 3: if with else as if (else if)
-    // if (x < 0) {
-    //     _printInt(x);
-    // } else if (x > 0) {
-    //     _printInt(0);
-    // }
+    _printFloat(3.3);
+    // Test Case 3: if with else as if (else if)
+    if (x < 0) {
+        _printInt(x);
+    } else if (x > 0) {
+        _printInt(0);
+    }
 
-    // _printFloat(4.4);
-    // // Test Case 4: full if-else if-else
-    // if (x < 0) {
-    //     _printInt(x);
-    // } else if (x == 0) {
-    //     _printInt(0);
-    // } else {
-    //     _printInt(-x);
-    // }
+    _printFloat(4.4);
+    // Test Case 4: full if-else if-else
+    if (x < 0) {
+        _printInt(x);
+    } else if (x == 0) {
+        _printInt(0);
+    } else {
+        _printInt(-x);
+    }
 
-    // _printFloat(5.5);
-    // // Test Case 5: Nested if
-    // if (x > 0) {
-    //     if (t > 0) {
-    //         _printInt(1);
-    //     } else {
-    //         _printInt(2);
-    //     }
-    // }
+    _printFloat(5.5);
+    // Test Case 5: Nested if
+    if (x > 0) {
+        if (t > 0) {
+            _printInt(1);
+        } else {
+            _printInt(2);
+        }
+    }
 
-    // _printFloat(6.6);
-    // // Test Case 6: if with complex logical expression
-    // if ((x > 0 && t < 0) || z == 1) {
-    //     _printInt(1);
-    // }
+    _printFloat(6.6);
+    // Test Case 6: if with complex logical expression
+    if ((x > 0 && t < 0) || z == 1) {
+        _printInt(1);
+    }
 
-    // _printFloat(7.7);   
-    // // Test Case 7: if with empty block
-    // if (x > 0) {
-    // }
+    _printFloat(7.7);   
+    // Test Case 7: if with empty block
+    if (x > 0) {
+    }
 
-    // _printFloat(8.8);
-    // // Test Case 8: if with non-print statement
-    // if (x > 0) {
-    //     t = t + 1;
-    // }
+    _printFloat(8.8);
+    // Test Case 8: if with non-print statement
+    if (x > 0) {
+        t = t + 1;
+    }
 
-    // _printInt(t); 
+    _printInt(t); 
 
-    // _printFloat(9.9);
-    // // Test Case 9: else with empty block
-    // if (x > 0) {
-    //     t = 1;
-    // } else {
-    // }
+    _printFloat(9.9);
+    // Test Case 9: else with empty block
+    if (x > 0) {
+        t = 1;
+    } else {
+    }
 
-    // _printFloat(10.10);
-    // // Test Case 10: long else if chain
-    // if (x == 1) {
-    //     _printInt(1);
-    // } else if (x == 2) {
-    //     _printInt(2);
-    // } else if (x == 3) {
-    //     _printInt(3);
-    // } else {
-    //     _printInt(0);
-    // }
+    _printFloat(10.10);
+    // Test Case 10: long else if chain
+    if (x == 1) {
+        _printInt(1);
+    } else if (x == 2) {
+        _printInt(2);
+    } else if (x == 3) {
+        _printInt(3);
+    } else {
+        _printInt(0);
+    }
 
-    // _printFloat(11.11);
-    // // Test Case 11: if with unary operator
-    // if (!m) {
-    //     _printInt(1);
-    // } else {
-    //     _printInt(2);
-    // }
+    _printFloat(11.11);
+    // Test Case 11: if with unary operator
+    if (!m) {
+        _printInt(1);
+    } else {
+        _printInt(2);
+    }
 
-    // _printInt(69420); 
+    _printInt(69420); 
 
-    // =================WHILE-LOOP===================\
-    // // Test Case 1: Simple while loop
-    // int i = 0;
-    // while (i < 10) {
-    //     _printInt(i);
-    //     i = i + 1;
-    // }
+    // =================WHILE-LOOP===================
+    // Test Case 1: Simple while loop
+    int i = 0;
+    while (i < 10) {
+        _printInt(i);
+        i = i + 1;
+    }
 
-    // // Test Case 2: more complex while loop with other statements
-    // int j = 0;
-    // while (j < 5) {
-    //     _printInt(j);
-    //     j = j + 1;
-    //     if (j == 3) {
-    //         _printInt(100);
-    //     } else if (j == 4) {
-    //         _printInt(200);
-    //     } else {
-    //         _printChar('A');
-    //     }
-    // }
+    // Test Case 2: more complex while loop with other statements
+    int j = 0;
+    while (j < 5) {
+        _printInt(j);
+        j = j + 1;
+        if (j == 3) {
+            _printInt(100);
+        } else if (j == 4) {
+            _printInt(200);
+        } else {
+            _printChar('A');
+        }
+    }
 
-    // // Test Case 3: while loop with char array access
-    // int sid = 0;
-    // int stringLength = 5;
-    // char charArrayWhile[stringLength];
-    // charArrayWhile[0] = 'H';
-    // charArrayWhile[1] = 'e';
-    // charArrayWhile[2] = 'l';
-    // charArrayWhile[3] = 'l';
-    // charArrayWhile[4] = 'o';
-    // while (sid < stringLength) {
-    //     _printChar(charArrayWhile[sid]);
-    //     sid = sid + 1;
-    // }
+    // Test Case 3: while loop with char array access
+    int sid = 0;
+    int stringLength = 5;
+    char charArrayWhile[stringLength];
+    charArrayWhile[0] = 'H';
+    charArrayWhile[1] = 'e';
+    charArrayWhile[2] = 'l';
+    charArrayWhile[3] = 'l';
+    charArrayWhile[4] = 'o';
+    while (sid < stringLength) {
+        _printChar(charArrayWhile[sid]);
+        sid = sid + 1;
+    }
 
-    // // Test Case 4: while loop with array access
-    // int arrLength = 5;
-    // int intArray[arrLength];
-    // intArray[0] = 6;
-    // intArray[1] = 9;
-    // intArray[2] = 4;
-    // intArray[3] = 2;
-    // intArray[4] = 0;
-    // int index = 0;
-    // while (index < arrLength) {
-    //     _printInt(intArray[index]);
-    //     index = index + 1;
-    // }
+    // Test Case 4: while loop with array access
+    int arrLength = 5;
+    int intArray[arrLength];
+    intArray[0] = 6;
+    intArray[1] = 9;
+    intArray[2] = 4;
+    intArray[3] = 2;
+    intArray[4] = 0;
+    int index = 0;
+    while (index < arrLength) {
+        _printInt(intArray[index]);
+        index = index + 1;
+    }
 
     // Test Case 5: nested while loop
     int test5Index = 0;
