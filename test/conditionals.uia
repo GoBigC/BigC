@@ -1,0 +1,83 @@
+// Test file for BigC conditional statements
+// Demonstrates if-else statements and their variations
+
+int main() {
+    // ============ Simple If Statement ============
+    int x = 10;
+    if (x > 5) {
+        _printInt(x); // Expected: 10
+    }
+    
+    // ============ If-Else Statement ============
+    int y = 3;
+    if (y > 5) {
+        _printInt(y);
+    } else {
+        _printInt(-y); // Expected: -3
+    }
+    
+    // ============ If-Else If Statement ============
+    int z = 0;
+    if (z > 0) {
+        _printInt(1);
+    } else if (z < 0) {
+        _printInt(-1);
+    } else {
+        _printInt(0); // Expected: 0
+    }
+    
+    // ============ Nested If Statements ============
+    int a = 10;
+    int b = 20;
+    if (a > 5) {
+        if (b > 15) {
+            _printInt(1); // Expected: 1
+        } else {
+            _printInt(2);
+        }
+    } else {
+        _printInt(3);
+    }
+    
+    
+    // ============ Boolean Variables in Conditions ============
+    bool flag = true;
+    if (flag) {
+        _printInt(100); // Expected: 100
+    } else {
+        _printInt(200);
+    }
+    
+    bool anotherFlag = false;
+    if (!anotherFlag) {
+        _printInt(300); // Expected: 300
+    } else {
+        _printInt(400);
+    }
+    
+    // ============ Comparison in Conditions ============
+    // float f1 = 3.14;
+    // float f2 = 2.71;
+    // if (f1 > f2) {
+    //     _printFloat(f1); // Expected: 3.14
+    // } else {
+    //     _printFloat(f2);
+    // }
+    
+    
+    // ============ Multiple Else-If Statements ============
+    int grade = 85;
+    if (grade >= 90) {
+        _printChar('A');
+    } else if (grade >= 80) {
+        _printChar('B'); // Expected: B
+    } else if (grade >= 70) {
+        _printChar('C');
+    } else if (grade >= 60) {
+        _printChar('D');
+    } else {
+        _printChar('F');
+    }
+    
+    return 0;
+}
