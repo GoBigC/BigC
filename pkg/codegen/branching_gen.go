@@ -27,8 +27,15 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 		var condReg string
 
 		switch cond := stmt.Condition.(type) {
-		case *ast.BinaryExpression, *ast.UnaryExpression:
+		case *ast.BinaryExpression, *ast.UnaryExpression, *ast.Identifier:
 			condReg, _ = cg.ExpressionGen.GenerateExpression(cond)
+		case *ast.BoolLiteral:
+			condReg = cg.Registers.GetTmpRegister()
+			if cond.Value {
+				cg.emit("li %s, 1", condReg)
+			} else {
+				cg.emit("li %s, 0", condReg)
+			}
 		default:
 			panic("Unsupported condition: only binary or unary expressions are allowed")
 		}
