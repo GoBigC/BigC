@@ -1,0 +1,51 @@
+int main() {
+    int sumArray[3];
+    sumArray[0] = 5;
+    sumArray[1] = 15;
+    sumArray[2] = 15;
+
+
+    _printInt(sumArray[0]); // Expected: 5
+    _printInt(sumArray[1]); // Expected: 10 
+    _printInt(sumArray[2]); // Expected: 15
+    
+    int sum = sumArray[0] + sumArray[1] + sumArray[2];
+    _printInt(sum); // Expected: 30
+
+    _printInt(sumArray[0]); // Expected: 5
+    _printInt(sumArray[1]); // Expected: 10 
+    _printInt(sumArray[2]); // Expected: 15
+    
+    // Calculate average
+    int average = (sumArray[0] + sumArray[1] + sumArray[2]) / 3;
+    _printInt(average); // Expected: 10.0
+    
+    // Find max
+    int max = sumArray[0];
+    if (sumArray[1] > max) {
+        max = sumArray[1];
+        _printInt(max); // Expected: 10
+    }
+    if (sumArray[2] > max) {
+        max = sumArray[2];
+        _printInt(max); // Expected: 15
+    }
+    _printInt(max); // Expected: 15
+    
+    // ============ Array with Variable Index ============
+    int intArray[5];
+    intArray[0] = 10;
+    intArray[1] = 20;
+    intArray[2] = 30;
+    intArray[3] = 40;
+    intArray[4] = 50;
+    
+    int index = 2;
+    _printInt(intArray[index]); // Expected: 30
+    
+    index = 4;
+    _printInt(intArray[index]); // Expected: 50
+
+return 0;
+
+}

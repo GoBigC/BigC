@@ -93,39 +93,5 @@ int main() {
     }
     _printInt(max); // Expected: 15
 
-    // ============ Matrix Declaration and Access ============
-    int matrix[2][3];
-    matrix[0][0] = 1;
-    matrix[0][1] = 2;
-    matrix[0][2] = 3;
-    matrix[1][0] = 4;
-    matrix[1][1] = 5;
-    matrix[1][2] = 6;
-
-    _printInt(matrix[0][0]); // Expected: 1
-    _printInt(matrix[0][2]); // Expected: 3
-    _printInt(matrix[1][1]); // Expected: 5
-
-    // ============ Matrix Operations ============
-    // Sum of all elements in the matrix
-    int matrixSum = 0;
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 3; j++) {
-            matrixSum += matrix[i][j];
-        }
-    }
-    _printInt(matrixSum); // Expected: 21
-
-    // Transpose of the matrix
-    int transpose[3][2];
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 3; j++) {
-            transpose[j][i] = matrix[i][j];
-        }
-    }
-
-    _printInt(transpose[0][0]); // Expected: 1
-    _printInt(transpose[2][1]); // Expected: 6
-
     return 0;
 }

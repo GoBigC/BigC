@@ -9,88 +9,88 @@ int main() {
         i = i + 1;
     }
     
-    // // ============ Nested While Loops ============
-    // int x = 0;
-    // while (x < 3) {
-    //     int y = 0;
-    //     while (y < 2) {
-    //         _printInt(x * 10 + y); // Expected: 0, 1, 10, 11, 20, 21
-    //         y = y + 1;
-    //     }
-    //     x = x + 1;
-    // }
+    // ============ Nested While Loops ============
+    int x = 0;
+    while (x < 3) {
+        int y = 0;
+        while (y < 2) {
+            _printInt(x * 10 + y); // Expected: 0, 1, 10, 11, 20, 21
+            y = y + 1;
+        }
+        x = x + 1;
+    }
     
-    // // ============ Simulating "break" with a flag ============
-    // _printChar('B'); // Marker for break simulation
+    // ============ Simulating "break" with a flag ============
+    _printChar('B'); // Marker for break simulation
     
-    // int j = 0;
-    // bool shouldBreak = false;
-    // while (j < 10 && !shouldBreak) {
-    //     _printInt(j); // Expected: 0, 1, 2, 3, 4
-    //     j = j + 1;
+    int j = 0;
+    bool shouldBreak = false;
+    while (j < 10 && !shouldBreak) {
+        _printInt(j); // Expected: 0, 1, 2, 3, 4
+        j = j + 1;
         
-    //     // Simulate "break" when j reaches 5
-    //     if (j == 5) {
-    //         shouldBreak = true;
-    //     }
-    // }
+        // Simulate "break" when j reaches 5
+        if (j == 5) {
+            shouldBreak = true;
+        }
+    }
     
-    // // ============ Simulating "break" in nested loops ============
-    // _printChar('N'); // Marker for nested break simulation
+    // ============ Simulating "break" in nested loops ============
+    _printChar('N'); // Marker for nested break simulation
     
-    // int outer = 0;
-    // bool outerBreak = false;
+    int outer = 0;
+    bool outerBreak = false;
     
-    // while (outer < 3 && !outerBreak) {
-    //     int inner = 0;
-    //     bool innerBreak = false;
+    while (outer < 3 && !outerBreak) {
+        int inner = 0;
+        bool innerBreak = false;
         
-    //     while (inner < 3 && !innerBreak) {
-    //         _printInt(outer * 10 + inner); // Expected: 0, 1, 10, 11, 20
+        while (inner < 3 && !innerBreak) {
+            _printInt(outer * 10 + inner); // Expected: 0, 1, 10, 11
             
-    //         // Simulate "break" from inner loop when inner == 2
-    //         if (inner == 1) {
-    //             innerBreak = true;
-    //         }
+            // Simulate "break" from inner loop when inner == 2
+            if (inner == 1) {
+                innerBreak = true;
+            }
             
-    //         inner = inner + 1;
-    //     }
+            inner = inner + 1;
+        }
         
-    //     // Simulate "break" from outer loop when outer == 2
-    //     if (outer == 1) {
-    //         outerBreak = true;
-    //     }
+        // Simulate "break" from outer loop when outer == 2
+        if (outer == 1) {
+            outerBreak = true;
+        }
         
-    //     outer = outer + 1;
-    // }
+        outer = outer + 1;
+    }
     
-    // // ============ Loop with Complex Condition ============
-    // int count = 0;
-    // int sum = 0;
+    // ============ Loop with Complex Condition ============
+    int count = 0;
+    int sum = 0;
     
-    // while (count < 10 && sum < 25) {
-    //     count = count + 1;
-    //     sum = sum + count;
-    //     _printInt(sum); // Expected: 1, 3, 6, 10, 15, 21, 28 (stops at 28)
-    // }
+    while (count < 10 && sum < 25) {
+        count = count + 1;
+        sum = sum + count;
+        _printInt(sum); // Expected: 1, 3, 6, 10, 15, 21, 28 (stops at 28)
+    }
     
-    // _printInt(count); // Expected: 7
+    _printInt(count); // Expected: 7
     
-    // // ============ Early Exit Pattern ============
-    // _printChar('E'); // Marker for early exit
+    // ============ Early Exit Pattern ============
+    _printChar('E'); // Marker for early exit
     
-    // int m = 0;
-    // bool done = false;
+    int m = 0;
+    bool done = false;
     
-    // while (m < 100 && !done) {
-    //     _printInt(m); // Expected: 0, 1, 2, 3, 4
+    while (m < 100 && !done) {
+        _printInt(m); // Expected: 0, 1, 2, 3, 4
         
-    //     m = m + 1;
+        m = m + 1;
         
-    //     if (m >= 5) {
-    //         done = true;
-    //     }
-    // }
+        if (m >= 5) {
+            done = true;
+        }
+    }
     
     return 0;
 }
