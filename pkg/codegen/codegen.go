@@ -201,10 +201,10 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 }
 
 func (cg *CodeGenerator) AllocateStack(symbolName string, size int) int {
-	cg.StackSize += size
-	offset := -cg.StackSize
-	cg.VarStackOffset[symbolName] = offset
-	return offset
+    cg.StackSize += size
+    offset := cg.StackSize - size // Offset from the adjusted sp
+    cg.VarStackOffset[symbolName] = offset
+    return offset
 }
 
 func (cg *CodeGenerator) ResetStack() {
@@ -312,6 +312,20 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	cg.GenerateAllBuiltinFunctions()
 	cg.emit("main:")
 
+	// Calculate stack size for main
+	stackSize := 0
+	for _, decl := range cg.Program.Declarations {
+		if funcDecl, ok := decl.(*ast.FunctionDeclaration); ok && funcDecl.Name == "main" {
+			stackSize = cg.CalculateStackSize(funcDecl.Body)
+		}
+	}
+
+	// Prologue: Allocate stack frame
+	if stackSize > 0 {
+		cg.emitComment("=== main Prologue ===")
+		cg.emit("    addi sp, sp, -%d", stackSize)
+	}
+
 	for _, decl := range cg.Program.Declarations {
 		if funcDecl, ok := decl.(*ast.FunctionDeclaration); ok {
 			if funcDecl.Name == "main" {
@@ -322,6 +336,11 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 		} else {
 			cg.GenerateDeclaration(decl)
 		}
+	}
+
+	if stackSize > 0 {
+		cg.emitComment("=== main Epilogue ===")
+		cg.emit("    addi sp, sp, %d", stackSize)
 	}
 
 	cg.emit("	li a0, 0")
@@ -376,4 +395,17 @@ func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
 	default:
 		panic(fmt.Sprintf("unknown statement type: %T", stmt))
 	}
+}
+
+func (cg *CodeGenerator) CalculateStackSize(block *ast.Block) int {
+	size := 0
+	for _, item := range block.Items {
+		switch stmt := item.(type) {
+		case *ast.VarDeclaration:
+			size += 8 // int, bool, char
+		case *ast.Block:
+			size += cg.CalculateStackSize(stmt)
+		}
+	}
+	return size
 }
