@@ -46,7 +46,7 @@ func (analyzer *SemanticAnalyzer) Analyze(program *ast.Program) []string {
 	}
 
 	analyzer.finalizeArraySizes()
-	
+
 	fmt.Println("Symbol table dump:")
 	analyzer.SymTable.PrintTable()
 
@@ -59,12 +59,12 @@ func (analyzer *SemanticAnalyzer) finalizeArraySizes() {
 			arr := symbol.Type.(*ast.ArrayType)
 			if lit, ok := arr.Size.(*ast.IntegerLiteral); ok {
 				symbol.ArraySize = lit.Value
-				analyzer.SymTable.Symbols[name] = symbol 
+				analyzer.SymTable.Symbols[name] = symbol
 			} else {
-				size, isConst := analyzer.evaluateArraySize(arr.Size) 
+				size, isConst := analyzer.evaluateArraySize(arr.Size)
 				if isConst {
-					symbol.ArraySize = size 
-					analyzer.SymTable.Symbols[name] = symbol 
+					symbol.ArraySize = size
+					analyzer.SymTable.Symbols[name] = symbol
 				}
 			}
 		}
@@ -128,7 +128,7 @@ func (analyzer *SemanticAnalyzer) analyzeDeclaration(declr ast.Declaration) {
 			if !typesMatch(d.Type, initType) {
 				analyzer.Error(d.Line, fmt.Sprintf("type mismatch in initializer: expected %s, got %s", typeString(d.Type), typeString(initType)))
 			}
-			if val, ok := analyzer.evaluateConstantExpression(d.Initializer); ok { 
+			if val, ok := analyzer.evaluateConstantExpression(d.Initializer); ok {
 				sym := analyzer.SymTable.Symbols[name]
 				sym.Value = val
 				analyzer.SymTable.Symbols[name] = sym
@@ -211,6 +211,11 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 	name := varDeclr.Name
 	lastLine := math.MaxInt // Global default
 
+	symLocal, okLocal := analyzer.SymTable.Lookup(name)
+	if okLocal {
+		analyzer.Error(varDeclr.Line, fmt.Sprintf("variable %s already declared at line %d", symLocal.Name, symLocal.Scope.ValidFirstLine))
+	}
+
 	if analyzer.currentFunction != "" {
 		name = analyzer.currentFunction + "." + varDeclr.Name
 		lastLine = blockEndLine
@@ -221,7 +226,7 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 		analyzer.Error(varDeclr.Line, fmt.Sprintf("variable %s already declared at line %d", sym.Name, sym.Scope.ValidFirstLine))
 	} else {
 		var size int64 = 0
-		
+
 		if isArray(varDeclr.Type) {
 			arrayType := varDeclr.Type.(*ast.ArrayType)
 
@@ -233,10 +238,10 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 				if !isConst {
 					analyzer.Error(varDeclr.Line, "array size must be a compile-time constant expression")
 				} else {
-					size = constSize 
+					size = constSize
 				}
 			}
-			if size < 1 { 
+			if size < 1 {
 				fmt.Printf("array size is %d", size)
 				analyzer.Error(varDeclr.Line, "array size must be a positive constant integer")
 			}
@@ -396,11 +401,11 @@ func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAccessExpr *ast.
 
 	if arr, ok := arrayType.(*ast.ArrayType); ok {
 		var size int64
-		var arrayName string 
+		var arrayName string
 
 		if id, ok := arrAccessExpr.Array.(*ast.Identifier); ok {
-			arrayName = id.Name 
-			var symName string = arrayName 
+			arrayName = id.Name
+			var symName string = arrayName
 			if analyzer.currentFunction != "" {
 				symName = fmt.Sprintf("main.%s", arrayName) // not global
 			}
@@ -516,7 +521,7 @@ func typeString(t ast.Type) string {
 		return p.Name
 	}
 	if a, ok := t.(*ast.ArrayType); ok {
-		return fmt.Sprintf("%s[]", typeString(a.ElementType)) 
+		return fmt.Sprintf("%s[]", typeString(a.ElementType))
 	}
 	return "unknown"
 }
@@ -537,9 +542,9 @@ func (analyzer *SemanticAnalyzer) evaluateConstantExpression(expr ast.Expression
 
 func (analyzer *SemanticAnalyzer) evaluateArraySize(expr ast.Expression) (int64, bool) {
 	switch e := expr.(type) {
-	case *ast.IntegerLiteral: 
+	case *ast.IntegerLiteral:
 		return e.Value, true
-	case *ast.BinaryExpression: 
+	case *ast.BinaryExpression:
 		leftVal, leftOk := analyzer.evaluateArraySize(e.Left)
 		rightVal, rightOk := analyzer.evaluateArraySize(e.Right)
 
@@ -554,30 +559,30 @@ func (analyzer *SemanticAnalyzer) evaluateArraySize(expr ast.Expression) (int64,
 		}
 
 		switch e.Operator {
-		case "+": 
-			return leftVal+rightVal, true
-		case "-": 
-			return leftVal-rightVal, true
-		case "*": 
-			return leftVal*rightVal, true
-		case "/": 
+		case "+":
+			return leftVal + rightVal, true
+		case "-":
+			return leftVal - rightVal, true
+		case "*":
+			return leftVal * rightVal, true
+		case "/":
 			if rightVal == 0 {
 				analyzer.Error(e.Line, "division by zero in array size")
 				return 0, false
 			}
-			return leftVal/rightVal, true
+			return leftVal / rightVal, true
 		default: // TODO: this function is evaluating all kinds of constant operations not just array types --> bad, we want it to only target array size expression
-            analyzer.Error(e.Line, fmt.Sprintf("operator %s not supported in constant expressions", e.Operator))
-            return 0, false
+			analyzer.Error(e.Line, fmt.Sprintf("operator %s not supported in constant expressions", e.Operator))
+			return 0, false
 		}
 	case *ast.Identifier:
-		symName := e.Name 
+		symName := e.Name
 
 		symbol, found := analyzer.SymTable.Lookup("main." + symName) // check local first
-		if !found { // then check global
+		if !found {                                                  // then check global
 			symbol, found = analyzer.SymTable.Lookup(symName)
 		}
-		 
+
 		if found {
 			if symbol.Value != nil {
 				if intVal, ok := symbol.Value.(int64); ok {
@@ -586,23 +591,23 @@ func (analyzer *SemanticAnalyzer) evaluateArraySize(expr ast.Expression) (int64,
 			}
 		}
 		analyzer.Error(e.Line, fmt.Sprintf("identifier %s is not a compile-time constant", e.Name))
-    	return 0, false
-	default: 
+		return 0, false
+	default:
 		analyzer.Error(getExprLine(expr), "cannot evaluate constant expression (69420 is placeholder int only)")
 		return 0, true
 	}
-	// return 0, false 
+	// return 0, false
 }
 
 func getExprLine(expr ast.Expression) int {
 	switch e := expr.(type) {
-	case *ast.BinaryExpression: 
+	case *ast.BinaryExpression:
 		return e.Line
-	case *ast.IntegerLiteral: 
+	case *ast.IntegerLiteral:
 		return e.Line
-	case *ast.Identifier: 
+	case *ast.Identifier:
 		return e.Line
-	default: 
+	default:
 		return 69420
 	}
 }
