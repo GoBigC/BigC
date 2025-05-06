@@ -55,11 +55,10 @@ func main() {
 	// ast := program
 	outFile := "asm.asm"
 	codeGenerator := codegen.NewCodeGenerator(program, semanticAnalyzer.SymTable)
-	
+
 	if err := codeGenerator.GenerateProgram(outFile); err != nil {
 		fmt.Printf("Error generating code: %v\n", err)
 		os.Exit(1)
 	}
 	fmt.Println("Code generation completed successfully.")
-}	
-
+}

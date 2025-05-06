@@ -16,7 +16,7 @@ func NewBranchingGenerator(cg *CodeGenerator) *BranchingGenerator {
 	}
 }
 
-func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
+func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement, funcContext string) {
 	cg := bg.CodeGen
 
 	cg.emitComment("=== Begin if statement ===")
@@ -28,7 +28,7 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 
 		switch cond := stmt.Condition.(type) {
 		case *ast.BinaryExpression, *ast.UnaryExpression, *ast.Identifier:
-			condReg, _ = cg.ExpressionGen.GenerateExpression(cond)
+			condReg, _ = cg.ExpressionGen.GenerateExpression(cond, funcContext)
 		case *ast.BoolLiteral:
 			condReg = cg.Registers.GetTmpRegister()
 			if cond.Value {
@@ -48,7 +48,7 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 		// Generate code for the then block
 		cg.emitComment("Then block:")
 		if stmt.ThenBlock != nil {
-			cg.BlockGen.GenerateBlock(stmt.ThenBlock)
+			cg.BlockGen.GenerateBlock(stmt.ThenBlock, funcContext)
 		}
 
 		// Handle else block
@@ -57,9 +57,9 @@ func (bg *BranchingGenerator) GenerateIfStatement(stmt *ast.IfStatement) {
 			cg.emit("%s:", elseLabel) // Else label
 			switch elseBlock := stmt.ElseBlock.(type) {
 			case *ast.Block:
-				cg.BlockGen.GenerateBlock(elseBlock)
+				cg.BlockGen.GenerateBlock(elseBlock, funcContext)
 			case *ast.IfStatement:
-				bg.GenerateIfStatement(elseBlock)
+				bg.GenerateIfStatement(elseBlock, funcContext)
 			default:
 				cg.emitComment("Unsupported else block type")
 			}

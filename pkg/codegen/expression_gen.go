@@ -17,16 +17,16 @@ func NewExpressionGenerator(cg *CodeGenerator) *ExpressionGenerator {
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression, funcContext string) (string, ast.Type) {
 	switch e := expr.(type) {
 	case *ast.BinaryExpression:
-		return eg.GenerateBinaryExpression(e)
+		return eg.GenerateBinaryExpression(e, funcContext)
 	case *ast.UnaryExpression:
-		return eg.GenerateUnaryExpression(e)
+		return eg.GenerateUnaryExpression(e, funcContext)
 	case *ast.ArrayAccessExpression:
-		return eg.GenerateArrayAccessExpression(e)
+		return eg.GenerateArrayAccessExpression(e, funcContext)
 	case *ast.FunctionCallExpression:
-		return eg.GenerateFunctionCallExpression(e)
+		return eg.GenerateFunctionCallExpression(e, funcContext)
 	case *ast.IntegerLiteral:
 		return eg.GenerateIntegerLiteral(e)
 	case *ast.FloatLiteral:
@@ -36,21 +36,24 @@ func (eg *ExpressionGenerator) GenerateExpression(expr ast.Expression) (string, 
 	case *ast.CharLiteral:
 		return eg.GenerateCharLiteral(e)
 	case *ast.Identifier:
-		return eg.GenerateIdentifier(e)
+		return eg.GenerateIdentifier(e, funcContext)
 	default:
 		panic(fmt.Sprintf("unknown expression type %T", expr))
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
-
-	var name string = expr.Name
-	symbol, found := cg.SymTable.Lookup("main." + name) // try local
-
+	name := expr.Name
+	symID := name
+	// Use plain name (no function prefix since only main exists)
+	if funcContext != "" {
+		symID = "main." + name
+	}
+	symbol, found := cg.SymTable.Lookup(symID)
 	if !found {
-		symbol, _ = cg.SymTable.Lookup(name) // try global
+		panic(fmt.Sprintf("Variable %s not found in symbol table", symID))
 	}
 
 	isFloatVar := isFloatType(symbol.Type)
@@ -130,7 +133,7 @@ func (eg *ExpressionGenerator) GenerateFloatLiteral(expr *ast.FloatLiteral) (str
 	return valueRegister, &ast.PrimitiveType{Name: "float"}
 }
 
-func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.FunctionCallExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.FunctionCallExpression, funcContext string) (string, ast.Type) {
 	var funcName string
 	cg := eg.CodeGen
 	rp := cg.Registers
@@ -142,7 +145,7 @@ func (eg *ExpressionGenerator) GenerateFunctionCallExpression(expr *ast.Function
 	}
 
 	if len(expr.Arguments) > 0 {
-		argRegister, _ := eg.GenerateExpression(expr.Arguments[0])
+		argRegister, _ := eg.GenerateExpression(expr.Arguments[0], funcContext)
 
 		switch funcName {
 		case "_printFloat":
@@ -183,11 +186,11 @@ Have to do next to access a[i]:
 	4. Load value from / Write value to that calculated address
 */
 
-func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(e.Array, e.Index)
+	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(e.Array, e.Index, funcContext)
 
 	// 4. load value from element address
 	var resultRegister string
@@ -214,7 +217,7 @@ func (eg *ExpressionGenerator) GenerateArrayAccessExpression(e *ast.ArrayAccessE
 	return resultRegister, elemType
 }
 
-func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expression, indexExpr ast.Expression) (string, string, ast.Type) {
+func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expression, indexExpr ast.Expression, funcContext string) (string, string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
@@ -229,9 +232,14 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	}
 
 	// Look up symbol
-	symbol, found := cg.SymTable.Lookup("main." + arrayName)
+	symID := arrayName
+	// Use plain name (no function prefix since only main exists)
+	if funcContext != "" {
+		symID = "main." + arrayName
+	}
+	symbol, found := cg.SymTable.Lookup(symID)
 	if !found {
-		symbol, _ = cg.SymTable.Lookup(arrayName)
+		panic(fmt.Sprintf("Variable %s not found in symbol table", symID))
 	}
 
 	// Verify array type and get element type
@@ -255,7 +263,7 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	}
 
 	// Generate index expression
-	indexRegister, _ := eg.GenerateExpression(indexExpr)
+	indexRegister, _ := eg.GenerateExpression(indexExpr, funcContext)
 	offsetValueRegister := rp.GetTmpRegister()
 
 	// Calculate offset (index * element_size)
@@ -278,7 +286,7 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	return elemAddrRegister, indexRegister, elemType
 }
 
-func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
@@ -286,7 +294,7 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 
 	switch e.Operator {
 	case "!":
-		operandReg, _ := eg.GenerateExpression(e.Operand)
+		operandReg, _ := eg.GenerateExpression(e.Operand, funcContext)
 		resultReg = rp.GetTmpRegister()
 
 		cg.emit("    seqz %s, %s", resultReg, operandReg)
@@ -298,7 +306,7 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 		return resultReg, &ast.PrimitiveType{Name: "bool"}
 
 	case "-":
-		operandReg, operandType := eg.GenerateExpression(e.Operand)
+		operandReg, operandType := eg.GenerateExpression(e.Operand, funcContext)
 
 		if primitiveType, ok := operandType.(*ast.PrimitiveType); ok {
 			switch primitiveType.Name {
@@ -321,16 +329,16 @@ func (eg *ExpressionGenerator) GenerateUnaryExpression(e *ast.UnaryExpression) (
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	if expr.Operator == "=" {
 		cg := eg.CodeGen
 		if arrayAccess, ok := expr.Left.(*ast.ArrayAccessExpression); ok {
 			// case a[i] = expr
-			cg.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right)
+			cg.AssignmentGen.GenerateArrayAssignment(arrayAccess, expr.Right, funcContext)
 			return "a0", &ast.PrimitiveType{Name: "void"} // assignment dont return value
 		} else if id, ok := expr.Left.(*ast.Identifier); ok {
 			// case: x = expr
-			cg.AssignmentGen.GenerateVariableAssignment(id, expr.Right)
+			cg.AssignmentGen.GenerateVariableAssignment(id, expr.Right, funcContext)
 			return "a0", &ast.PrimitiveType{Name: "void"} // assignment doesn't return value
 		}
 		panic(fmt.Sprintf("Unsupported assignment target: %T", expr.Left))
@@ -339,40 +347,40 @@ func (eg *ExpressionGenerator) GenerateBinaryExpression(expr *ast.BinaryExpressi
 
 	switch expr.Operator {
 	case "+":
-		return eg.GenerateAddition(expr)
+		return eg.GenerateAddition(expr, funcContext)
 	case "-":
-		return eg.GenerateSubtraction(expr)
+		return eg.GenerateSubtraction(expr, funcContext)
 	case "*":
-		return eg.GenerateMultiplication(expr)
+		return eg.GenerateMultiplication(expr, funcContext)
 	case "/":
-		return eg.GenerateDivision(expr)
+		return eg.GenerateDivision(expr, funcContext)
 	case "==":
-		return eg.GenerateEquality(expr)
+		return eg.GenerateEquality(expr, funcContext)
 	case "!=":
-		return eg.GenerateInequality(expr)
+		return eg.GenerateInequality(expr, funcContext)
 	case "<":
-		return eg.GenerateLessThan(expr)
+		return eg.GenerateLessThan(expr, funcContext)
 	case "<=":
-		return eg.GenerateLessThanOrEqual(expr)
+		return eg.GenerateLessThanOrEqual(expr, funcContext)
 	case ">":
-		return eg.GenerateGreaterThan(expr)
+		return eg.GenerateGreaterThan(expr, funcContext)
 	case ">=":
-		return eg.GenerateGreaterThanOrEqual(expr)
+		return eg.GenerateGreaterThanOrEqual(expr, funcContext)
 	case "&&":
-		return eg.GenerateLogicalAnd(expr)
+		return eg.GenerateLogicalAnd(expr, funcContext)
 	case "||":
-		return eg.GenerateLogicalOr(expr)
+		return eg.GenerateLogicalOr(expr, funcContext)
 	default:
 		panic("GenerateBinaryExpression - No case should reach here, as everything should be handled in semantic analysis")
 	}
 }
 
-func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, leftType := eg.GenerateExpression(expr.Left)
-	rightReg, rightType := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, rightType := eg.GenerateExpression(expr.Right, funcContext)
 
 	var resultReg string
 
@@ -395,12 +403,12 @@ func (eg *ExpressionGenerator) GenerateDivision(expr *ast.BinaryExpression) (str
 
 }
 
-func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, leftType := eg.GenerateExpression(expr.Left)
-	rightReg, rightType := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, rightType := eg.GenerateExpression(expr.Right, funcContext)
 
 	var resultReg string
 
@@ -422,12 +430,12 @@ func (eg *ExpressionGenerator) GenerateMultiplication(expr *ast.BinaryExpression
 	panic("GenerateMultiplication - No case should reach here, as everything should be handled in semantic analysis")
 }
 
-func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, leftType := eg.GenerateExpression(expr.Left)
-	rightReg, rightType := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, rightType := eg.GenerateExpression(expr.Right, funcContext)
 
 	var resultReg string
 
@@ -449,12 +457,12 @@ func (eg *ExpressionGenerator) GenerateSubtraction(expr *ast.BinaryExpression) (
 	panic("GenerateSubtraction - No case should reach here, as everything should be handled in semantic analysis")
 }
 
-func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, leftType := eg.GenerateExpression(expr.Left)
-	rightReg, rightType := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, rightType := eg.GenerateExpression(expr.Right, funcContext)
 
 	var resultReg string
 
@@ -476,12 +484,12 @@ func (eg *ExpressionGenerator) GenerateAddition(expr *ast.BinaryExpression) (str
 	panic("GenerateAddition - No case should reach here, as everything should be handled in semantic analysis")
 }
 
-func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 	cg.emit("    slt %s, %s, %s", resultReg, rightReg, leftReg)
@@ -491,12 +499,12 @@ func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) (
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 
@@ -507,12 +515,12 @@ func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) (str
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 	tempReg := rp.GetTmpRegister()
@@ -526,12 +534,12 @@ func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpres
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 	tempReg := rp.GetTmpRegister()
@@ -545,12 +553,12 @@ func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpressio
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 
@@ -562,12 +570,12 @@ func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) (str
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 
@@ -579,12 +587,12 @@ func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (s
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateLogicalOr(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateLogicalOr(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 
@@ -595,12 +603,12 @@ func (eg *ExpressionGenerator) GenerateLogicalOr(expr *ast.BinaryExpression) (st
 	return resultReg, &ast.PrimitiveType{Name: "bool"}
 }
 
-func (eg *ExpressionGenerator) GenerateLogicalAnd(expr *ast.BinaryExpression) (string, ast.Type) {
+func (eg *ExpressionGenerator) GenerateLogicalAnd(expr *ast.BinaryExpression, funcContext string) (string, ast.Type) {
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, _ := eg.GenerateExpression(expr.Left, funcContext)
+	rightReg, _ := eg.GenerateExpression(expr.Right, funcContext)
 
 	resultReg := rp.GetTmpRegister()
 

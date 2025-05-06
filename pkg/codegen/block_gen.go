@@ -15,31 +15,31 @@ func NewBlockGenerator(cg *CodeGenerator) *BlockGenerator {
 	}
 }
 
-func (bg *BlockGenerator) GenerateBlock(block *ast.Block) {
+func (bg *BlockGenerator) GenerateBlock(block *ast.Block, funcContext string) {
 	if block == nil || len(block.Items) == 0 {
 		bg.CodeGen.emitComment("Empty block")
 		return
 	}
 	for i, item := range block.Items {
 		bg.CodeGen.emitComment("Statement #%d", i+1)
-		bg.GenerateBlockItem(item)
+		bg.GenerateBlockItem(item, funcContext)
 	}
 }
 
-func (bg *BlockGenerator) GenerateBlockItem(item ast.BlockItem) {
+func (bg *BlockGenerator) GenerateBlockItem(item ast.BlockItem, funcContext string) {
 	switch stmt := item.(type) {
 	case *ast.VarDeclaration:
-		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(stmt)
+		bg.CodeGen.AssignmentGen.GenerateVarDeclaration(stmt, funcContext)
 	case *ast.ExpressionStatement:
-		_, _ = bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr)
+		_, _ = bg.CodeGen.ExpressionGen.GenerateExpression(stmt.Expr, funcContext)
 	case *ast.IfStatement:
-		bg.CodeGen.BranchingGen.GenerateIfStatement(stmt)
+		bg.CodeGen.BranchingGen.GenerateIfStatement(stmt, funcContext)
 	case *ast.WhileStatement:
-		bg.CodeGen.LoopingGen.GenerateWhileStatement(stmt)
+		bg.CodeGen.LoopingGen.GenerateWhileStatement(stmt, funcContext)
 	case *ast.ReturnStatement:
 		bg.CodeGen.emitComment("Return statement")
 	case *ast.Block:
-		bg.GenerateBlock(stmt)
+		bg.GenerateBlock(stmt, funcContext)
 	default:
 		panic(fmt.Sprintf("Unsupported block item: %T", stmt))
 	}

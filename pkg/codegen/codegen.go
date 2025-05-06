@@ -313,14 +313,14 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	cg.emit("main:")
 
 	for _, decl := range cg.Program.Declarations {
-		if funcDecl, ok := decl.(*ast.FunctionDeclaration); ok {
+		if funcDecl, ok := decl.(*ast.FunctionDeclaration); ok { // inside main
 			if funcDecl.Name == "main" {
 				for _, stmt := range funcDecl.Body.Items {
-					cg.GenerateStatement(stmt)
+					cg.GenerateStatement(stmt, funcDecl.Name)
 				}
 			}
-		} else {
-			cg.GenerateDeclaration(decl)
+		} else { // global declarations
+			cg.GenerateDeclaration(decl, "")
 		}
 	}
 
@@ -339,23 +339,25 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	return nil
 }
 
-func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration) {
+func (cg *CodeGenerator) GenerateDeclaration(decl ast.Declaration, funcContext string) {
 	switch d := decl.(type) {
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration(d)
+		cg.AssignmentGen.GenerateVarDeclaration(d, funcContext)
 	// add more cases as we generate
+	case *ast.FunctionDeclaration:
+		panic("No function declaration allowed for now!")
 	default:
 		panic(fmt.Sprintf("Cannot generate code for unknown declaration type: %T", decl))
 	}
 }
 
-func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
+func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem, funcContext string) {
 	switch stmt := item.(type) {
 	case *ast.ExpressionStatement:
-		cg.ExpressionGen.GenerateExpression(stmt.Expr)
+		cg.ExpressionGen.GenerateExpression(stmt.Expr, funcContext)
 	case *ast.ReturnStatement:
 		if stmt.Value != nil {
-			reg, _ := cg.ExpressionGen.GenerateExpression(stmt.Value)
+			reg, _ := cg.ExpressionGen.GenerateExpression(stmt.Value, funcContext)
 			if reg != "a0" {
 				cg.emit("    mv a0, %s", reg)
 				if reg != "a0" && reg != "fa0" {
@@ -364,14 +366,14 @@ func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
 			}
 		}
 	case *ast.IfStatement:
-		cg.BranchingGen.GenerateIfStatement(stmt)
+		cg.BranchingGen.GenerateIfStatement(stmt, funcContext)
 	case *ast.WhileStatement:
-		cg.LoopingGen.GenerateWhileStatement(stmt)
+		cg.LoopingGen.GenerateWhileStatement(stmt, funcContext)
 	case *ast.VarDeclaration:
-		cg.AssignmentGen.GenerateVarDeclaration(stmt)
+		cg.AssignmentGen.GenerateVarDeclaration(stmt, funcContext)
 	case *ast.Block:
 		for _, blockItem := range stmt.Items {
-			cg.GenerateStatement(blockItem)
+			cg.GenerateStatement(blockItem, funcContext)
 		}
 	default:
 		panic(fmt.Sprintf("unknown statement type: %T", stmt))

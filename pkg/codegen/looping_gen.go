@@ -19,7 +19,7 @@ func NewLoopingGenerator(cg *CodeGenerator) *LoopingGenerator {
 	}
 }
 
-func (lg *LoopingGenerator) GenerateWhileStatement(stmt *ast.WhileStatement) {
+func (lg *LoopingGenerator) GenerateWhileStatement(stmt *ast.WhileStatement, funcContext string) {
 	cg := lg.CodeGen
 	rp := cg.Registers
 
@@ -29,7 +29,7 @@ func (lg *LoopingGenerator) GenerateWhileStatement(stmt *ast.WhileStatement) {
 
 	cg.emit("%s:", startLabel) // Start of the loop
 	cg.emitComment("Condition:")
-	condReg, condType := cg.ExpressionGen.GenerateExpression(stmt.Condition)
+	condReg, condType := cg.ExpressionGen.GenerateExpression(stmt.Condition, funcContext)
 
 	if condType.(*ast.PrimitiveType).Name != "bool" {
 		panic("Condition must be a boolean type - this shoulld have been caught in semantic analysis")
@@ -39,7 +39,7 @@ func (lg *LoopingGenerator) GenerateWhileStatement(stmt *ast.WhileStatement) {
 	rp.ReleaseRegister(condReg)
 
 	cg.emitComment("=== While body ===")
-	cg.BlockGen.GenerateBlock(stmt.Body)
+	cg.BlockGen.GenerateBlock(stmt.Body, funcContext)
 
 	// Jump back to start
 	cg.emitComment("=== Jump back to" + startLabel + "===")

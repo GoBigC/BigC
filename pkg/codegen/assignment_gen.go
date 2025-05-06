@@ -16,15 +16,18 @@ func NewAssignmentGenerator(cg *CodeGenerator) *AssignmentGenerator {
 	}
 }
 
-func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaration) {
+func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaration, funcContext string) {
 	cg := ag.CodeGen
 	rp := cg.Registers
-
-	// Use plain name (no function prefix since only main exists)
 	name := varDecl.Name
-	symbol, found := cg.SymTable.Lookup("main." + name)
+	symID := name
+	// Use plain name (no function prefix since only main exists)
+	if funcContext != "" {
+		symID = "main." + name
+	}
+	symbol, found := cg.SymTable.Lookup(symID)
 	if !found {
-		symbol, _ = cg.SymTable.Lookup(name)
+		panic(fmt.Sprintf("Variable %s not found in symbol table", symID))
 	}
 
 	// Check if local (inside main) or global
@@ -47,7 +50,7 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaratio
 
 	if varDecl.Initializer != nil {
 		// Generate initializer
-		resultReg, _ := cg.ExpressionGen.GenerateExpression(varDecl.Initializer)
+		resultReg, _ := cg.ExpressionGen.GenerateExpression(varDecl.Initializer, funcContext)
 
 		if isLocal {
 			// Store to stack
@@ -83,7 +86,7 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaratio
 		}
 	}
 
-	fmt.Printf("Var %s: local=%v, offset=%d\n", name, isLocal, offset)
+	fmt.Printf("Var %s: startline=%d, endline=%d local=%v, offset=%d\n", symID, symbol.Scope.ValidFirstLine, symbol.Scope.ValidLastLine, isLocal, offset)
 }
 
 func getAscii(lit *ast.CharLiteral) int {
@@ -97,13 +100,13 @@ func isFloatType(typeExpr ast.Type) bool {
 	return false
 }
 
-func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessExpression, value ast.Expression) {
+func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessExpression, value ast.Expression, funcContext string) {
 	cg := ag.CodeGen
 	eg := cg.ExpressionGen
 	rp := cg.Registers
 
-	valueRegister, _ := eg.GenerateExpression(value)
-	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(arrExpr.Array, arrExpr.Index)
+	valueRegister, _ := eg.GenerateExpression(value, funcContext)
+	elemAddrRegister, indexRegister, elemType := eg.CalculateArrayElementAddress(arrExpr.Array, arrExpr.Index, funcContext)
 
 	isFloat := false
 	if primType, ok := elemType.(*ast.PrimitiveType); ok {
@@ -127,19 +130,23 @@ func (ag *AssignmentGenerator) GenerateArrayAssignment(arrExpr *ast.ArrayAccessE
 	}
 }
 
-func (ag *AssignmentGenerator) GenerateVariableAssignment(id *ast.Identifier, value ast.Expression) {
+func (ag *AssignmentGenerator) GenerateVariableAssignment(id *ast.Identifier, value ast.Expression, funcContext string) {
 	cg := ag.CodeGen
 	eg := cg.ExpressionGen
 	rp := cg.Registers
 
 	// Generate value expression
-	resultReg, _ := eg.GenerateExpression(value)
+	resultReg, _ := eg.GenerateExpression(value, funcContext)
 
-	// Look up symbol
 	name := id.Name
-	symbol, found := cg.SymTable.Lookup("main." + name)
+	symID := name
+	// Use plain name (no function prefix since only main exists)
+	if funcContext != "" {
+		symID = "main." + name
+	}
+	symbol, found := cg.SymTable.Lookup(symID)
 	if !found {
-		symbol, _ = cg.SymTable.Lookup(name)
+		panic(fmt.Sprintf("Variable %s not found in symbol table", symID))
 	}
 
 	// Determine if local or global
