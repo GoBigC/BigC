@@ -86,13 +86,15 @@ func (analyzer *SemanticAnalyzer) collectDeclaration(declr ast.Declaration) {
 		if ok {
 			analyzer.Error(d.Line, fmt.Sprintf("variable %s already declared at line %d", sym.Name, sym.Scope.ValidFirstLine))
 		} else {
-
+			size := analyzer.checkArrayDeclaration(d)
 			analyzer.SymTable.Define(name, table.Symbol{
-				Name:  d.Name,
-				Type:  d.Type,
-				Scope: table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine},
+				Name:      d.Name,
+				Type:      d.Type,
+				Scope:     table.ScopeInfo{ValidFirstLine: d.Line, ValidLastLine: lastLine},
+				ArraySize: size,
 			})
 		}
+
 	case *ast.FunctionDeclaration:
 		funcName := d.Name
 		if funcName != "main" {
@@ -225,27 +227,8 @@ func (analyzer *SemanticAnalyzer) checkVarDeclaration(varDeclr *ast.VarDeclarati
 	if ok {
 		analyzer.Error(varDeclr.Line, fmt.Sprintf("variable %s already declared at line %d", sym.Name, sym.Scope.ValidFirstLine))
 	} else {
-		var size int64 = 0
 
-		if isArray(varDeclr.Type) {
-			arrayType := varDeclr.Type.(*ast.ArrayType)
-
-			if lit, ok := arrayType.Size.(*ast.IntegerLiteral); ok {
-				size = lit.Value
-			} else {
-				constSize, isConst := analyzer.evaluateArraySize(arrayType.Size)
-
-				if !isConst {
-					analyzer.Error(varDeclr.Line, "array size must be a compile-time constant expression")
-				} else {
-					size = constSize
-				}
-			}
-			if size < 1 {
-				fmt.Printf("array size is %d", size)
-				analyzer.Error(varDeclr.Line, "array size must be a positive constant integer")
-			}
-		}
+		size := analyzer.checkArrayDeclaration(varDeclr)
 
 		var sym table.Symbol = table.Symbol{
 			Name:      varDeclr.Name,
@@ -406,19 +389,34 @@ func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAccessExpr *ast.
 		if id, ok := arrAccessExpr.Array.(*ast.Identifier); ok {
 			arrayName = id.Name
 			var symName string = arrayName
-			if analyzer.currentFunction != "" {
-				symName = fmt.Sprintf("main.%s", arrayName) // not global
+
+			// fmt.Printf("Current function: %s\n", analyzer.currentFunction)
+			// if analyzer.currentFunction != "" {
+			// symName = fmt.Sprintf("main.%s", arrayName) // not global
+			// }
+
+			// fmt.Println(symName)
+			// if symbol, ok := analyzer.SymTable.Lookup(symName); ok {
+			// 	size = symbol.ArraySize
+			// else if symbol, ok := analyzer.SymTable.Lookup(arrayName); ok {
+			// }
+
+			symbol, found := analyzer.SymTable.Lookup("main." + symName) // check local first
+			if !found {
+				symbol, found = analyzer.SymTable.Lookup(symName) // then check global
+				println("found global")
+				fmt.Printf("array name: %s with size %d\n", symName, size)
 			}
-			if symbol, ok := analyzer.SymTable.Lookup(symName); ok {
-				size = symbol.ArraySize
-			} else if symbol, ok := analyzer.SymTable.Lookup(arrayName); ok {
+			if found {
 				size = symbol.ArraySize
 			}
 		}
 
+		fmt.Printf("array name: %s with size %d\n", arrayName, size)
+
 		if lit, ok := arrAccessExpr.Index.(*ast.IntegerLiteral); ok {
 			if lit.Value < 0 || (size >= 0 && lit.Value >= size) {
-				analyzer.Error(arrAccessExpr.Line, fmt.Sprintf("index out of bounds, cannot access index %d with array size %d", lit.Value, size))
+				analyzer.Error(arrAccessExpr.Line, fmt.Sprintf("INT LITERAL - index out of bounds, cannot access index %d with array size %d", lit.Value, size))
 			}
 		} else if variable, ok := arrAccessExpr.Index.(*ast.Identifier); ok {
 			name := variable.Name
@@ -429,7 +427,7 @@ func (analyzer *SemanticAnalyzer) checkArrayAccessExpression(arrAccessExpr *ast.
 			if !ok {
 				analyzer.Error(arrAccessExpr.Line, fmt.Sprintf("undefined symbol: %s", variable.Name))
 			} else if !isIntType(sym.Type) {
-				analyzer.Error(arrAccessExpr.Line, fmt.Sprintf("index must be an integer literal or identifier, not %s", typeString(sym.Type)))
+				analyzer.Error(arrAccessExpr.Line, fmt.Sprintf("IDENTIFIER - index must be an integer literal or identifier, not %s", typeString(sym.Type)))
 			} else if ok && isIntType(sym.Type) {
 				if sym.Value != nil {
 					if val, ok := sym.Value.(int64); ok {
@@ -647,4 +645,28 @@ func (s *SemanticAnalyzer) findFunctionScope() *table.Symbol {
 		}
 	}
 	return nil
+}
+
+func (analyzer SemanticAnalyzer) checkArrayDeclaration(varDeclr *ast.VarDeclaration) int64 {
+	var size int64
+	if isArray(varDeclr.Type) {
+		arrayType := varDeclr.Type.(*ast.ArrayType)
+
+		if lit, ok := arrayType.Size.(*ast.IntegerLiteral); ok {
+			size = lit.Value
+		} else {
+			constSize, isConst := analyzer.evaluateArraySize(arrayType.Size)
+
+			if !isConst {
+				analyzer.Error(varDeclr.Line, "array size must be a compile-time constant expression")
+			} else {
+				size = constSize
+			}
+		}
+		if size < 1 {
+			fmt.Printf("array size is %d", size)
+			analyzer.Error(varDeclr.Line, "array size must be a positive constant integer")
+		}
+	}
+	return size
 }
