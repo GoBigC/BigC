@@ -3,6 +3,7 @@ package codegen
 import (
 	"BigCooker/pkg/syntax/ast"
 	"fmt"
+	"math"
 )
 
 type AssignmentGenerator struct {
@@ -27,7 +28,7 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaratio
 	}
 
 	// Check if local (inside main) or global
-	isLocal := symbol.Scope.ValidFirstLine > 1 // Locals declared inside main
+	isLocal := symbol.Scope.ValidLastLine != math.MaxInt // Locals declared inside main
 	isFloat := isFloatType(varDecl.Type)
 	size := 8 // 8 bytes for int, float, bool, char
 	var offset int
@@ -142,7 +143,7 @@ func (ag *AssignmentGenerator) GenerateVariableAssignment(id *ast.Identifier, va
 	}
 
 	// Determine if local or global
-	isLocal := symbol.Scope.ValidFirstLine > 1 // Locals declared inside main
+	isLocal := symbol.Scope.ValidLastLine != math.MaxInt // Locals declared inside main
 	isFloat := isFloatType(symbol.Type)
 
 	if isLocal {

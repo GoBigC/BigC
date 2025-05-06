@@ -3,6 +3,7 @@ package codegen
 import (
 	"BigCooker/pkg/syntax/ast"
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -53,7 +54,7 @@ func (eg *ExpressionGenerator) GenerateIdentifier(expr *ast.Identifier) (string,
 	}
 
 	isFloatVar := isFloatType(symbol.Type)
-	isLocal := symbol.Scope.ValidFirstLine > 1 // Locals declared inside main
+	isLocal := symbol.Scope.ValidLastLine != math.MaxInt // Locals declared inside main
 
 	if isLocal {
 		// Load from stack
@@ -241,7 +242,7 @@ func (eg *ExpressionGenerator) CalculateArrayElementAddress(arrExpr ast.Expressi
 	}
 
 	// Determine if local or global
-	isLocal := symbol.Scope.ValidFirstLine > 1 // Locals declared inside main
+	isLocal := symbol.Scope.ValidLastLine != math.MaxInt // Locals declared inside main
 	baseAddrRegister := rp.GetTmpRegister()
 
 	if isLocal {
