@@ -56,8 +56,7 @@ func (symTable *SymbolTable) PrintTable() {
     fmt.Fprintln(w, "----\t----\t-----\t---------\t-----\t----------\t----------")
 
     // Print each symbol as a row
-    for _, sym := range symTable.Symbols {
-        name := sym.Name
+    for symID, sym := range symTable.Symbols {
         typ := typeString(sym.Type)
         scope := fmt.Sprintf("%d-%d", sym.Scope.ValidFirstLine, sym.Scope.ValidLastLine)
         arraySize := "-"
@@ -83,7 +82,7 @@ func (symTable *SymbolTable) PrintTable() {
         if sym.ReturnType != nil {
             retType = typeString(sym.ReturnType)
         }
-        fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", name, typ, scope, arraySize, value, params, retType)
+        fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", symID, typ, scope, arraySize, value, params, retType)
     }
     fmt.Fprintln(w, "-----------------------------------------------------------------")
 
