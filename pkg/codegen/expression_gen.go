@@ -480,11 +480,18 @@ func (eg *ExpressionGenerator) GenerateGreaterThan(expr *ast.BinaryExpression) (
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
 
+	operandType := determineResultType(leftType, rightType)
 	resultReg := rp.GetTmpRegister()
-	cg.emit("    slt %s, %s, %s", resultReg, rightReg, leftReg)
+
+	switch operandType.(*ast.PrimitiveType).Name {
+	case "int":
+		cg.emit("    sgt %s, %s, %s", resultReg, leftReg, rightReg)
+	case "float":
+		cg.emit("    fgt.d %s, %s, %s", resultReg, leftReg, rightReg)
+	}
 
 	releaseRegAfterUse(*rp, leftReg, rightReg)
 
@@ -495,12 +502,18 @@ func (eg *ExpressionGenerator) GenerateLessThan(expr *ast.BinaryExpression) (str
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
 
+	operandType := determineResultType(leftType, rightType)
 	resultReg := rp.GetTmpRegister()
 
-	cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
+	switch operandType.(*ast.PrimitiveType).Name {
+	case "int":
+		cg.emit("    slt %s, %s, %s", resultReg, leftReg, rightReg)
+	case "float":
+		cg.emit("    flt.d %s, %s, %s", resultReg, leftReg, rightReg)
+	}
 
 	releaseRegAfterUse(*rp, leftReg, rightReg)
 
@@ -511,14 +524,22 @@ func (eg *ExpressionGenerator) GenerateGreaterThanOrEqual(expr *ast.BinaryExpres
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
+
+	operandType := determineResultType(leftType, rightType)
 
 	resultReg := rp.GetTmpRegister()
 	tempReg := rp.GetTmpRegister()
 
-	cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
-	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
+	switch operandType.(*ast.PrimitiveType).Name {
+	case "int":
+		cg.emit("    slt %s, %s, %s", tempReg, leftReg, rightReg)
+		cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
+	case "float":
+		cg.emit("    flt.d %s, %s, %s", tempReg, leftReg, rightReg)
+		cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
+	}
 
 	releaseRegAfterUse(*rp, leftReg, rightReg)
 	rp.ReleaseRegister(tempReg)
@@ -530,14 +551,22 @@ func (eg *ExpressionGenerator) GenerateLessThanOrEqual(expr *ast.BinaryExpressio
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
+
+	operandType := determineResultType(leftType, rightType)
 
 	resultReg := rp.GetTmpRegister()
 	tempReg := rp.GetTmpRegister()
 
-	cg.emit("    slt %s, %s, %s", tempReg, rightReg, leftReg)
-	cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
+	switch operandType.(*ast.PrimitiveType).Name {
+	case "int":
+		cg.emit("    sgt %s, %s, %s", tempReg, leftReg, rightReg)
+		cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
+	case "float":
+		cg.emit("    fgt.d %s, %s, %s", tempReg, leftReg, rightReg)
+		cg.emit("    xori %s, %s, 1", resultReg, tempReg) // Invert the result
+	}
 
 	releaseRegAfterUse(*rp, leftReg, rightReg)
 	rp.ReleaseRegister(tempReg)
@@ -549,13 +578,19 @@ func (eg *ExpressionGenerator) GenerateEquality(expr *ast.BinaryExpression) (str
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
 
+	operandType := determineResultType(leftType, rightType)
 	resultReg := rp.GetTmpRegister()
 
-	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
-	cg.emit("    seqz %s, %s", resultReg, resultReg) // Set to 1 if equal to zero
+	switch operandType.(*ast.PrimitiveType).Name {
+	case "int":
+		cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+		cg.emit("    seqz %s, %s", resultReg, resultReg) // Set to 1 if equal to zero
+	case "float":
+		cg.emit("    feq.d %s, %s, %s", resultReg, leftReg, rightReg)
+	}
 
 	releaseRegAfterUse(*rp, leftReg, rightReg)
 
@@ -566,13 +601,20 @@ func (eg *ExpressionGenerator) GenerateInequality(expr *ast.BinaryExpression) (s
 	cg := eg.CodeGen
 	rp := cg.Registers
 
-	leftReg, _ := eg.GenerateExpression(expr.Left)
-	rightReg, _ := eg.GenerateExpression(expr.Right)
+	leftReg, leftType := eg.GenerateExpression(expr.Left)
+	rightReg, rightType := eg.GenerateExpression(expr.Right)
 
+	operandType := determineResultType(leftType, rightType)
 	resultReg := rp.GetTmpRegister()
 
-	cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
-	cg.emit("    snez %s, %s", resultReg, resultReg) // Set to 1 if not equal to zero
+	switch operandType.(*ast.PrimitiveType).Name {
+	case "int":
+		cg.emit("    sub %s, %s, %s", resultReg, leftReg, rightReg)
+		cg.emit("    snez %s, %s", resultReg, resultReg) // Set to 1 if not equal to zero
+	case "float":
+		cg.emit("    feq.d %s, %s, %s", resultReg, leftReg, rightReg)
+		cg.emit("    xori %s, %s, 1", resultReg, resultReg) // Invert the result
+	}
 
 	releaseRegAfterUse(*rp, leftReg, rightReg)
 
