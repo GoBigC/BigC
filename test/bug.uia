@@ -1,7 +1,7 @@
 int main() {
     int sumArray[3];
     sumArray[0] = 5;
-    sumArray[1] = 15;
+    sumArray[1] = 10;
     sumArray[2] = 15;
 
 

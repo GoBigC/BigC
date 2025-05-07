@@ -170,8 +170,8 @@ type CodeGenerator struct {
 	// program state tracking
 	Labels         int
 	Registers      *RegisterPool
-	StackSize      int
-	VarStackOffset map[string]int
+	StackSize      int64
+	VarStackOffset map[string]int64
 
 	//
 	ExpressionGen *ExpressionGenerator
@@ -188,7 +188,7 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 		AsmOut:         &strings.Builder{},
 		Labels:         0,
 		Registers:      NewRegisterPool(),
-		VarStackOffset: make(map[string]int),
+		VarStackOffset: make(map[string]int64),
 	}
 
 	cg.ExpressionGen = NewExpressionGenerator(cg)
@@ -200,19 +200,29 @@ func NewCodeGenerator(program *ast.Program, symTable *table.SymbolTable) *CodeGe
 	return cg
 }
 
-func (cg *CodeGenerator) AllocateStack(symbolName string, size int) int {
+func (cg *CodeGenerator) AllocateStack(symbol table.Symbol) int64 {
+	var size int64
+	// Check if the variable is an array
+    if _, isArray := symbol.Type.(*ast.ArrayType); isArray {
+        // Array: 8 bytes per element * array size
+        size = 8 * symbol.ArraySize
+    } else {
+        // Scalar types: int, float, bool, char
+        size = 8
+    }
+
     cg.StackSize += size
     offset := cg.StackSize - size // Offset from the adjusted sp
-    cg.VarStackOffset[symbolName] = offset
+    cg.VarStackOffset[symbol.Name] = offset
     return offset
 }
 
 func (cg *CodeGenerator) ResetStack() {
-	cg.VarStackOffset = make(map[string]int)
+	cg.VarStackOffset = make(map[string]int64)
 	cg.StackSize = 0
 }
 
-func (cg *CodeGenerator) GetStackOffset(symbolName string) int {
+func (cg *CodeGenerator) GetStackOffset(symbolName string) int64 {
 	if offset, ok := cg.VarStackOffset[symbolName]; ok {
 		return offset
 	}
@@ -313,7 +323,7 @@ func (cg *CodeGenerator) GenerateProgram(outFile string) error { //renamed Gener
 	cg.emit("main:")
 
 	// Calculate stack size for main
-	stackSize := 0
+	var stackSize int64
 	for _, decl := range cg.Program.Declarations {
 		if funcDecl, ok := decl.(*ast.FunctionDeclaration); ok && funcDecl.Name == "main" {
 			stackSize = cg.CalculateStackSize(funcDecl.Body)
@@ -397,12 +407,23 @@ func (cg *CodeGenerator) GenerateStatement(item ast.BlockItem) {
 	}
 }
 
-func (cg *CodeGenerator) CalculateStackSize(block *ast.Block) int {
-	size := 0
+func (cg *CodeGenerator) CalculateStackSize(block *ast.Block) int64 {
+	var size int64
 	for _, item := range block.Items {
 		switch stmt := item.(type) {
 		case *ast.VarDeclaration:
-			size += 8 // int, bool, char
+			if _, ok := stmt.Type.(*ast.ArrayType); ok {
+				// Array: 8 bytes per element * array size
+				symbol, found := cg.SymTable.Lookup("main." + stmt.Name)
+				if !found {
+					symbol, _ = cg.SymTable.Lookup(stmt.Name)
+				}
+				arraySize := symbol.ArraySize // From symbol table
+				size += 8 * arraySize
+			} else {
+				// Scalar types: int, float, bool, char
+				size += 8
+			}
 		case *ast.Block:
 			size += cg.CalculateStackSize(stmt)
 		}
