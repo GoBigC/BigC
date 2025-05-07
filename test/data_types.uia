@@ -4,23 +4,23 @@
 int main() {
     // Integer type tests
     int intVar = 42;
-    _printInt(intVar);
+    _printInt(intVar); // Expected: 42
     
     int intNegative = -10;
-    _printInt(intNegative);
+    _printInt(intNegative); // Expected: -10
     
     int intResult = intVar + intNegative;
     _printInt(intResult); // Expected: 32
     
     // Float type tests
     float floatVar = 3.14159;
-    _printFloat(floatVar);
+    _printFloat(floatVar); // Expected: 3.14159
     
     float floatNegative = -2.718;
-    _printFloat(floatNegative);
+    _printFloat(floatNegative); // Expected: -2.718
     
     float floatResult = floatVar + floatNegative;
-    _printFloat(floatResult); // Expected: ~0.42359
+    _printFloat(floatResult); // Expected: 0.42359
     
     // Boolean type tests
     bool boolTrue = true;
@@ -46,8 +46,8 @@ int main() {
     int intTen = 10;
     float floatTen = 10.0;
     
-    _printInt(intTen);
-    _printFloat(floatTen);
+    _printInt(intTen); // Expected: 10
+    _printFloat(floatTen); // Expected: 10.0
     
     // Testing expressions with mixed types
     int a = 5;

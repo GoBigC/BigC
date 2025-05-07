@@ -30,12 +30,12 @@ func (ag *AssignmentGenerator) GenerateVarDeclaration(varDecl *ast.VarDeclaratio
 	// Check if local (inside main) or global
 	isLocal := symbol.Scope.ValidLastLine != math.MaxInt // Locals declared inside main
 	isFloat := isFloatType(varDecl.Type)
-	size := 8 // 8 bytes for int, float, bool, char
-	var offset int
+	// size := 8 // 8 bytes for int, float, bool, char
+	var offset int64
 
 	if isLocal {
 		// Allocate stack space
-		offset = cg.AllocateStack(name, size)
+		offset = cg.AllocateStack(symbol)
 	} else {
 		// Global: Allocate in .data
 		if isFloat {

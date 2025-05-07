@@ -101,10 +101,12 @@ int main() {
 
     _printChar('S'); // Marker for Sort
     
-    int bubbleArr[3];
+    int bubbleArr[5];
     bubbleArr[0] = 3;
     bubbleArr[1] = 1;
     bubbleArr[2] = 2;
+    bubbleArr[3] = 5;
+    bubbleArr[4] = 4;
 
     
     // Print original array
