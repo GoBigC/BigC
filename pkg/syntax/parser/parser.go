@@ -29,6 +29,10 @@ func ParseFile(filename string) (*ast.Program, error) {
 	p := NewBigCParser(tokenStream)
 
 	errorHandler := error_formatter.NewSyntaxErrorHandler(lines)
+
+	lexer.RemoveErrorListeners()
+	lexer.AddErrorListener(errorHandler)
+
 	p.RemoveErrorListeners()
 	p.AddErrorListener(errorHandler)
 

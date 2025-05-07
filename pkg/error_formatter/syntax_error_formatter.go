@@ -114,6 +114,9 @@ func (h *SyntaxErrorHandler) SyntaxError(recognizer antlr.Recognizer, offendingS
 	case strings.Contains(msg, "expecting"):
 		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: expected token missing near '%s'. %s", actualLine, actualCol, codeLine, caretLine, text, msg)
 
+	case strings.Contains(msg, "token recognition error at:"):
+		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\nSyntax Error: unrecognized token '%s'. Check for typos or unsupported characters.", actualLine, actualCol, codeLine, caretLine, text)
+
 	default:
 		fullMessage = fmt.Sprintf("line %d:%d\n%s\n%s\n%s", actualLine, actualCol, codeLine, caretLine, msg)
 	}
