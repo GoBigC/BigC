@@ -1,0 +1,62 @@
+// Test file for BigC data types
+// Demonstrates all basic data types and their operations
+
+int main() {
+    // Integer type tests
+    int intVar = 42;
+    _printInt(intVar);
+    
+    int intNegative = -10;
+    _printInt(intNegative);
+    
+    int intResult = intVar + intNegative;
+    _printInt(intResult); // Expected: 32
+    
+    // Float type tests
+    float floatVar = 3.14159;
+    _printFloat(floatVar);
+    
+    float floatNegative = -2.718;
+    _printFloat(floatNegative);
+    
+    float floatResult = floatVar + floatNegative;
+    _printFloat(floatResult); // Expected: ~0.42359
+    
+    // Boolean type tests
+    bool boolTrue = true;
+    _printBool(boolTrue); // Expected: 1
+    
+    bool boolFalse = false;
+    _printBool(boolFalse); // Expected: 0
+    
+    bool boolResult = boolTrue && boolFalse;
+    _printBool(boolResult); // Expected: 0
+    
+    // Character type tests
+    char charVar = 'A';
+    _printChar(charVar); // Expected: A
+    
+    char charLower = 'z';
+    _printChar(charLower); // Expected: z
+    
+    char charSymbol = '#';
+    _printChar(charSymbol); // Expected: #
+    
+    // Type conversion (implicit)
+    int intTen = 10;
+    float floatTen = 10.0;
+    
+    _printInt(intTen);
+    _printFloat(floatTen);
+    
+    // Testing expressions with mixed types
+    int a = 5;
+    int b = 7;
+    bool isGreater = a > b;
+    _printBool(isGreater); // Expected: 0
+    
+    bool isEqual = a == 5;
+    _printBool(isEqual); // Expected: 1
+    
+    return 0;
+}

@@ -1,0 +1,97 @@
+// Test file for BigC arrays
+// Demonstrates array operations and manipulations
+
+int main() {
+    // ============ Basic Array Declaration and Access ============
+    int intArray[5];
+    intArray[0] = 10;
+    intArray[1] = 20;
+    intArray[2] = 30;
+    intArray[3] = 40;
+    intArray[4] = 50;
+    
+    _printInt(intArray[0]); // Expected: 10
+    _printInt(intArray[2]); // Expected: 30
+    _printInt(intArray[4]); // Expected: 50
+    
+    // ============ Array with Variable Size ============
+    int size = 3;
+    float floatArray[size];
+    floatArray[0] = 1.1;
+    floatArray[1] = 2.2;
+    floatArray[2] = 3.3;
+    
+    _printFloat(floatArray[0]); // Expected: 1.1
+    _printFloat(floatArray[1]); // Expected: 2.2
+    _printFloat(floatArray[2]); // Expected: 3.3
+    
+    // ============ Array with Expression Size ============
+    int width = 2;
+    int height = 3;
+    int grid[width + height];
+    
+    grid[0] = 100;
+    grid[1] = 200;
+    grid[2] = 300;
+    grid[3] = 400;
+    grid[4] = 500;
+    
+    _printInt(grid[0]); // Expected: 100
+    _printInt(grid[2]); // Expected: 300
+    _printInt(grid[4]); // Expected: 500
+    
+    // ============ Array with Variable Index ============
+    int index = 2;
+    _printInt(intArray[index]); // Expected: 30
+    
+    index = 4;
+    _printInt(intArray[index]); // Expected: 50
+    
+    // ============ Arrays of Different Types ============
+    bool boolArray[3];
+    boolArray[0] = true;
+    boolArray[1] = false;
+    boolArray[2] = true;
+    
+    _printBool(boolArray[0]); // Expected: 1
+    _printBool(boolArray[1]); // Expected: 0
+    _printBool(boolArray[2]); // Expected: 1
+    
+    char charArray[5];
+    charArray[0] = 'H';
+    charArray[1] = 'e';
+    charArray[2] = 'l';
+    charArray[3] = 'l';
+    charArray[4] = 'o';
+    
+    _printChar(charArray[0]); // Expected: H
+    _printChar(charArray[1]); // Expected: e
+    _printChar(charArray[2]); // Expected: l
+    _printChar(charArray[3]); // Expected: l
+    _printChar(charArray[4]); // Expected: o
+    
+    // ============ Array Operations ============
+    int sumArray[3];
+    sumArray[0] = 5;
+    sumArray[1] = 10;
+    sumArray[2] = 15;
+    
+    int sum = sumArray[0] + sumArray[1] + sumArray[2];
+    _printInt(sum); // Expected: 30
+    
+    // Calculate average
+    int average = (sumArray[0] + sumArray[1] + sumArray[2]) / 3;
+    _printInt(average); // Expected: 10.0
+    
+    // Find max
+    int max = sumArray[0];
+    if (sumArray[1] > max) {
+        max = sumArray[1];
+    }
+    if (sumArray[2] > max) {
+        max = sumArray[2];
+    }
+    _printInt(max); // Expected: 15
+
+    return 0;
+}

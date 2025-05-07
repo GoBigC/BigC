@@ -1,7 +1,0 @@
-int main() {
-    int i = 5;
-    while (i < 10) {
-        _printInt(i);
-    }
-    return 0;
-}

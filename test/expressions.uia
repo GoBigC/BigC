@@ -2,8 +2,16 @@ int main() {
     // int addInt = 1 + 2050;
     // _printInt(addInt);
 
-    float addFloat = 4.2 + 6.9;
-    _printFloat(addFloat);
+    // float addFloat = 4.2 + (-6.9);
+    // _printFloat(addFloat);
+
+    float f1 = 3.14;
+    float f2 = 2.71;
+    if (f1 > f2) {
+        _printFloat(f1); // Expected: 3.14
+    } else {
+        _printFloat(f2);
+    }
 
     // int subInt = 5 - 2;
     // printInt(subInt);

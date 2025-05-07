@@ -1,8 +1,0 @@
-int side() {
-    return 0; 
-}
-
-int main(int arg) {
-    bool c = true;
-    return 0;
-}

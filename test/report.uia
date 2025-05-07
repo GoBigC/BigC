@@ -1,0 +1,33 @@
+int main() {    
+    
+    int intVar = 42;
+    _printInt(intVar);
+    
+    int intNegative = -10;
+    _printInt(intNegative);
+    
+    int intResult = intVar + intNegative;
+    _printInt(intResult); // Expected: 32 but was wrong result
+
+// ===
+// syntax point at comment in same line
+// ===
+
+// float average = (sumArray[0] + sumArray[1] + sumArray[2]) / 3; //not automatically convert to float
+// _printFloat(average); 
+// ===
+
+// branching logic in checking condition not correctly
+
+//binary expr for float not work 
+
+//while loop not work
+//     int i = 5;
+//     while (i < 10) {
+//         _printInt(i);
+//         i = i + 1;
+//     }
+
+
+
+}

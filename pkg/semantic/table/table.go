@@ -49,44 +49,45 @@ func (symTable *SymbolTable) Lookup(name string) (Symbol, bool) {
 
 func (symTable *SymbolTable) PrintTable() {
 
-	// Set up tabwriter for aligned columns
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "Name\tType\tScope\tArraySize\tValue\tParameters\tReturnType")
-	fmt.Fprintln(w, "----\t----\t-----\t---------\t-----\t----------\t----------")
+    // Set up tabwriter for aligned columns
+    w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+    fmt.Fprintln(w, "Name\tType\tScope\tArraySize\tValue\tParameters\tReturnType")
+    fmt.Fprintln(w, "----\t----\t-----\t---------\t-----\t----------\t----------")
 
-	// Print each symbol as a row
-	for symID, sym := range symTable.Symbols {
-		typ := typeString(sym.Type)
-		scope := fmt.Sprintf("%d-%d", sym.Scope.ValidFirstLine, sym.Scope.ValidLastLine)
-		arraySize := "-"
-		if sym.ArraySize > 0 {
-			arraySize = fmt.Sprintf("%d", sym.ArraySize)
-		}
-		value := "-"
-		if sym.Value != nil {
-			value = fmt.Sprintf("%v", sym.Value)
-		}
-		params := "-"
-		if len(sym.Parameters) > 0 {
-			params = "["
-			for i, p := range sym.Parameters {
-				if i > 0 {
-					params += ", "
-				}
-				params += fmt.Sprintf("%s: %s", p.Name, typeString(p.Type))
-			}
-			params += "]"
-		}
-		retType := "-"
-		if sym.ReturnType != nil {
-			retType = typeString(sym.ReturnType)
-		}
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", symID, typ, scope, arraySize, value, params, retType)
-	}
-	fmt.Fprintln(w, "-----------------------------------------------------------------")
+    // Print each symbol as a row
+    for symID, sym := range symTable.Symbols {
+        typ := typeString(sym.Type)
+        scope := fmt.Sprintf("%d-%d", sym.Scope.ValidFirstLine, sym.Scope.ValidLastLine)
+        arraySize := "-"
+        if sym.ArraySize > 0 {
+            arraySize = fmt.Sprintf("%d", sym.ArraySize)
+        }
+        value := "-"
+        if sym.Value != nil {
+            value = fmt.Sprintf("%v", sym.Value)
+        }
+        params := "-"
+        if len(sym.Parameters) > 0 {
+            params = "["
+            for i, p := range sym.Parameters {
+                if i > 0 {
+                    params += ", "
+                }
+                params += fmt.Sprintf("%s: %s", p.Name, typeString(p.Type))
+            }
+            params += "]"
+        }
+        retType := "-"
+        if sym.ReturnType != nil {
+            retType = typeString(sym.ReturnType)
+        }
+        fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", symID, typ, scope, arraySize, value, params, retType)
+    }
+    fmt.Fprintln(w, "-----------------------------------------------------------------")
 
-	w.Flush()
-	fmt.Println()
+    w.Flush()
+    fmt.Println()
+
 }
 
 func typeString(t ast.Type) string {
